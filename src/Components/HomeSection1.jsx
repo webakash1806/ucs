@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FaMapMarkerAlt, FaSyncAlt, FaRoad, FaPlane } from 'react-icons/fa'; // Importing icons from react-icons
 import ServiceDetailCard from './ServiceDetailCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import airportTrip from '../assets/icons/airportTrip.gif';
+import addressPickup from '../assets/icons/addressPickup.gif';
+import localTrip from '../assets/icons/localTrip.gif';
+import longDistance from '../assets/icons/longDistance.gif';
 
 const HomeSection1 = () => {
     const [slidesPerView, setSlidesPerView] = useState(1);
@@ -11,7 +14,7 @@ const HomeSection1 = () => {
     useEffect(() => {
         const updateSlidesPerView = () => {
             const viewportWidth = window.innerWidth;
-            const cardWidth = 20 * 16; // 20rem in pixels (1rem = 16px, adjust as needed)
+            const cardWidth = 19.5 * 16; // 20rem in pixels (1rem = 16px, adjust as needed)
             const numSlides = Math.floor(viewportWidth / cardWidth);
             setSlidesPerView(numSlides || 1); // Ensure at least 1 slide is visible
         };
@@ -28,31 +31,31 @@ const HomeSection1 = () => {
         {
             id: 1,
             name: 'Address Pickup',
-            icon: <FaMapMarkerAlt size={30} className="text-main" />,
+            icon: addressPickup,
             description: 'Conveniently pick up at your chosen location.'
         },
         {
             id: 2,
             name: 'Round Trip',
-            icon: <FaSyncAlt size={30} className="text-main" />,
+            icon: localTrip,
             description: 'Travel to your destination and return with ease.'
         },
         {
             id: 3,
             name: 'Long Distance',
-            icon: <FaRoad size={30} className="text-main" />,
+            icon: longDistance,
             description: 'Travel comfortably for long distance journeys.'
         },
         {
             id: 4,
             name: 'Airport Transfer',
-            icon: <FaPlane size={30} className="text-main" />,
+            icon: airportTrip,
             description: 'Hassle-free airport transfers for your trips.'
         }
     ];
 
     return (
-        <div className="px-6 py-12 bg-[#F5F6F7] flex flex-col items-center">
+        <div className="sm:px-6 px-4 py-12 bg-[#F5F6F7] flex flex-col items-center">
             <div className="text-center mb-8">
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
                     A Car for Every Occasion
@@ -72,9 +75,14 @@ const HomeSection1 = () => {
                     className="w-full mx-auto flex items-center justify-center gap-6"
                     slidesPerView={slidesPerView}
                     spaceBetween={10} // Reduce the gap between slides
+                    breakpoints={{
+                        1024: {
+                            slidesPerView: 4
+                        }
+                    }}
                 >
-                    {services.concat(services).map((service) => (
-                        <SwiperSlide key={service.id} className="flex justify-center  px-6">
+                    {services.concat(services).map((service, ind) => (
+                        <SwiperSlide key={ind + 1} className="flex justify-center  px-6">
                             <ServiceDetailCard
                                 icon={service.icon}
                                 title={service.name}

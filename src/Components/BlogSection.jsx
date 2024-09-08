@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import blog1 from '../assets/car1.jpg';
 import blog2 from '../assets/car2.jpg';
@@ -6,6 +6,9 @@ import blog3 from '../assets/car3.jpg';
 import blog4 from '../assets/img1.jpg';
 import { CiFacebook, CiInstagram, CiTwitter } from "react-icons/ci";
 import { FaYoutube } from "react-icons/fa";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
 
 const BlogSection = () => {
     const blogs = [
@@ -39,6 +42,24 @@ const BlogSection = () => {
         },
     ];
 
+    const [slidesPerView, setSlidesPerView] = useState(1);
+
+    useEffect(() => {
+        const updateSlidesPerView = () => {
+            const viewportWidth = window.innerWidth;
+            const cardWidth = 18 * 16; // 20rem in pixels (1rem = 16px, adjust as needed)
+            const numSlides = Math.floor(viewportWidth / cardWidth);
+            setSlidesPerView(numSlides || 1); // Ensure at least 1 slide is visible
+        };
+
+        updateSlidesPerView();
+        window.addEventListener('resize', updateSlidesPerView);
+
+        return () => {
+            window.removeEventListener('resize', updateSlidesPerView);
+        };
+    }, []);
+
     return (
         <div className='flex flex-col items-center justify-center xl:p-10 p-6 bg-gradient-to-br bg-white'>
             {/* Header */}
@@ -49,37 +70,48 @@ const BlogSection = () => {
                 <h1 className='text-2xl xl:text-3xl font-bold mt-4'>Latest News & Blogs</h1>
             </div>
 
-            {/* Blog Grid */}
-            <div className='grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4 min-w-full max-w-7xl'>
-                {blogs.map((blog, index) => (
-                    <div key={index} className='relative overflow-hidden text-white rounded-lg mx-auto min-w-[19rem] max-w-[23rem] flex flex-col items-center justify-between bg-dark shadow-xl transition-transform transform h-[28rem] hover:scale-105'>
-                        <img src={blog.img} alt={`blog${index + 1}`} className='w-full h-[12rem] object-cover transition-transform duration-300 hover:opacity-80' />
-                        <div className='p-4 pt-2 '>
-                            <h2 className='text-[1.2rem] font-semibold mb-1 hover:text-blue-400 transition-all'>
-                                {blog.title}
-                            </h2>
-                            <p className='text-gray-400 mb-6 text-[0.9rem] line-clamp-3'>
-                                {blog.description}
-                            </p>
-                            <div className='flex flex-col gap-2 items-center justify-between'>
-                                <div className='flex items-center gap-4'>
-                                    <img src={''} alt="user" className='w-10 h-10 rounded-full bg-gray-500' />
-                                    <p>By: {blog.author}</p>
-                                </div>
-                                <div className='flex gap-3 justify-between'>
-                                    <Link className='p-2 bg-gray-800 rounded-full hover:bg-blue-500 transition'><CiFacebook className='text-xl text-gray-400 hover:text-white' /></Link>
-                                    <Link className='p-2 bg-gray-800 rounded-full hover:bg-red-500 transition'><FaYoutube className='text-xl text-gray-400 hover:text-white' /></Link>
-                                    <Link className='p-2 bg-gray-800 rounded-full hover:bg-pink-500 transition'><CiInstagram className='text-xl text-gray-400 hover:text-white' /></Link>
-                                    <Link className='p-2 bg-gray-800 rounded-full hover:bg-blue-400 transition'><CiTwitter className='text-xl text-gray-400 hover:text-white' /></Link>
+            <div className="relative w-full max-w-[80rem] mx-auto flex items-center justify-center">
+                <Swiper
+                    modules={[Autoplay, Pagination]}
+                    autoplay={{ delay: 4000, disableOnInteraction: false }}
+                    loop={true}
+                    speed={1500}
+                    className="w-full mx-auto flex items-center justify-center gap-6"
+                    slidesPerView={slidesPerView}
+                    spaceBetween={10} // Reduce the gap between slides
+                >
+                    {blogs.map((blog, index) => (
+                        <SwiperSlide key={index} className='relative overflow-hidden text-white rounded-lg mx-auto min-w-[18.5rem] max-w-[22.5rem] flex flex-col items-center justify-between bg-dark shadow-xl h-[25rem] cursor-pointer'>
+                            <img src={blog.img} alt={`blog${index + 1}`} className='w-full h-[10rem] object-cover transition-transform duration-300 hover:opacity-80' />
+                            <div className='p-4 pt-2 '>
+                                <h2 className='text-[1.1rem] line-clamp-2 font-semibold mb-1 hover:text-blue-400 transition-all'>
+                                    {blog.title}
+                                </h2>
+                                <p className='text-gray-400 mb-4 text-[0.9rem] line-clamp-3'>
+                                    {blog.description}
+                                </p>
+                                <div className='flex flex-col gap-2 items-center justify-between'>
+                                    <div className='flex items-center gap-4'>
+                                        <img src={''} alt="user" className='w-10 h-10 rounded-full bg-gray-500' />
+                                        <p>By: {blog.author}</p>
+                                    </div>
+                                    <div className='flex gap-3 justify-between'>
+                                        <Link className='p-2 bg-gray-800 rounded-full hover:bg-blue-500 transition'><CiFacebook className='text-xl text-gray-400 hover:text-white' /></Link>
+                                        <Link className='p-2 bg-gray-800 rounded-full hover:bg-red-500 transition'><FaYoutube className='text-xl text-gray-400 hover:text-white' /></Link>
+                                        <Link className='p-2 bg-gray-800 rounded-full hover:bg-pink-500 transition'><CiInstagram className='text-xl text-gray-400 hover:text-white' /></Link>
+                                        <Link className='p-2 bg-gray-800 rounded-full hover:bg-blue-400 transition'><CiTwitter className='text-xl text-gray-400 hover:text-white' /></Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className='absolute top-5 left-5 bg-blue-500 text-white font-semibold text-center rounded-lg px-4 py-2 shadow-lg'>
-                            <p className='leading-tight'>{blog.date}</p>
-                        </div>
-                    </div>
-                ))}
+                            <div className='absolute top-5 left-5 bg-blue-500 text-white font-semibold text-center rounded-lg px-4 py-2 shadow-lg'>
+                                <p className='leading-tight'>{blog.date}</p>
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
+
+
         </div>
     );
 };

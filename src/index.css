@@ -16,14 +16,24 @@
 }
 
 .swiper-pagination-bullet-active {
-    background-color: #2399C0;
+    background-color: #fff;
     width: 30px;
 }
 
 
-
-
-
-
-
 /* Slider styles ended */
+
+
+@keyframes spin-reverse {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+.animate-spin-reverse {
+    animation: spin-reverse 100s linear infinite;
+}

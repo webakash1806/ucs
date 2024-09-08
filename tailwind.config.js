@@ -6,8 +6,12 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        'spin-slow': 'spin 100s linear infinite', // Spin slowly
+      },
       colors: {
-        main: '#2399c0',
+        main: '#2499BF',
+        light: '#908C8C',
         dark: '#001E3A',
         white: '#ffffff',  // Standard white color
         black: '#000000',  // Standard black color
