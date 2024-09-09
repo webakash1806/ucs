@@ -47,7 +47,7 @@ const BlogSection = () => {
     useEffect(() => {
         const updateSlidesPerView = () => {
             const viewportWidth = window.innerWidth;
-            const cardWidth = 18 * 16; // 20rem in pixels (1rem = 16px, adjust as needed)
+            const cardWidth = 20 * 16; // 20rem in pixels (1rem = 16px, adjust as needed)
             const numSlides = Math.floor(viewportWidth / cardWidth);
             setSlidesPerView(numSlides || 1); // Ensure at least 1 slide is visible
         };
@@ -70,7 +70,7 @@ const BlogSection = () => {
                 <h1 className='text-2xl xl:text-3xl font-bold mt-4'>Latest News & Blogs</h1>
             </div>
 
-            <div className="relative w-full max-w-[80rem] mx-auto flex items-center justify-center">
+            <div className="relative w-full max-w-[82rem] mx-auto flex items-center justify-center">
                 <Swiper
                     modules={[Autoplay, Pagination]}
                     autoplay={{ delay: 4000, disableOnInteraction: false }}
@@ -80,8 +80,8 @@ const BlogSection = () => {
                     slidesPerView={slidesPerView}
                     spaceBetween={10} // Reduce the gap between slides
                 >
-                    {blogs.map((blog, index) => (
-                        <SwiperSlide key={index} className='relative overflow-hidden text-white rounded-lg mx-auto min-w-[18.5rem] max-w-[22.5rem] flex flex-col items-center justify-between bg-dark shadow-xl h-[25rem] cursor-pointer'>
+                    {blogs.concat(blogs).map((blog, index) => (
+                        <SwiperSlide key={index} className='relative overflow-hidden text-white rounded-lg mx-auto w-[18rem] flex flex-col items-center justify-between bg-dark shadow-xl min-h-[25rem] max-h-[25rem] cursor-pointer'>
                             <img src={blog.img} alt={`blog${index + 1}`} className='w-full h-[10rem] object-cover transition-transform duration-300 hover:opacity-80' />
                             <div className='p-4 pt-2 '>
                                 <h2 className='text-[1.1rem] line-clamp-2 font-semibold mb-1 hover:text-blue-400 transition-all'>

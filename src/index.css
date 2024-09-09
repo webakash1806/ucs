@@ -37,3 +37,38 @@
 .animate-spin-reverse {
     animation: spin-reverse 100s linear infinite;
 }
+
+/* register page styles */
+
+.form-container {
+    position: relative;
+    width: 100%;
+    max-width: 24rem;
+}
+
+.flip-animation {
+    animation: flip-page 0.7s forwards;
+}
+
+@keyframes flip-page {
+    0% {
+        transform: rotateX(0deg);
+    }
+
+    50% {
+        transform: rotateX(90deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: rotateX(180deg);
+        opacity: 1;
+    }
+}
+
+.register-form,
+.verify-form {
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Register page styles ended */

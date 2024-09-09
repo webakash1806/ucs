@@ -1,10 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // If you're using React Router
 import logo from '../assets/logo.jpg'
-import { IoLogInOutline } from "react-icons/io5";
-import { FaUser } from 'react-icons/fa';
-import { MdAddCall } from 'react-icons/md';
-
 import call from '../assets/icons/call.gif';
 import signup from '../assets/icons/signup.gif';
 import login from '../assets/icons/login.gif';
@@ -13,7 +9,7 @@ import login from '../assets/icons/login.gif';
 const Header = () => {
     return (
         <header className="w-full bg-white shadow-md">
-            <div className=" flex items-center justify-between py-2 px-4 sm:px-8 mx-auto md:mx-12 lg:mx-28">
+            <div className="flex items-center justify-between px-2 pt-[0.35rem] pb-[0.6rem] mx-auto sm:px-8 md:mx-12 lg:mx-28">
                 {/* Logo */}
                 <div>
                     <Link to="/">
@@ -21,7 +17,7 @@ const Header = () => {
                             alt="UCS"
                             src={logo}
 
-                            className="sm:w-[7.8rem] w-[7.5rem] h-auto"
+                            className="sm:w-[7.8rem] w-[7.2rem] h-auto"
                         />
                     </Link>
                 </div>
@@ -37,26 +33,26 @@ const Header = () => {
                 </div>
 
                 {/* Navigation Links */}
-                <div className="flex items-center sm:space-x-6 space-x-4">
-                    <div className='sm:hidden block'>
-                        <Link to={''} className='flex group items-center flex-col mr-1'>
-                            <img src={call} className='w-[2.7rem]' alt="" />
+                <div className="flex items-center space-x-3 sm:space-x-6">
+                    <div className='block sm:hidden'>
+                        <Link to={''} className='flex flex-col items-center mr-1 group'>
+                            <img src={call} className='w-[2.4rem] sm:w-[2.7rem]' alt="" />
 
-                            <p className='text-[0.85rem] group-hover:text-main font-semibold'>
+                            <p className='text-[0.85rem] leading-3 group-hover:text-main font-semibold'>
                                 Call us
                             </p>
                         </Link>
                     </div>
-                    <Link to={''} className='flex group items-center flex-col'>
-                        <img src={login} className='w-[2.7rem]' alt="" />
+                    <Link to={'/login'} className='flex flex-col items-center group'>
+                        <img src={login} className='w-[2.4rem] sm:w-[2.7rem]' alt="" />
 
-                        <p className='text-[0.85rem] group-hover:text-main font-semibold'>
+                        <p className='text-[0.85rem] leading-3 group-hover:text-main font-semibold'>
                             Login
                         </p>
                     </Link>
-                    <Link to={''} className='flex group items-center flex-col'>
-                        <img src={signup} className='w-[2.7rem]' alt="" />
-                        <p className='text-[0.85rem] group-hover:text-main font-semibold'>
+                    <Link to={'/register'} className='flex flex-col items-center group'>
+                        <img src={signup} className='w-[2.4rem] sm:w-[2.7rem]' alt="" />
+                        <p className='text-[0.85rem] leading-3 group-hover:text-main font-semibold'>
                             Sign up
                         </p>
                     </Link>

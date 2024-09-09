@@ -30,7 +30,7 @@ const HomeSection2 = () => {
 
 
     return (
-        <div className='w-full px-[4vw] lg:px-[6vw] flex flex-col items-center justify-center bg-[#F5F6F7]  py-28'>
+        <div className='w-full px-[4vw] lg:px-[6vw] flex flex-col items-center justify-center bg-[#F5F6F7]  py-20 pt-6'>
             <h1 className='text-3xl md:text-4xl font-semibold pb-10  text-dark '>
                 UCS Cabs : Aao Chalein
             </h1>

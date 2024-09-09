@@ -25,7 +25,7 @@ const WhyChoose = () => {
 
 
     return (
-        <div className="relative flex py-10 pb-36 flex-col justify-center items-center w-full gap-4 overflow-hidden">
+        <div className="relative flex py-10 pb-16 flex-col justify-center items-center w-full gap-4 overflow-hidden">
             <h1 className='text-main font-semibold text-[1.8rem] mb-4'>Why Choose Us?</h1>
             <div className='flex flex-col items-center justify-center lg:flex-row'>
                 <div className='flex flex-col gap-4 lg:gap-6'>

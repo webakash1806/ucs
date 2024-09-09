@@ -44,9 +44,6 @@ const MainSlider = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(new Date());
 
-    console.log(active)
-    console.log(outstationActive)
-
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -69,10 +66,10 @@ const MainSlider = () => {
                         {slides.map((slide) => (
                             <SwiperSlide key={slide.id}>
                                 <div className="flex flex-col pt-10 justify-center items-center lg:items-start lg:text-start text-center min-w-[17rem] md:pr-4 max-w-[30rem] md:max-w-[35rem] w-full">
-                                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                                    <h1 className="mb-4 text-3xl font-bold text-white md:text-4xl">
                                         {slide.title}
                                     </h1>
-                                    <p className="text-lg md:text-xl text-gray-200 mb-6">
+                                    <p className="mb-6 text-lg text-gray-200 md:text-xl">
                                         {slide.description}
                                     </p>
                                 </div>
@@ -112,7 +109,7 @@ const MainSlider = () => {
 
 
 
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-3 mt-2 p-5 rounded-lg relative  bg-white ">
+                    <form onSubmit={handleSubmit} className="relative flex flex-col gap-4 p-5 px-3 mt-2 bg-white rounded-lg ">
 
 
 
@@ -166,7 +163,7 @@ const MainSlider = () => {
                             <input
                                 type="text"
                                 placeholder="Enter Pickup Location"
-                                className="w-full text-black  placeholder:text-black font-semibold bg-transparent pb-3 outline-none  "
+                                className="w-full pb-3 font-semibold text-black bg-transparent outline-none placeholder:text-black "
                             />
                             {/* Arrow Icon */}
                             <div className='absolute top-[3.35rem] border-main bg-white right-4 border p-[0.35rem] text-[0.95rem] rounded-full'>
@@ -176,11 +173,11 @@ const MainSlider = () => {
                             <input
                                 type="text"
                                 placeholder="Enter Drop Location"
-                                className="w-full text-black outline-none pb-1 placeholder:text-black font-semibold"
+                                className="w-full pb-1 font-semibold text-black outline-none placeholder:text-black"
                             />
                         </div>
 
-                        <div className="flex gap-3 w-full">
+                        <div className="flex w-full gap-3">
                             <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
                                 <FaRegCalendarAlt className='text-light left-2 absolute top-[1.67rem]' />
                                 <label className='w-full  text-light   text-[0.8rem]'>Pick-up Date</label>
@@ -189,7 +186,7 @@ const MainSlider = () => {
                                     selected={startDate}
                                     onChange={(date) => setStartDate(date)}
                                     dateFormat="dd/MM/yyyy"
-                                    className="w-full tracking-wide outline-none pl-5 bg-transparent font-semibold caret-transparent"
+                                    className="w-full pl-5 font-semibold tracking-wide bg-transparent outline-none caret-transparent"
                                     placeholderText="Select Date and Time"
                                 />
                             </div>
@@ -205,7 +202,7 @@ const MainSlider = () => {
                                     timeIntervals={15}
                                     timeCaption="Time"
                                     dateFormat="hh:mm aa"
-                                    className="w-full outline-none pl-5 font-semibold bg-transparent caret-transparent"
+                                    className="w-full pl-5 font-semibold bg-transparent outline-none caret-transparent"
 
                                     placeholderText="Select Time"
                                 />
