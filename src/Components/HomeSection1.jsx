@@ -9,7 +9,7 @@ const HomeSection1 = () => {
     return (
         <div className='px-[5vw] py-20 flex flex-col items-center justify-center md:px-[6vw] lg:px-[8rem] bg-[#F5F6F7]'>
             <h1 className="text-3xl font-[600] mb-6 text-gray-800 md:text-4xl">
-                Welcome Ayush ji
+                Welcome to UCS
             </h1>
             <div className='flex flex-col items-center justify-center gap-8 pb-10 sm:block'>
                 <img src={about1} className='w-full sm:w-[16rem] border h-full drop-shadow-[-3px_4px_4px_#808080] sm:mr-3 md:w-[19rem] lg:w-[25rem] float-left relative z-[10]' alt="Main visual" />

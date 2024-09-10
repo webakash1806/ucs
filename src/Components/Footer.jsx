@@ -118,10 +118,10 @@ const Footer = () => {
                                         <Link to="/contact">Contact us</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/">Privacy Policy</Link>
+                                        <Link to="/privacy-policy">Privacy Policy</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/">Terms &amp; Conditions</Link>
+                                        <Link to="/terms-and-conditions">Terms &amp; Conditions</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
                                         <Link to="/FAQ">FAQs</Link>

@@ -7,6 +7,11 @@ import 'aos/dist/aos.css';
 import RegisterPage from './Pages/Auth/RegisterPage';
 import carIcon from './assets/icons/carTrip.gif'
 import LoginPage from './Pages/Auth/Login';
+import PrivacyPolicy from './Pages/PrivacyPolicy';
+import TermsAndConditions from './Pages/TermsAndConditions';
+import FAQPage from './Pages/FAQPage';
+import Profile from './Pages/Auth/Profile';
+import CarList from './Pages/CarList';
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
@@ -26,6 +31,11 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/about' element={<About />} />
+          <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+          <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/cars/:cityName' element={<CarList />} />
+          <Route path='/FAQ' element={<FAQPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
         </Routes>

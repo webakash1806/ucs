@@ -21,6 +21,8 @@ const LoginPage = () => {
         password: "",
     });
 
+    console.log(loading)
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -45,12 +47,14 @@ const LoginPage = () => {
             if (!response?.payload?.validUser?.isVerify) {
                 dispatch(resendOTP({ email: email }))
                 setVerifyActive(true)
+                setLoading(false)
             } else {
                 navigate('/')
             }
             // setVerifyActive(true)
         } else {
-            return toast.error("Something went wrong")
+            setLoading(false)
+
         }
 
     };
@@ -67,8 +71,6 @@ const LoginPage = () => {
         if (response?.payload?.success) {
             toast.success("Account verified")
             navigate('/')
-        } else {
-            return toast.error("Please try again!")
         }
     }
 
