@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createAccount } from "../../Redux/Slices/authSlice"; // Adjust the path according to your project structure
+import { createAccount, verifyOTP } from "../../Redux/Slices/authSlice"; // Adjust the path according to your project structure
 import { toast } from "react-toastify";
 import signup from '../../assets/icons/registerPage.gif';
 import verify from '../../assets/icons/verify.gif';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
 
 const RegisterPage = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false);
     const [verifyActive, setVerifyActive] = useState(false);
     const [otp, setOtp] = useState('');
@@ -19,17 +20,17 @@ const RegisterPage = () => {
         phoneNumber: "",
     });
 
-    console.log(otp)
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
+
+    console.log(verifyActive)
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setVerifyActive(true)
         const { email, name, phoneNumber, password } = formData;
 
         if (!email || !name || !phoneNumber || !password) {
@@ -41,6 +42,7 @@ const RegisterPage = () => {
         setLoading(false); // Stop loading once request is complete
 
         if (response?.payload?.success) {
+            console.log(response)
             setVerifyActive(true);
         } else {
             toast.error("Something went wrong");
@@ -52,6 +54,15 @@ const RegisterPage = () => {
 
         if (otp.length !== 5) {
             return toast.error("Enter 5 digit OTP")
+        }
+
+        const response = await dispatch(verifyOTP({ email: formData?.email, otp: otp }))
+
+        if (response?.payload?.success) {
+            toast.success("Account verified")
+            navigate('/')
+        } else {
+            return toast.error("Please try again!")
         }
     }
 

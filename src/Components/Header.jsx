@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom'; // If you're using React Router
 import logo from '../assets/logo.jpg'
 import call from '../assets/icons/call.gif';
 import signup from '../assets/icons/signup.gif';
 import login from '../assets/icons/login.gif';
+import userProfile from '../assets/icons/userProfile.gif';
+import logoutIcon from '../assets/icons/logout.gif';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../Redux/Slices/authSlice';
 
 
 const Header = () => {
+    const dispatch = useDispatch()
+    const { isLoggedIn, data } = useSelector((state) => state.auth)
+    console.log(data)
+
+
+    // useEffect(() => {
+    //     dispatch()
+    // })
+
     return (
         <header className="w-full bg-white shadow-md">
             <div className="flex items-center justify-between px-2 pt-[0.35rem] pb-[0.6rem] mx-auto sm:px-8 md:mx-12 lg:mx-28">
@@ -43,19 +56,41 @@ const Header = () => {
                             </p>
                         </Link>
                     </div>
-                    <Link to={'/login'} className='flex flex-col items-center group'>
-                        <img src={login} className='w-[2.4rem] sm:w-[2.7rem]' alt="" />
+                    {
+                        isLoggedIn ?
+                            <>
+                                <button className='flex flex-col items-center group'>
+                                    <img src={userProfile} className='w-[2.4rem] sm:w-[2.7rem]' alt="" />
 
-                        <p className='text-[0.85rem] leading-3 group-hover:text-main font-semibold'>
-                            Login
-                        </p>
-                    </Link>
-                    <Link to={'/register'} className='flex flex-col items-center group'>
-                        <img src={signup} className='w-[2.4rem] sm:w-[2.7rem]' alt="" />
-                        <p className='text-[0.85rem] leading-3 group-hover:text-main font-semibold'>
-                            Sign up
-                        </p>
-                    </Link>
+                                    <p className='text-[0.85rem] leading-3 group-hover:text-main font-semibold'>
+                                        {data?.name.split(" ")[0]}
+                                    </p>
+                                </button>
+                                <button onClick={() => dispatch(logout())} className='flex flex-col items-center group'>
+                                    <img src={logoutIcon} className='w-[2.4rem] sm:w-[2.7rem]' alt="" />
+
+                                    <p className='text-[0.85rem] leading-3 group-hover:text-main font-semibold'>
+                                        Logout
+                                    </p>
+                                </button>
+                            </>
+                            :
+                            <>
+                                <Link to={'/login'} className='flex flex-col items-center group'>
+                                    <img src={login} className='w-[2.4rem] sm:w-[2.7rem]' alt="" />
+
+                                    <p className='text-[0.85rem] leading-3 group-hover:text-main font-semibold'>
+                                        Login
+                                    </p>
+                                </Link>
+                                <Link to={'/register'} className='flex flex-col items-center group'>
+                                    <img src={signup} className='w-[2.4rem] sm:w-[2.7rem]' alt="" />
+                                    <p className='text-[0.85rem] leading-3 group-hover:text-main font-semibold'>
+                                        Sign up
+                                    </p>
+                                </Link>
+                            </>
+                    }
                 </div>
             </div>
         </header>

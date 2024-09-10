@@ -1,99 +1,68 @@
-import React, { useEffect, useState } from 'react';
-import ServiceDetailCard from './ServiceDetailCard';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import airportTrip from '../assets/icons/airportTrip.gif';
-import addressPickup from '../assets/icons/addressPickup.gif';
-import localTrip from '../assets/icons/localTrip.gif';
-import longDistance from '../assets/icons/longDistance.gif';
+import React from 'react';
+import about1 from '../assets/car1.jpg';
+import transparency from '../assets/icons/transparency.gif'
+import trust from '../assets/icons/trust.gif'
+import support from '../assets/icons/support.gif'
 
 const HomeSection1 = () => {
-    const [slidesPerView, setSlidesPerView] = useState(1);
-
-    useEffect(() => {
-        const updateSlidesPerView = () => {
-            const viewportWidth = window.innerWidth;
-            const cardWidth = 19.5 * 16; // 20rem in pixels (1rem = 16px, adjust as needed)
-            const numSlides = Math.floor(viewportWidth / cardWidth);
-            setSlidesPerView(numSlides || 1); // Ensure at least 1 slide is visible
-        };
-
-        updateSlidesPerView();
-        window.addEventListener('resize', updateSlidesPerView);
-
-        return () => {
-            window.removeEventListener('resize', updateSlidesPerView);
-        };
-    }, []);
-
-    const services = [
-        {
-            id: 1,
-            name: 'Address Pickup',
-            icon: addressPickup,
-            description: 'Conveniently pick up at your chosen location.'
-        },
-        {
-            id: 2,
-            name: 'Round Trip',
-            icon: localTrip,
-            description: 'Travel to your destination and return with ease.'
-        },
-        {
-            id: 3,
-            name: 'Long Distance',
-            icon: longDistance,
-            description: 'Travel comfortably for long distance journeys.'
-        },
-        {
-            id: 4,
-            name: 'Airport Transfer',
-            icon: airportTrip,
-            description: 'Hassle-free airport transfers for your trips.'
-        }
-    ];
 
     return (
-        <div className="sm:px-6 px-4 py-12 bg-[#F5F6F7] flex flex-col items-center">
-            <div className="text-center mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-                    A Car for Every Occasion
-                </h1>
-                <p className="text-gray-600 mt-4">
-                    Experience seamless travel with our wide range of services, tailored to suit your needs.
+        <div className='px-[5vw] py-20 flex flex-col items-center justify-center md:px-[6vw] lg:px-[8rem] bg-[#F5F6F7]'>
+            <h1 className="text-3xl font-[600] mb-6 text-gray-800 md:text-4xl">
+                Welcome Ayush ji
+            </h1>
+            <div className='flex flex-col items-center justify-center gap-8 pb-10 sm:block'>
+                <img src={about1} className='w-full sm:w-[16rem] border h-full drop-shadow-[-3px_4px_4px_#808080] sm:mr-3 md:w-[19rem] lg:w-[25rem] float-left relative z-[10]' alt="Main visual" />
+                <h2 className='mb-1 text-xl font-semibold md:text-2xl text-main'>
+                    Embark on a Journey with UCS Cab Services
+                </h2>
+                <p className='text-base  text-[#535760] mb-4'>
+                    Embark on a Journey with UCS Cab Services
+                    When it comes to seamless and dependable transportation, UCS Cab Services stands out as a leader in the industry. We are committed to offering top-tier transportation solutions that cater to a wide range of customer needs. Whether you&apos;re traveling for work, attending a special event, or simply exploring the city, UCS Cab ensures that your journey is smooth, safe, and comfortable.
                 </p>
+                <p className='text-base  text-[#535760] mb-4'>
+                    <strong>Our services are available 24/7</strong>, meaning you can rely on us any time, day or night. With a team of highly professional and courteous drivers, we prioritize your safety and comfort above all else. Our drivers are well-trained, experienced, and dedicated to providing a hassle-free ride, ensuring that you reach your destination on time and in style. Whether you’re hurrying to a business meeting or taking a leisurely trip, UCS Cab guarantees an enjoyable ride from the moment you step in until you reach your destination.
+                </p>
+                <h2 className='mb-1 text-xl font-semibold md:text-2xl text-main'>
+                    India&apos;s Premier Cab Service
+                </h2>
+                <p className='text-base  text-[#535760] mb-4'>At
+                    <strong> UCS Cab</strong>,  we take pride in being recognized as one of the best cab services in India. We have built our reputation on a foundation of punctuality, safety, and an unwavering commitment to customer satisfaction. With our extensive network spanning major cities across the country, we offer unmatched convenience and reliability for all your transportation needs.
+
+
+                </p>
+
+
             </div>
 
-            {/* Slider Section */}
-            <div className="relative w-full max-w-[82rem] mx-auto flex items-center justify-center">
-                <Swiper
-                    modules={[Autoplay, Pagination]}
-                    autoplay={{ delay: 4000, disableOnInteraction: false }}
-                    loop={true}
-                    speed={1500}
-                    className="w-full mx-auto flex items-center justify-center gap-6"
-                    slidesPerView={slidesPerView}
-                    spaceBetween={10} // Reduce the gap between slides
-                    breakpoints={{
-                        1024: {
-                            slidesPerView: 4
-                        }
-                    }}
-                >
-                    {services.concat(services).map((service, ind) => (
-                        <SwiperSlide key={ind + 1} className="flex justify-center  px-6">
-                            <ServiceDetailCard
-                                icon={service.icon}
-                                title={service.name}
-                                description={service.description}
-                            />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+            <div className='flex flex-wrap items-center justify-center flex-grow gap-5'>
+                <div className='flex items-center max-w-[20rem] shadow-md py-1 gap-1 bg-lightSky border-main border rounded-md'>
+                    <img src={transparency} alt="Transparency icon" className='w-[5rem] rounded-md' />
+                    <div>
+                        <h2 className='font-semibold text-[1.1rem] mb-1'>100% Transparency</h2>
+                        <p className='text-[0.9rem] leading-5'>We ensure complete clarity in all our services and dealings.</p>
+                    </div>
+                </div>
+
+                <div className='flex items-center max-w-[20rem] shadow-md py-1 gap-1 bg-lightSky border-main border rounded-md'>
+                    <img src={support} alt="Transparency icon" className='w-[5rem] rounded-md' />
+                    <div>
+                        <h2 className='font-semibold  text-[1.1rem] mb-1'>24/7 Customer Support</h2>
+                        <p className='text-[0.9rem] leading-5'>We maintain open communication with clients at every step.</p>
+                    </div>
+                </div>
+
+                <div className='flex items-center max-w-[20rem] shadow-md py-1 gap-1 bg-lightSky border-main border rounded-md'>
+                    <img src={trust} alt="Trust icon" className='w-[5rem] rounded-md' />
+                    <div>
+                        <h2 className='font-semibold text-[1.1rem] mb-1'>Trusted & Quality Service</h2>
+                        <p className='text-[0.9rem] leading-5'>Providing reliable and top-notch service is our utmost priority.</p>
+                    </div>
+                </div>
             </div>
+
         </div>
     );
-};
+}
 
 export default HomeSection1;

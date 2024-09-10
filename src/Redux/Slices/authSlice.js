@@ -5,14 +5,13 @@ import axiosInstance from '../../Helper/axiosInstance';
 // Initial state setup
 const initialState = {
     isLoggedIn: localStorage.getItem('isLoggedIn') === 'true' || false,
-    role: localStorage.getItem('role') || "",
     data: localStorage.getItem('data') !== "undefined" ? JSON.parse(localStorage.getItem('data')) : {},
 };
 
 // Thunks for different actions
 export const createAccount = createAsyncThunk('/user/register', async (data) => {
     try {
-        let res = axiosInstance.post('user/register', data);
+        let res = axiosInstance.post('user/add', data);
         toast.promise(res, {
             loading: 'Creating Account',
             success: (data) => data?.data.message,
@@ -26,9 +25,41 @@ export const createAccount = createAsyncThunk('/user/register', async (data) => 
     }
 });
 
+export const verifyOTP = createAsyncThunk('/user/verify-otp', async (data) => {
+    try {
+        let res = axiosInstance.post('user/verify', data);
+        toast.promise(res, {
+            loading: 'Verifying',
+            success: (data) => data?.data.message,
+            error: "Failed to verify"
+        });
+        res = await res;
+        return res.data;
+    } catch (e) {
+        toast.error(e?.response?.data?.message);
+        throw e;
+    }
+});
+
 export const loginAccount = createAsyncThunk('/user/login', async (data) => {
     try {
         let res = axiosInstance.post('/user/login', data);
+        toast.promise(res, {
+            loading: 'Wait! Logging in',
+            success: (data) => data?.data.message,
+            error: "Failed to login"
+        });
+        res = await res;
+        return res.data;
+    } catch (e) {
+        toast.error(e?.response?.data?.message);
+        throw e;
+    }
+});
+
+export const resendOTP = createAsyncThunk('/user/verify/resent', async (data) => {
+    try {
+        let res = axiosInstance.post('/user/verify/resent', data);
         toast.promise(res, {
             loading: 'Wait! Logging in',
             success: (data) => data?.data.message,
@@ -139,20 +170,16 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(loginAccount.fulfilled, (state, action) => {
-                localStorage.setItem('data', JSON.stringify(action.payload.user));
+                localStorage.setItem('data', JSON.stringify(action.payload.validUser));
                 localStorage.setItem('isLoggedIn', true);
-                localStorage.setItem('role', action.payload.user.role);
                 state.isLoggedIn = true;
-                state.data = action.payload.user;
-                state.role = action.payload.user.role;
+                state.data = action.payload.validUser;
             })
             .addCase(createAccount.fulfilled, (state, action) => {
                 localStorage.setItem('data', JSON.stringify(action.payload.user));
                 localStorage.setItem('isLoggedIn', true);
-                localStorage.setItem('role', action.payload.user.role);
                 state.isLoggedIn = true;
                 state.data = action.payload.user;
-                state.role = action.payload.user.role;
             })
             .addCase(logout.fulfilled, (state) => {
                 localStorage.clear();
@@ -163,10 +190,8 @@ const authSlice = createSlice({
             .addCase(userProfile.fulfilled, (state, action) => {
                 localStorage.setItem('data', JSON.stringify(action.payload.user));
                 localStorage.setItem('isLoggedIn', true);
-                localStorage.setItem('role', action.payload.user.role);
                 state.isLoggedIn = true;
                 state.data = action.payload.user;
-                state.role = action.payload.user.role;
             })
     }
 });

@@ -10,9 +10,9 @@ import {
 
 const Footer = () => {
     return (
-        <footer className="relative flex flex-col items-center justify-center pt-16 overflow-x-hidden">
+        <footer className="relative flex flex-col items-center justify-center overflow-x-hidden">
 
-            <div className="mx-auto w-full sm:px-28 px-4 bg-[#001e3a]">
+            <div className="mx-auto w-full sm:px-28 px-4 bg-[#001e3a] pt-8">
                 <div className="py-8">
                     <div className="flex flex-wrap items-center justify-around">
                         {/* About Section */}
