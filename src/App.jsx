@@ -12,6 +12,7 @@ import TermsAndConditions from './Pages/TermsAndConditions';
 import FAQPage from './Pages/FAQPage';
 import Profile from './Pages/Auth/Profile';
 import CarList from './Pages/CarList';
+import BookCab from './Pages/BookCab';
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
@@ -21,6 +22,13 @@ const About = lazy(() => import('./Pages/About'));
 const App = () => {
   useEffect(() => {
     AOS.init();
+  }, []);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
   }, []);
 
   return (
@@ -35,6 +43,7 @@ const App = () => {
           <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/cars/:cityName' element={<CarList />} />
+          <Route path='/book-cab' element={<BookCab />} />
           <Route path='/FAQ' element={<FAQPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />

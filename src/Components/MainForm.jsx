@@ -14,13 +14,17 @@ const MainForm = () => {
     const [active, setActive] = useState(1);
     const [outstationActive, setOutstationActive] = useState(1.1);
     const [airportActive, setAirportActive] = useState(3.1);
-    const [startDate, setStartDate] = useState(new Date().toLocaleDateString('en-GB'));
-    const [startTime, setStartTime] = useState(new Date());
+    const [startDate, setStartDate] = useState(new Date());
+    const [startTime, setStartTime] = useState(() => {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() + 30);
+        return now;
+    });
     const [searchInput, setSearchInput] = useState('');
     const [filteredCities, setFilteredCities] = useState([]);
     const [tripCityError, setTripCityError] = useState('');
     const [focus, setFocus] = useState(false);
-
+    const [tripType, setTripType] = useState('One-Way Trip')
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const localCityData = useSelector((state) => state?.localTrip?.cityData);
@@ -59,6 +63,7 @@ const MainForm = () => {
                 .filter((data) => data.cityName.toLowerCase().startsWith(searchInput.toLowerCase()))
                 .map((data) => data.cityName);
             setFilteredCities(filtered);
+            setTripType('Local')
         }
     }, [searchInput, active, localCityData]);
 
@@ -72,14 +77,44 @@ const MainForm = () => {
         setFilteredCities([]);
     };
 
-    const allLocalCityNames = localCityData?.allCityRate.map((data) => data?.cityName);
+    const formatDateToISO = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    };
+
+    const isToday = (date) => {
+        const today = new Date();
+        return date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
+    };
+
+    useEffect(() => {
+        const date = startDate
+        isToday(date)
+    }, [startDate])
+
+
+    const allLocalCityNames = localCityData?.allCityRate?.map((data) => data?.cityName);
 
     const handleLocalTripSubmit = (e) => {
         e.preventDefault();
+
+        const date = formatDateToISO(startDate);
+        console.log(date)
+
+
+        if (!searchInput) {
+            return setTripCityError('Select a valid city name');
+        }
+
         if (allLocalCityNames.includes(searchInput)) {
             setTripCityError('');
         } else {
-            setTripCityError('Select a valid city name');
+            return setTripCityError('Select a valid city name');
         }
 
         if (!startDate) {
@@ -91,10 +126,12 @@ const MainForm = () => {
         }
 
         const time = startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+
         if (!time) {
             return toast.error("Select pickup time")
         }
-        navigate(`/cars/${searchInput}`, { state: { pickupTime: time, pickupDate: startDate, city: searchInput } })
+        navigate(`/cars/${searchInput}`, { state: { tripType: tripType, pickupTime: time, pickupDate: date, city: searchInput, cabData: localCityData } })
     };
     return (
         <div className=" min-w-[19.5rem] sm:min-w-[23rem] w-full md:w-fit md:min-w-[19.5rem] lg:min-w-[24rem] mb-8 max-w-[25rem] p-4 h-fit">
@@ -243,11 +280,11 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
 
                         <DatePicker
                             selected={startDate}
-                            onChange={(date) => setStartDate(date.toLocaleDateString('en-GB'))}
-
-                            dateFormat="dd/MM/yyyy"
+                            onChange={(date) => setStartDate(date)}
+                            minDate={new Date()}
+                            dateFormat="yyyy-MM-dd"
                             className="w-full pl-5 font-semibold tracking-wide bg-transparent outline-none caret-transparent"
-                            placeholderText="Select Date and Time"
+                            placeholderText="Select Date..."
                         />
                     </div>
                     <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
@@ -256,7 +293,7 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                         <label className='w-full  text-light text-[0.8rem]'>Pick-up Time</label>
                         <DatePicker
                             selected={startTime}
-                            onChange={(date) => setStartTime(date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }))}
+                            onChange={(date) => setStartTime(date)}
 
                             showTimeSelect
                             showTimeSelectOnly
@@ -266,7 +303,18 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                             className="w-full pl-5 font-semibold bg-transparent outline-none caret-transparent"
 
                             placeholderText="Select Time"
-                        />
+                            minTime={startDate && isToday(startDate)
+                                ? (() => {
+                                    const now = new Date();
+                                    now.setMinutes(now.getMinutes() + 30); // 30 minutes from now
+
+                                    // Set the date to today's date
+                                    const todayMinTime = new Date(startDate);
+                                    todayMinTime.setHours(now.getHours(), now.getMinutes(), 0, 0);
+                                    return todayMinTime;
+                                })()
+                                : new Date(startDate.setHours(0, 0, 0, 0))} // Min time for future dates (midnight)
+                            maxTime={new Date(startDate.setHours(23, 45, 0, 0))} />
                     </div>
                 </div>
                 <button
