@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react'
+import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
+import { IoDocumentText } from 'react-icons/io5'
+import { MdAirlineSeatReclineExtra, MdLocalParking, MdLuggage } from 'react-icons/md'
+import { SiToll } from 'react-icons/si'
+import { TbAirConditioning } from 'react-icons/tb'
+import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../assets/car1.jpg'
-import { MdAirlineSeatReclineExtra, MdLocalParking, MdLuggage } from 'react-icons/md';
-import { TbAirConditioning } from 'react-icons/tb';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { getTCDetails } from '../Redux/Slices/localTripSlice';
-import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi';
-import { SiToll } from 'react-icons/si';
-import { IoDocumentText } from 'react-icons/io5';
-import { FaXmark } from 'react-icons/fa6';
-const CarList = () => {
+import { toast } from 'react-toastify'
+import { getTCDetails } from '../Redux/Slices/localTripSlice'
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
+import { FaXmark } from 'react-icons/fa6'
+
+const CarDropList = () => {
+
+
     const [active, setActive] = useState(1);
     const dispatch = useDispatch()
     const [detailsActive, setDetailsActive] = useState()
@@ -22,10 +25,10 @@ const CarList = () => {
     const data = location.state
 
     const { tcData } = useSelector((state) => state?.localTrip)
-    const { tC } = tcData
-    const tc = tC?.map(data => data?.text)
 
-    console.log(tc)
+    console.log(tcData)
+
+
 
     console.log(data)
     console.log(active)
@@ -35,17 +38,17 @@ const CarList = () => {
     const pickupTime = data?.pickupTime
     const tripType = data?.tripType
 
-    useEffect(() => {
-        setPickupCity(data?.city)
-        const filteredCityData = data?.cabData?.allCityRate?.filter(cityRate => cityRate?.cityName === pickupCity);
-        setFilteredData(...filteredCityData)
-        if (tripType === "Local") {
-            const data = {
-                tripType: "local"
-            }
-            dispatch(getTCDetails(data))
-        }
-    }, [pickupCity])
+    // useEffect(() => {
+    //     setPickupCity(data?.city)
+    //     const filteredCityData = data?.cabData?.allCityRate?.filter(cityRate => cityRate?.cityName === pickupCity);
+    //     setFilteredData(...filteredCityData)
+    //     if (tripType === "Local") {
+    //         const data = {
+    //             tripType: "local"
+    //         }
+    //         dispatch(getTCDetails(data))
+    //     }
+    // }, [pickupCity])
 
     const handleBook = (data) => {
 
@@ -76,6 +79,8 @@ const CarList = () => {
     }
 
 
+
+    console.log(data)
     return (
         <div className='px-2 py-2 bg-lightSky'>
 
@@ -98,9 +103,9 @@ const CarList = () => {
             <div className='flex flex-col py-10  px-[5vw] sm:px-[7vw] md:px-[9vw] lg:px-[11vw] items-center justify-center gap-4'>
                 {
                     active === 1 ?
-                        filteredData && filteredData?.rates?.length === 0 ?
+                        data?.cabData && data?.cabData === 0 ?
                             <p>No Cabs available to this city right now</p> :
-                            filteredData?.rates?.map((data, index) => {
+                            data?.cabData?.map((data, index) => {
                                 return <div key={index} className='border rounded-md border-main min-w-[19.5rem] text-black max-w-[22rem] cursor-pointer transition-all duration-500 sm:max-w-[45rem] md:max-w-[50rem] lg:max-w-[52rem] w-[90vw] border-b md:border-r-[6px] hover:shadow-none shadow-[0px_5px_16px_-6px_#808080] overflow-hidden lg:hover:border-r-[0.5px]'>
                                     <div
                                         className='bg-white flex flex-col   sm:flex-row    [#f8fafc] '
@@ -219,9 +224,11 @@ const CarList = () => {
                                                 <div className='text-[0.8rem] p-2 py-4 relative'>
                                                     <div className='absolute text-main right-3 top-3' onClick={() => setDetailsActive(0)}><FaXmark /></div>
                                                     <h3 className='text-[0.9rem] font-semibold '>Terms and Conditions</h3>
-                                                    {tc.map((t, i) => (
-                                                        <li key={i} className='pl-2 mt-1 list-disc'>{t}</li>
-                                                    ))}
+                                                    {
+                                                        tcData?.tC?.map((data, index) => (
+                                                            <li className='pl-2 mt-1 leading-4 list-disc' key={index}>{data}</li>
+                                                        ))
+                                                    }
                                                 </div>
                                             }
                                             {detailsActive === `2.${index}` &&
@@ -295,9 +302,11 @@ const CarList = () => {
                                             <div className='text-[0.8rem] p-2 py-4 relative'>
                                                 <div className='absolute text-main right-3 top-3' onClick={() => setDetailsActive(0)}><FaXmark /></div>
                                                 <h3 className='text-[0.9rem] font-semibold '>Terms and Conditions</h3>
-                                                {tc.map((t, i) => (
-                                                    <li key={i} className='pl-2 mt-1 list-disc'>{t}</li>
-                                                ))}
+                                                {
+                                                    tcData?.tC?.map((data, index) => (
+                                                        <li className='pl-2 mt-1 leading-4 list-disc' key={index}>{data}</li>
+                                                    ))
+                                                }
                                             </div>
                                         }
                                         {detailsActive === `2.${index}` &&
@@ -489,9 +498,11 @@ const CarList = () => {
                                                 <div className='text-[0.8rem] p-2 py-4 relative'>
                                                     <div className='absolute text-main right-3 top-3' onClick={() => setDetailsActive(0)}><FaXmark /></div>
                                                     <h3 className='text-[0.9rem] font-semibold '>Terms and Conditions</h3>
-                                                    {tc.map((t, i) => (
-                                                        <li key={i} className='pl-2 mt-1 list-disc'>{t}</li>
-                                                    ))}
+                                                    {
+                                                        tcData.tC.map((data, index) => (
+                                                            <li className='pl-2 mt-1 leading-4 list-disc' key={data?._id}>{data?.text}</li>
+                                                        ))
+                                                    }
                                                 </div>
                                             }
                                             {detailsActive === `2.${index}` &&
@@ -566,8 +577,8 @@ const CarList = () => {
                                                 <div className='absolute text-main right-3 top-3' onClick={() => setDetailsActive(0)}><FaXmark /></div>
                                                 <h3 className='text-[0.9rem] font-semibold '>Terms and Conditions</h3>
                                                 {
-                                                    tC.map((data, index) => (
-                                                        <li className='pl-2 mt-1 leading-4 list-disc' key={index + 1}>{data?.text}</li>
+                                                    tcData?.tC?.map((data, index) => (
+                                                        <li className='pl-2 mt-1 leading-4 list-disc' key={index}>{data?.type}</li>
                                                     ))
                                                 }
                                             </div>
@@ -647,4 +658,4 @@ const CarList = () => {
     )
 }
 
-export default CarList
+export default CarDropList

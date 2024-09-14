@@ -9,8 +9,137 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getLocalCityData } from '../Redux/Slices/localTripSlice';
 import { toast } from 'react-toastify';
+import { getAirportCityData } from '../Redux/Slices/airportSlice';
+import axios from 'axios';
 
 const MainForm = () => {
+
+    useEffect(() => {
+        // Load Google Maps script if not already loaded
+        if (!window.google || !window.google.maps || !window.google.maps.places) {
+            const script = document.createElement('script');
+            script.src = "https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places";
+            script.async = true;
+            document.head.appendChild(script);
+        }
+    }, []);
+
+    // -----airport drop
+
+    // Renamed state variables
+    const [airportDropValue, setAirportDropValue] = useState('');
+    const [airportDropSuggestions, setAirportDropSuggestions] = useState([]);
+    const [isAirportDropVisible, setIsAirportDropVisible] = useState(false);
+    const [validAirportSuggestions, setValidAirportSuggestions] = useState([]);
+    const [airportError, setAirportError] = useState('');
+
+
+
+    const handleAirportDropChange = async (event) => {
+        const value = event.target.value;
+        setAirportDropValue(value);
+        setIsAirportDropVisible(true);
+
+        if (value) {
+            const autocompleteService = new window.google.maps.places.AutocompleteService();
+            autocompleteService.getPlacePredictions({
+                input: value,
+                types: ['airport'],
+                componentRestrictions: { country: 'IN' }
+            }, (predictions, status) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                    const transformedSuggestions = predictions.map(prediction => ({
+                        airportName: prediction.description,
+                        placeId: prediction.place_id
+                    }));
+                    setValidAirportSuggestions(transformedSuggestions); // Update valid suggestions
+                    setAirportDropSuggestions(transformedSuggestions);
+                } else {
+                    console.error('Error fetching suggestions:', status);
+                    setAirportDropSuggestions([]);
+                }
+            });
+        } else {
+            setAirportDropSuggestions([]);
+            setIsAirportDropVisible(false);
+        }
+    };
+
+    const handleAirportDropSelect = (suggestion) => {
+        setAirportDropValue(suggestion.airportName);
+        setIsAirportDropVisible(false);
+        setAirportError(''); // Clear error when a valid suggestion is selected
+    };
+    // -----airport drop end
+
+
+
+    // ------------airport pickup start
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [inputValue, setInputValue] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+    const [validSuggestions, setValidSuggestions] = useState([]);
+    const [inputError, setInputError] = useState('');
+    const containerRef = useRef(null);
+
+    const handleInputChange = async (event) => {
+        const value = event.target.value;
+        setInputValue(value);
+        setShowSuggestions(true);
+
+        if (value) {
+            const autocompleteService = new window.google.maps.places.AutocompleteService();
+            autocompleteService.getPlacePredictions({
+                input: value,
+                componentRestrictions: { country: 'IN' } // Restrict to India
+            }, (predictions, status) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                    const transformedSuggestions = predictions.map(prediction => ({
+                        placeName: prediction.description,
+                        placeId: prediction.place_id
+                    }));
+                    setValidSuggestions(transformedSuggestions); // Update valid suggestions
+                    setSuggestions(transformedSuggestions);
+                } else {
+                    console.error('Error fetching suggestions:', status);
+                    setSuggestions([]);
+                }
+            });
+        } else {
+            setSuggestions([]);
+            setShowSuggestions(false);
+        }
+    };
+
+    const handleSuggestionClick = (suggestion) => {
+        setInputValue(suggestion.placeName);
+        setShowSuggestions(false);
+        setInputError(''); // Clear error when a valid suggestion is selected
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setShowSuggestions(false); // Hide suggestions if click is outside
+                setIsAirportDropVisible(false); // Hide suggestions if input is empty
+
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+
+
+    console.log(suggestions)
+
+    // ---------airport end
+
+
     const [active, setActive] = useState(1);
     const [outstationActive, setOutstationActive] = useState(1.1);
     const [airportActive, setAirportActive] = useState(3.1);
@@ -28,9 +157,13 @@ const MainForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const localCityData = useSelector((state) => state?.localTrip?.cityData);
+    const airportCityData = useSelector((state) => state?.airportTrip?.airportData);
 
     const inputRef = useRef(null);
     const dropdownRef = useRef(null);
+
+
+    console.log(airportCityData)
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -41,9 +174,7 @@ const MainForm = () => {
                 setFocus(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
-
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
@@ -51,6 +182,7 @@ const MainForm = () => {
 
     const fetchLocalCityData = async () => {
         await dispatch(getLocalCityData());
+        await dispatch(getAirportCityData())
     };
 
     useEffect(() => {
@@ -103,18 +235,41 @@ const MainForm = () => {
     const handleLocalTripSubmit = (e) => {
         e.preventDefault();
 
+        if (active === 3, airportActive === 3.1) {
+            setTripType("Drop Airport")
+        }
+
         const date = formatDateToISO(startDate);
         console.log(date)
 
+        if (active === 3) {
+            if (!validSuggestions.some(suggestion => suggestion.placeName === inputValue)) {
+                return setInputError('Select a valid location from the suggestions');
+            } else {
+                setInputError('');
+                // Handle form submission logic here
+            }
 
-        if (!searchInput) {
-            return setTripCityError('Select a valid city name');
+            if (!validAirportSuggestions.some(suggestion => suggestion.airportName === airportDropValue)) {
+                return setAirportError('Select a valid airport from the suggestions');
+            } else {
+                setAirportError('');
+                // Handle form submission logic here
+            }
+
+
         }
 
-        if (allLocalCityNames.includes(searchInput)) {
-            setTripCityError('');
-        } else {
-            return setTripCityError('Select a valid city name');
+        if (active === 2) {
+            if (!searchInput) {
+                return setTripCityError('Select a valid city name');
+            }
+
+            if (allLocalCityNames.includes(searchInput)) {
+                setTripCityError('');
+            } else {
+                return setTripCityError('Select a valid city name');
+            }
         }
 
         if (!startDate) {
@@ -131,7 +286,15 @@ const MainForm = () => {
         if (!time) {
             return toast.error("Select pickup time")
         }
-        navigate(`/cars/${searchInput}`, { state: { tripType: tripType, pickupTime: time, pickupDate: date, city: searchInput, cabData: localCityData } })
+
+        if (active === 2) {
+            navigate(`/cars/${searchInput}`, { state: { tripType: tripType, pickupTime: time, pickupDate: date, city: searchInput, cabData: localCityData } })
+        }
+
+        if (active === 3) {
+            navigate(`/cars/drop/airport/from/${airportDropValue}`, { state: { tripType: tripType, pickupTime: time, pickupDate: date, pickup: inputValue, drop: airportDropValue, cabData: airportCityData } })
+        }
+
     };
     return (
         <div className=" min-w-[19.5rem] sm:min-w-[23rem] w-full md:w-fit md:min-w-[19.5rem] lg:min-w-[24rem] mb-8 max-w-[25rem] p-4 h-fit">
@@ -188,24 +351,106 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
 
 
                 {active === 3 &&
-                    <div className='w-full flex  items-center justify-center text-[0.8rem] tracking-wide'>
-                        <button
-                            onClick={() => setAirportActive(3.1)}
-                            className={`py-[0.15rem] font-semibold px-4 border-[0.3px] rounded-l-full border-gray-400 transform scale-105 transition-all duration-500 ease-in-out
+                    <>
+                        <div className='w-full flex  items-center justify-center text-[0.8rem] tracking-wide'>
+                            <button
+                                onClick={() => setAirportActive(3.1)}
+                                className={`py-[0.15rem] font-semibold px-4 border-[0.3px] rounded-l-full border-gray-400 transform scale-105 transition-all duration-500 ease-in-out
 ${airportActive === 3.1 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#f0f4f8]'}`}
-                        >
-                            Drop
-                        </button>
-                        <button
-                            onClick={() => setAirportActive(3.2)}
-                            className={`py-[0.15rem] font-semibold px-4 border-[0.3px] rounded-r-full border-gray-400 transform scale-105 transition-all duration-500 ease-in-out
+                            >
+                                Drop
+                            </button>
+                            <button
+                                onClick={() => setAirportActive(3.2)}
+                                className={`py-[0.15rem] font-semibold px-4 border-[0.3px] rounded-r-full border-gray-400 transform scale-105 transition-all duration-500 ease-in-out
 ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#f0f4f8]'}`}
-                        >
-                            Pickup
-                        </button>
-                    </div>}
+                            >
+                                Pickup
+                            </button>
+                        </div>
+                        <div
+                            ref={containerRef}
 
-                {active !== 2 &&
+                            className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
+
+                            <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
+                                <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-light border-[0.2rem] rounded-full' ></div>
+                                <div className='h-[3.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1'>
+                                </div>
+                                <FaLocationDot />
+                            </div>
+                            <div
+
+                                className='relative w-full' >
+                                <label className='w-full text-light text-[0.8rem]'>Pick-up Location</label>
+                                <input
+                                    type="text"
+                                    value={inputValue}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter Pickup Location"
+                                    className="w-full pb-3 mt-[0.2rem] font-semibold text-black bg-transparent outline-none placeholder:text-black"
+                                />
+                                {inputError && <p className="text-xs text-red-500 ">{inputError}</p>}
+                                {showSuggestions && (
+                                    <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
+                                        {suggestions.length > 0 ? (
+                                            suggestions.map((suggestion, index) => (
+                                                <li
+                                                    key={index}
+                                                    onClick={() => handleSuggestionClick(suggestion)}
+                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                                                >
+                                                    {suggestion.placeName}
+                                                </li>
+                                            ))
+                                        ) : (
+                                            <li className="px-4 py-2 text-gray-500">No suggestions available</li>
+                                        )}
+                                    </ul>
+                                )}
+                            </div>
+                            {/* Arrow Icon */}
+                            <div className='absolute top-[3.35rem] border-main bg-white right-4 border p-[0.35rem] text-[0.95rem] rounded-full'>
+                                <GoArrowSwitch className=" top-10 rotate-[90deg]   text-main" />
+                            </div>
+                            <div className='w-full h-[0.5px] bg-[#80808051]'></div>
+                            <div
+
+                                className='relative w-full mt-[0.52rem]'>
+                                <label className='w-full  text-light py-3 pb-2  text-[0.8rem]'>Drop Location</label>
+                                <input
+
+
+                                    type="text"
+                                    value={airportDropValue}
+                                    onChange={handleAirportDropChange}
+                                    placeholder="Enter Drop Location"
+                                    className="w-full pb-1 mt-[0.2rem] font-semibold text-black outline-none placeholder:text-black"
+                                />
+                                {airportError && <p className="text-xs text-red-500 ">{airportError}</p>}
+                                {isAirportDropVisible && (
+                                    <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
+                                        {airportDropSuggestions.length > 0 ? (
+                                            airportDropSuggestions.map((suggestion, index) => (
+                                                <li
+                                                    key={index}
+                                                    onClick={() => handleAirportDropSelect(suggestion)}
+                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                                                >
+                                                    {suggestion.airportName}
+                                                </li>
+                                            ))
+                                        ) : (
+                                            <li className="px-4 py-2 text-gray-500">No suggestions available</li>
+                                        )}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                }
+
+                {active === 1 &&
                     <div className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
 
                         <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>

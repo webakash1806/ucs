@@ -13,6 +13,7 @@ import FAQPage from './Pages/FAQPage';
 import Profile from './Pages/Auth/Profile';
 import CarList from './Pages/CarList';
 import BookCab from './Pages/BookCab';
+import CarDropList from './Pages/CarDropList';
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
@@ -43,6 +44,7 @@ const App = () => {
           <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/cars/:cityName' element={<CarList />} />
+          <Route path='/cars/drop/airport/from/:pickupName' element={<CarDropList />} />
           <Route path='/book-cab' element={<BookCab />} />
           <Route path='/FAQ' element={<FAQPage />} />
           <Route path='/register' element={<RegisterPage />} />
