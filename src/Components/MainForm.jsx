@@ -242,7 +242,7 @@ const MainForm = () => {
         const date = formatDateToISO(startDate);
         console.log(date)
 
-        if (active === 3) {
+        if (airportActive === 3.1) {
             if (!validSuggestions.some(suggestion => suggestion.placeName === inputValue)) {
                 return setInputError('Select a valid location from the suggestions');
             } else {
@@ -259,6 +259,29 @@ const MainForm = () => {
 
 
         }
+
+
+
+        if (airportActive === 3.2) {
+            if (!validAirportSuggestions.some(suggestion => suggestion.airportName === airportDropValue)) {
+                return setAirportError('Select a valid airport from the suggestions');
+            } else {
+                setAirportError('');
+                // Handle form submission logic here
+            }
+
+            if (!validSuggestions.some(suggestion => suggestion.placeName === inputValue)) {
+                return setInputError('Select a valid location from the suggestions');
+            } else {
+                setInputError('');
+                // Handle form submission logic here
+            }
+
+
+
+        }
+
+
 
         if (active === 2) {
             if (!searchInput) {
@@ -292,7 +315,7 @@ const MainForm = () => {
         }
 
         if (active === 3) {
-            navigate(`/cars/drop/airport/from/${airportDropValue}`, { state: { tripType: tripType, pickupTime: time, pickupDate: date, pickup: inputValue, drop: airportDropValue, cabData: airportCityData } })
+            navigate(`/cars/from/${airportDropValue}`, { state: { tripType: airportActive === 3.1 ? 1 : 2, pickupTime: time, pickupDate: date, pickup: airportActive === 3.1 ? inputValue : airportDropValue, drop: airportActive === 3.1 ? airportDropValue : inputValue, cabData: airportCityData } })
         }
 
     };
@@ -353,100 +376,185 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
                 {active === 3 &&
                     <>
                         <div className='w-full flex  items-center justify-center text-[0.8rem] tracking-wide'>
-                            <button
+                            <div
                                 onClick={() => setAirportActive(3.1)}
                                 className={`py-[0.15rem] font-semibold px-4 border-[0.3px] rounded-l-full border-gray-400 transform scale-105 transition-all duration-500 ease-in-out
 ${airportActive === 3.1 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#f0f4f8]'}`}
                             >
                                 Drop
-                            </button>
-                            <button
+                            </div>
+                            <div
                                 onClick={() => setAirportActive(3.2)}
                                 className={`py-[0.15rem] font-semibold px-4 border-[0.3px] rounded-r-full border-gray-400 transform scale-105 transition-all duration-500 ease-in-out
 ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#f0f4f8]'}`}
                             >
                                 Pickup
-                            </button>
+                            </div>
                         </div>
-                        <div
-                            ref={containerRef}
+                        {airportActive === 3.1 &&
+                            <div
+                                ref={containerRef}
 
-                            className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
+                                className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
 
-                            <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
-                                <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-light border-[0.2rem] rounded-full' ></div>
-                                <div className='h-[3.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1'>
+                                <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
+                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-light border-[0.2rem] rounded-full' ></div>
+                                    <div className='h-[3.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1'>
+                                    </div>
+                                    <FaLocationDot />
                                 </div>
-                                <FaLocationDot />
-                            </div>
+                                <div
+
+                                    className='relative w-full' >
+                                    <label className='w-full text-light text-[0.8rem]'>Pick-up Location</label>
+                                    <input
+                                        type="text"
+                                        value={inputValue}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter Pickup Location"
+                                        className="w-full pb-3 mt-[0.2rem] font-semibold text-black bg-transparent outline-none placeholder:text-black"
+                                    />
+                                    {inputError && <p className="text-xs text-red-500 ">{inputError}</p>}
+                                    {showSuggestions && (
+                                        <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
+                                            {suggestions.length > 0 ? (
+                                                suggestions.map((suggestion, index) => (
+                                                    <li
+                                                        key={index}
+                                                        onClick={() => handleSuggestionClick(suggestion)}
+                                                        className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                                                    >
+                                                        {suggestion.placeName}
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <li className="px-4 py-2 text-gray-500">No suggestions available</li>
+                                            )}
+                                        </ul>
+                                    )}
+                                </div>
+                                {/* Arrow Icon */}
+                                <div className='absolute top-[3.35rem] border-main bg-white right-4 border p-[0.35rem] text-[0.95rem] rounded-full'>
+                                    <GoArrowSwitch className=" top-10 rotate-[90deg]   text-main" />
+                                </div>
+                                <div className='w-full h-[0.5px] bg-[#80808051]'></div>
+                                <div
+
+                                    className='relative w-full mt-[0.52rem]'>
+                                    <label className='w-full  text-light py-3 pb-2  text-[0.8rem]'>Drop Location</label>
+                                    <input
+
+
+                                        type="text"
+                                        value={airportDropValue}
+                                        onChange={handleAirportDropChange}
+                                        placeholder="Enter Drop Location"
+                                        className="w-full pb-1 mt-[0.2rem] font-semibold text-black outline-none placeholder:text-black"
+                                    />
+                                    {airportError && <p className="text-xs text-red-500 ">{airportError}</p>}
+                                    {isAirportDropVisible && (
+                                        <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
+                                            {airportDropSuggestions.length > 0 ? (
+                                                airportDropSuggestions.map((suggestion, index) => (
+                                                    <li
+                                                        key={index}
+                                                        onClick={() => handleAirportDropSelect(suggestion)}
+                                                        className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                                                    >
+                                                        {suggestion.airportName}
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <li className="px-4 py-2 text-gray-500">No suggestions available</li>
+                                            )}
+                                        </ul>
+                                    )}
+                                </div>
+                            </div>}
+
+                        {airportActive === 3.2 &&
                             <div
+                                ref={containerRef}
 
-                                className='relative w-full' >
-                                <label className='w-full text-light text-[0.8rem]'>Pick-up Location</label>
-                                <input
-                                    type="text"
-                                    value={inputValue}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter Pickup Location"
-                                    className="w-full pb-3 mt-[0.2rem] font-semibold text-black bg-transparent outline-none placeholder:text-black"
-                                />
-                                {inputError && <p className="text-xs text-red-500 ">{inputError}</p>}
-                                {showSuggestions && (
-                                    <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
-                                        {suggestions.length > 0 ? (
-                                            suggestions.map((suggestion, index) => (
-                                                <li
-                                                    key={index}
-                                                    onClick={() => handleSuggestionClick(suggestion)}
-                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-200"
-                                                >
-                                                    {suggestion.placeName}
-                                                </li>
-                                            ))
-                                        ) : (
-                                            <li className="px-4 py-2 text-gray-500">No suggestions available</li>
-                                        )}
-                                    </ul>
-                                )}
-                            </div>
-                            {/* Arrow Icon */}
-                            <div className='absolute top-[3.35rem] border-main bg-white right-4 border p-[0.35rem] text-[0.95rem] rounded-full'>
-                                <GoArrowSwitch className=" top-10 rotate-[90deg]   text-main" />
-                            </div>
-                            <div className='w-full h-[0.5px] bg-[#80808051]'></div>
-                            <div
+                                className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
 
-                                className='relative w-full mt-[0.52rem]'>
-                                <label className='w-full  text-light py-3 pb-2  text-[0.8rem]'>Drop Location</label>
-                                <input
+                                <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
+                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-light border-[0.2rem] rounded-full' ></div>
+                                    <div className='h-[3.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1'>
+                                    </div>
+                                    <FaLocationDot />
+                                </div>
+                                <div
+
+                                    className='relative w-full' >
+                                    <label className='w-full text-light text-[0.8rem]'>Pick-up Location</label>
+                                    <input
+                                        type="text"
+                                        value={airportDropValue}
+                                        onChange={handleAirportDropChange}
+                                        placeholder="Enter Pickup Location"
+                                        className="w-full pb-3 mt-[0.2rem] font-semibold text-black bg-transparent outline-none placeholder:text-black"
+                                    />
+
+                                    {airportError && <p className="text-xs text-red-500 ">{airportError}</p>}
+                                    {isAirportDropVisible && (
+                                        <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
+                                            {airportDropSuggestions.length > 0 ? (
+                                                airportDropSuggestions.map((suggestion, index) => (
+                                                    <li
+                                                        key={index}
+                                                        onClick={() => handleAirportDropSelect(suggestion)}
+                                                        className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                                                    >
+                                                        {suggestion.airportName}
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <li className="px-4 py-2 text-gray-500">No suggestions available</li>
+                                            )}
+                                        </ul>
+                                    )}
 
 
-                                    type="text"
-                                    value={airportDropValue}
-                                    onChange={handleAirportDropChange}
-                                    placeholder="Enter Drop Location"
-                                    className="w-full pb-1 mt-[0.2rem] font-semibold text-black outline-none placeholder:text-black"
-                                />
-                                {airportError && <p className="text-xs text-red-500 ">{airportError}</p>}
-                                {isAirportDropVisible && (
-                                    <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
-                                        {airportDropSuggestions.length > 0 ? (
-                                            airportDropSuggestions.map((suggestion, index) => (
-                                                <li
-                                                    key={index}
-                                                    onClick={() => handleAirportDropSelect(suggestion)}
-                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-200"
-                                                >
-                                                    {suggestion.airportName}
-                                                </li>
-                                            ))
-                                        ) : (
-                                            <li className="px-4 py-2 text-gray-500">No suggestions available</li>
-                                        )}
-                                    </ul>
-                                )}
-                            </div>
-                        </div>
+                                </div>
+                                {/* Arrow Icon */}
+                                <div className='absolute top-[3.35rem] border-main bg-white right-4 border p-[0.35rem] text-[0.95rem] rounded-full'>
+                                    <GoArrowSwitch className=" top-10 rotate-[90deg]   text-main" />
+                                </div>
+                                <div className='w-full h-[0.5px] bg-[#80808051]'></div>
+                                <div
+
+                                    className='relative w-full mt-[0.52rem]'>
+                                    <label className='w-full  text-light py-3 pb-2  text-[0.8rem]'>Drop Location</label>
+                                    <input
+
+
+                                        type="text"
+                                        value={inputValue}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter Drop Location"
+                                        className="w-full pb-1 mt-[0.2rem] font-semibold text-black outline-none placeholder:text-black"
+                                    />
+                                    {inputError && <p className="text-xs text-red-500 ">{inputError}</p>}
+                                    {showSuggestions && (
+                                        <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
+                                            {suggestions.length > 0 ? (
+                                                suggestions.map((suggestion, index) => (
+                                                    <li
+                                                        key={index}
+                                                        onClick={() => handleSuggestionClick(suggestion)}
+                                                        className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                                                    >
+                                                        {suggestion.placeName}
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <li className="px-4 py-2 text-gray-500">No suggestions available</li>
+                                            )}
+                                        </ul>
+                                    )}
+                                </div>
+                            </div>}
                     </>
                 }
 

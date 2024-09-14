@@ -20,7 +20,7 @@ export const getAirportCityData = createAsyncThunk('/airpot/airportData', async 
     }
 });
 
-export const sendBookingData = createAsyncThunk('/airpot/airportData', async (data) => {
+export const sendAirportBookingData = createAsyncThunk('/airpot/airportData', async (data) => {
     try {
         let res = axiosInstance.post('oneway/booking/trip/airpot', data);
         res = await res;
@@ -35,6 +35,18 @@ export const getTCDetails = createAsyncThunk('/tc/byTrip', async (data) => {
     try {
         console.log(data)
         let res = axiosInstance.post('tc/trip', data);
+        res = await res;
+        return res.data;
+    } catch (e) {
+        toast.error(e?.response?.data?.message);
+        throw e;
+    }
+});
+
+export const getDistance = createAsyncThunk('/airport/distance', async (data) => {
+    try {
+        console.log(data)
+        let res = axiosInstance.post('distance', data);
         res = await res;
         return res.data;
     } catch (e) {
