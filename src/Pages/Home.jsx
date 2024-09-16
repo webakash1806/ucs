@@ -6,6 +6,8 @@ import BlogSection from '../Components/BlogSection'
 import Testimonial from '../Components/Testimonial'
 import WhyChoose from '../Components/WhyChoose'
 import ServiceSection from '../Components/ServiceSection'
+import car1 from '../assets/car1.jpg'
+
 
 const Home = () => {
     return (
@@ -13,6 +15,9 @@ const Home = () => {
             <MainSlider />
             <HomeSection1 />
             <ServiceSection />
+
+
+
 
             <HomeSection2 />
             <WhyChoose />

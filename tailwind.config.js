@@ -10,7 +10,7 @@ export default {
         'spin-slow': 'spin 100s linear infinite', // Spin slowly
       },
       colors: {
-        main: '#2499BF',
+        main: '#08828E',
         light: '#908C8C',
         lightSky: '#F7FBFF',
         dark: '#001E3A',

@@ -14,7 +14,7 @@ const ServiceSection = () => {
     useEffect(() => {
         const updateSlidesPerView = () => {
             const viewportWidth = window.innerWidth;
-            const cardWidth = 19.5 * 16; // 20rem in pixels (1rem = 16px, adjust as needed)
+            const cardWidth = 18 * 16; // 20rem in pixels (1rem = 16px, adjust as needed)
             const numSlides = Math.floor(viewportWidth / cardWidth);
             setSlidesPerView(numSlides || 1); // Ensure at least 1 slide is visible
         };
@@ -66,23 +66,19 @@ const ServiceSection = () => {
             </div>
 
             {/* Slider Section */}
-            <div className="relative w-full max-w-[82rem] mx-auto flex items-center justify-center">
+            <div className="relative w-full max-w-[84rem] mx-auto flex items-center justify-center">
                 <Swiper
                     modules={[Autoplay, Pagination]}
                     autoplay={{ delay: 4000, disableOnInteraction: false }}
                     loop={true}
                     speed={1500}
                     className="flex items-center justify-center w-full gap-6 mx-auto"
-                    slidesPerView={slidesPerView}
-                    spaceBetween={10} // Reduce the gap between slides
-                    breakpoints={{
-                        1024: {
-                            slidesPerView: 4
-                        }
-                    }}
+                    slidesPerView={slidesPerView > 4 ? 4 : slidesPerView}
+                    spaceBetween={1} // Reduce the gap between slides
+
                 >
                     {services.concat(services).map((service, ind) => (
-                        <SwiperSlide key={ind + 1} className="flex justify-center px-6">
+                        <SwiperSlide key={ind + 1} className="flex justify-center px-2">
                             <ServiceDetailCard
                                 icon={service.icon}
                                 title={service.name}

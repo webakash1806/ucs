@@ -15,6 +15,10 @@ import CarList from './Pages/CarList';
 import BookCab from './Pages/BookCab';
 import CarDropList from './Pages/CarDropList';
 import BookAirportCab from './Pages/BookAirportCab';
+import RoundCarList from './Pages/RoundCarList';
+import RoundTripBook from './Pages/RoundTripBook';
+import OnewayCarList from './Pages/OnewayCarList';
+import BookOnewayCab from './Pages/BookOnewayCab';
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
@@ -46,8 +50,12 @@ const App = () => {
           <Route path='/profile' element={<Profile />} />
           <Route path='/cars/:cityName' element={<CarList />} />
           <Route path='/cars/from/:pickupName' element={<CarDropList />} />
+          <Route path='/cars/round/:pickupName' element={<RoundCarList />} />
+          <Route path='/cars/oneway/:pickupName' element={<OnewayCarList />} />
           <Route path='/book-cab' element={<BookCab />} />
           <Route path='/book-airport-cab' element={<BookAirportCab />} />
+          <Route path='/book-round-trip-cab' element={<RoundTripBook />} />
+          <Route path='/book-oneway-trip-cab' element={<BookOnewayCab />} />
           <Route path='/FAQ' element={<FAQPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />

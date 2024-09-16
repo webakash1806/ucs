@@ -61,13 +61,13 @@ const BlogSection = () => {
     }, []);
 
     return (
-        <div className='flex flex-col items-center justify-center xl:p-10 p-6 bg-gradient-to-br bg-white'>
+        <div className='flex flex-col items-center justify-center p-6 bg-white xl:p-10 bg-gradient-to-br'>
             {/* Header */}
-            <div className='text-center mb-10'>
-                <button className='py-3 px-10 bg-main text-white rounded-full font-semibold shadow-lg hover:bg-blue-700 transition-all'>
+            <div className='mb-10 text-center'>
+                <button className='px-10 py-3 font-semibold text-white transition-all rounded-full shadow-lg bg-main hover:bg-blue-700'>
                     News & Blogs
                 </button>
-                <h1 className='text-2xl xl:text-3xl font-bold mt-4'>Latest News & Blogs</h1>
+                <h1 className='mt-4 text-2xl font-bold xl:text-3xl'>Latest News & Blogs</h1>
             </div>
 
             <div className="relative w-full max-w-[82rem] mx-auto flex items-center justify-center">
@@ -76,8 +76,8 @@ const BlogSection = () => {
                     autoplay={{ delay: 4000, disableOnInteraction: false }}
                     loop={true}
                     speed={1500}
-                    className="w-full mx-auto flex items-center justify-center gap-6"
-                    slidesPerView={slidesPerView}
+                    className="flex items-center justify-center w-full gap-6 mx-auto"
+                    slidesPerView={slidesPerView > 4 ? 4 : slidesPerView}
                     spaceBetween={10} // Reduce the gap between slides
                 >
                     {blogs.concat(blogs).map((blog, index) => (
@@ -90,20 +90,20 @@ const BlogSection = () => {
                                 <p className='text-gray-400 mb-4 text-[0.9rem] line-clamp-3'>
                                     {blog.description}
                                 </p>
-                                <div className='flex flex-col gap-2 items-center justify-between'>
+                                <div className='flex flex-col items-center justify-between gap-2'>
                                     <div className='flex items-center gap-4'>
-                                        <img src={''} alt="user" className='w-10 h-10 rounded-full bg-gray-500' />
+                                        <img src={''} alt="user" className='w-10 h-10 bg-gray-500 rounded-full' />
                                         <p>By: {blog.author}</p>
                                     </div>
-                                    <div className='flex gap-3 justify-between'>
-                                        <Link className='p-2 bg-gray-800 rounded-full hover:bg-blue-500 transition'><CiFacebook className='text-xl text-gray-400 hover:text-white' /></Link>
-                                        <Link className='p-2 bg-gray-800 rounded-full hover:bg-red-500 transition'><FaYoutube className='text-xl text-gray-400 hover:text-white' /></Link>
-                                        <Link className='p-2 bg-gray-800 rounded-full hover:bg-pink-500 transition'><CiInstagram className='text-xl text-gray-400 hover:text-white' /></Link>
-                                        <Link className='p-2 bg-gray-800 rounded-full hover:bg-blue-400 transition'><CiTwitter className='text-xl text-gray-400 hover:text-white' /></Link>
+                                    <div className='flex justify-between gap-3'>
+                                        <Link className='p-2 transition bg-gray-800 rounded-full hover:bg-blue-500'><CiFacebook className='text-xl text-gray-400 hover:text-white' /></Link>
+                                        <Link className='p-2 transition bg-gray-800 rounded-full hover:bg-red-500'><FaYoutube className='text-xl text-gray-400 hover:text-white' /></Link>
+                                        <Link className='p-2 transition bg-gray-800 rounded-full hover:bg-pink-500'><CiInstagram className='text-xl text-gray-400 hover:text-white' /></Link>
+                                        <Link className='p-2 transition bg-gray-800 rounded-full hover:bg-blue-400'><CiTwitter className='text-xl text-gray-400 hover:text-white' /></Link>
                                     </div>
                                 </div>
                             </div>
-                            <div className='absolute top-5 left-5 bg-blue-500 text-white font-semibold text-center rounded-lg px-4 py-2 shadow-lg'>
+                            <div className='absolute px-4 py-2 font-semibold text-center text-white bg-blue-500 rounded-lg shadow-lg top-5 left-5'>
                                 <p className='leading-tight'>{blog.date}</p>
                             </div>
                         </SwiperSlide>

@@ -39,7 +39,7 @@ const MainSlider = () => {
         <div className="relative w-full min-h-[40rem] flex flex-col md:flex-row-reverse items-center justify-center">
             {/* Form Section */}
             <div className='absolute gap-4 flex-col md:flex-row-reverse md:justify-around z-10 w-full h-[38rem]  flex items-center justify-center'>
-                <div className="relative min-w-[17rem] md:pr-4 w-full max-w-[30rem] md:max-w-[35rem] h-auto flex items-center justify-center">
+                <div className="relative hidden lg:block min-w-[17rem] md:pr-4 w-full max-w-[30rem] md:max-w-[35rem] h-auto flex items-center justify-center">
                     <Swiper
                         modules={[Autoplay, Pagination, EffectFade]}
                         autoplay={{ delay: 3000, disableOnInteraction: false }}

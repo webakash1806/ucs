@@ -116,7 +116,7 @@ const LoginPage = () => {
 
 
                     <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <label className='w-full  text-light   text-[0.8rem]'>Full Name</label>
+                        <label className='w-full  text-light   text-[0.8rem]'>Password</label>
                         <input
                             type="password"
                             name="password"

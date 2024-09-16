@@ -13,27 +13,26 @@ import { order, verifyPayment } from '../Redux/Slices/razorpaySlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
 import { SiToll } from 'react-icons/si'
+import { sendOnewayTripData, sendRoundTripData } from '../Redux/Slices/outstationSlice'
 
-const BookCab = () => {
+const BookOnewayCab = () => {
     const navigate = useNavigate()
     const [currentStep, setCurrentStep] = useState(1);
     const [detailsActive, setDetailsActive] = useState(1)
     const [actualPrice, setActualPrice] = useState(0)
     const dispatch = useDispatch()
     const location = useLocation()
-    const { cabData, tcData, pickupDate, pickupCity, totalPrice, pickupTime, selectedType, tripType } = location.state
+    const { cabData, tcData, pickupDate, distance, pickupCity, dropCity, totalPrice, pickupTime, selectedType, returnDate, tripType } = location.state
     const [price10, setPrice10] = useState(Number(totalPrice) * 10 / 100)
     console.log(tcData)
     const userData = useSelector((state) => state?.auth)
 
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
     const order_id = useSelector((state) => state?.razorpay?.orderId);
-    const formatPickupDate = (dateString) => {
-        // Split the date string "dd/mm/yyyy" into individual components
-        const [day, month, year] = dateString.split("/");
 
-        // Create a new Date object with the parsed values
-        const dateObject = new Date(`${year}-${month}-${day}`);
+    const formatPickupDate = (dateString) => {
+        // Create a new Date object directly from the "yyyy-mm-dd" string
+        const dateObject = new Date(dateString);
 
         // Use Intl.DateTimeFormat to get the weekday
         const weekday = new Intl.DateTimeFormat('en-GB', {
@@ -46,26 +45,28 @@ const BookCab = () => {
             day: 'numeric',
         }).format(dateObject);
 
+        // Extract the year directly from the dateObject
+        const year = dateObject.getFullYear();
+
         // Combine the weekday, the formatted date, and the year with commas
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
 
 
-
-
     const [formData, setFormData] = useState({
-        cityName: pickupCity,
+        fromLocation: pickupCity,
+        pickupAddress: "",
+        dropAddress: "",
+        toLocation: dropCity,
         tripType: tripType,
         category: cabData?.category?.name,
         pickupDate: pickupDate,
+        returnDate: returnDate,
         pickupTime: pickupTime,
         name: userData?.data?.name || "",
         email: userData?.data?.email || "",
         phoneNumber: userData?.data?.phoneNumber || "",
         voucherCode: "",
-        pickupAddress: "",
-        dropAddress: "",
-        distance: selectedType === "8 hrs | 80 km" ? 80 : 120,
         paymentMode: '10',
         declaration: false,
     })
@@ -161,10 +162,10 @@ const BookCab = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const { cityName, tripType, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, dropAddress, paymentMode, distance } = formData
-
+        const { fromLocation, tripType, toLocation, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, paymentMode, dropAddress } = formData
+        console.log(formData)
         if (currentStep === 1) {
-            if (!cityName || !tripType || !category || !pickupAddress || !pickupDate || !pickupTime || !name || !email || !phoneNumber || !dropAddress || !distance) {
+            if (!fromLocation || !dropAddress || !tripType || !toLocation || !category || !pickupAddress || !pickupDate || !pickupTime || !name || !email || !phoneNumber) {
                 return toast.error("All fields are required!")
             }
 
@@ -199,7 +200,7 @@ const BookCab = () => {
                 paymentDetails.razorpay_signature = res.razorpay_signature;
                 const response = await dispatch(verifyPayment(paymentDetails));
                 if (response?.payload?.success) {
-                    const res = await dispatch(sendBookingData(formData))
+                    const res = await dispatch(sendOnewayTripData(formData))
 
                     if (res?.payload?.success) {
                         return toast.success("Booking confirmed")
@@ -244,7 +245,7 @@ const BookCab = () => {
                                 <div className='flex items-center text-[0.9rem]'>
                                     <h2 className='font-semibold tracking-wide'>{pickupCity}</h2>
                                     <MdKeyboardArrowRight className='text-[1.2rem] mt-[0.05rem]' />
-                                    <h2 className='font-semibold tracking-wide'> {pickupCity}
+                                    <h2 className='font-semibold tracking-wide'> {dropCity}
                                     </h2>
                                 </div>
                                 <p className='text-[0.7rem] sm:text-[0.85rem] font-[400]'>{formatPickupDate(pickupDate)}
@@ -254,7 +255,7 @@ const BookCab = () => {
                         </div>
                         <div className='flex gap-2'>
                             <div>
-                                <img src={cabData?.category?.photo?.secure_url || car1} className='max-w-[6.5rem]' alt="" />
+                                <img src={cabData?.category?.photo?.secure_url || car1} className='min-w-[8rem] h-[5rem] object-cover' alt="" />
                             </div>
                             <div className=''>
 
@@ -275,25 +276,17 @@ const BookCab = () => {
                                         <TbAirConditioning className='' />
                                         <p>{cabData?.category?.acAvailable ? "AC" : "NON AC"}</p>
                                     </div>
-
-
                                 </div>
-
-
-
-
-
                             </div>
-
                         </div>
-                        <div>
-                            <div className='flex items-center p-1 px-2 text-[0.9rem] gap-1'>
+                        <div className='py-1 border-t'>
+                            <div className='flex items-center px-2 text-[0.9rem] gap-1'>
                                 <h3 className='font-semibold'>Trip Type :</h3><span className='text-[0.85rem] mt-[0.08rem]'>
-                                    {tripType} ({selectedType})
+                                    {tripType}
                                 </span>
                             </div>
-                            <div className='flex items-center p-1 px-2 text-[0.9rem] gap-1'>
-                                <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.85rem] mt-[0.08rem] font-semibold'>
+                            <div className='flex items-center px-2 text-[0.95rem] gap-1'>
+                                <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.95rem] mt-[0.08rem] font-semibold'>
                                     &#8377; {totalPrice}
                                 </span>
                             </div>
@@ -570,4 +563,4 @@ const BookCab = () => {
     )
 }
 
-export default BookCab
+export default BookOnewayCab

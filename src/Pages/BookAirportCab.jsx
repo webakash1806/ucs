@@ -19,7 +19,7 @@ const BookAirportCab = () => {
     const navigate = useNavigate()
     const [currentStep, setCurrentStep] = useState(1);
     const [detailsActive, setDetailsActive] = useState(1)
-    const [actualPrice, setActualPrice] = useState(1)
+    const [actualPrice, setActualPrice] = useState(0)
     const dispatch = useDispatch()
     const location = useLocation()
     console.log(location.state)
@@ -332,7 +332,7 @@ const BookAirportCab = () => {
 
                                         <h3 className='text-[0.9rem] font-semibold '>Terms and Conditions</h3>
                                         {
-                                            tcData?.tC?.map((data, index) => (
+                                            tcData?.map((data, index) => (
                                                 <li className='pl-2 mt-1 leading-4 list-disc' key={index}>{data}</li>
                                             ))
                                         }

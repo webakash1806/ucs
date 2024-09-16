@@ -3,10 +3,10 @@ import React from 'react';
 
 const ServiceDetailCard = ({ icon, title, description }) => {
     return (
-        <div className="relative flex min-w-[17.5rem] max-w-[22rem]  mx-auto my-4 border border-gray-100 bg-[#ffffff] flex-col h-[15rem] overflow-hidden transition-all transform shadow-[0px_2px_10px_-8px_#808080] rounded-xl hover:scale-105 hover:shadow-lg">
+        <div className="relative flex min-w-[16rem] max-w-[22rem]  mx-auto my-4 border border-gray-100 bg-[#ffffff] flex-col h-[15rem] overflow-hidden transition-all transform shadow-[0px_2px_10px_-8px_#808080] rounded-xl hover:scale-105 hover:shadow-lg">
 
             {/* Angled Decorative Element */}
-            <div className="absolute inset-0 w-full h-1/3 bg-gradient-to-tr from-main to-dark transform -skew-y-6 -rotate-3 opacity-90 shadow-inner"></div>
+            <div className="absolute inset-0 w-full transform -skew-y-6 shadow-inner h-1/3 bg-gradient-to-tr from-main to-dark -rotate-3 opacity-90"></div>
 
             {/* Content Section */}
             <div className="relative z-10 flex flex-col items-center justify-between flex-1 p-8 flex-glow">

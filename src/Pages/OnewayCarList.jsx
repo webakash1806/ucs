@@ -1,102 +1,55 @@
 import React, { useEffect, useState } from 'react'
-import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
-import { IoDocumentText } from 'react-icons/io5'
-import { MdAirlineSeatReclineExtra, MdArrowLeft, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md'
-import { SiToll } from 'react-icons/si'
-import { TbAirConditioning } from 'react-icons/tb'
-import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../assets/car1.jpg'
-import { toast } from 'react-toastify'
-import { getTCDetails } from '../Redux/Slices/localTripSlice'
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
-import { FaLocationDot, FaXmark } from 'react-icons/fa6'
-import { getDistance } from '../Redux/Slices/airportSlice'
-import MainForm from '../Components/MainForm'
+import { MdAirlineSeatReclineExtra, MdArrowLeft, MdArrowRight, MdArrowRightAlt, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md';
+import { TbAirConditioning } from 'react-icons/tb';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTCDetails } from '../Redux/Slices/localTripSlice';
+import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi';
+import { SiToll } from 'react-icons/si';
+import { IoDocumentText } from 'react-icons/io5';
+import { FaArrowRightToCity, FaLocationDot, FaXmark } from 'react-icons/fa6';
+import { getDistance } from '../Redux/Slices/airportSlice';
+import { getOnewayCabData } from '../Redux/Slices/outstationSlice';
+import MainForm from '../Components/MainForm';
+import { FaArrowRight } from 'react-icons/fa';
 
-const CarDropList = () => {
-
-
+const OnewayCarList = () => {
     const [modifyActive, setModifyActive] = useState(false)
-
-    const [active, setActive] = useState(1);
     const dispatch = useDispatch()
     const [detailsActive, setDetailsActive] = useState()
     const navigate = useNavigate()
     const location = useLocation()
-    const [distance, setDistance] = useState(0)
-    const [filteredData, setFilteredData] = useState([])
-    const data = location.state
+    const [filteredData, setFilteredData] = useState()
+    const { pickupDate, tripType, pickupTime, pickup, drop } = location.state
 
-    const { cabData, drop, pickup, pickupDate, pickupTime, tripType } = data
-
-    console.log(data)
+    console.log(location.state)
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
     console.log(tcData)
     const tc = tcData?.tC?.map(data => data?.text)
-    console.log(cabData)
-    console.log(filteredData)
-    useEffect(() => {
-        if (cabData) {
-            const newFilteredData = cabData.map((car) => {
-                const filteredRates = car.rates.filter((rate) => {
-                    if (distance <= 30) {
-                        return rate.kilometer === '30';
-                    } else if (distance > 30 && distance <= 40) {
-                        return rate.kilometer === '40';
-                    } else if (distance > 40 && distance <= 55) {
-                        return rate.kilometer === '55';
-                    } else if (distance > 55 && distance <= 70) {
-                        return rate.kilometer === '70';
-                    } else if (distance > 70) {
-                        return false; // No data found for distances beyond 45 km
-                    } else {
-                        return false;
-                    }
-                });
-                return { ...car, rates: filteredRates };
-            });
-
-            // Handle case where no data is found for distances beyond 45 km
-            const noDataFound = distance > 45;
-            console.log(distance)
-            if (noDataFound) {
-                console.log(true)
-                setFilteredData([]); // Or handle it based on your requirements
-            } else {
-                setFilteredData(newFilteredData);
-            }
-        }
-    }, [distance, cabData]); // Ensure this runs when `distance` or `cabData` chang
 
     const fetchDistance = async () => {
-        const distanceData = {
-            fromLocation: data?.pickup,
-            toLocation: data?.drop
+        const cityData = {
+            fromCity: pickup,
+            toCity: drop
         }
 
-        const res = await dispatch(getDistance(distanceData))
-        setDistance(res?.payload?.distance)
-
+        const res = await dispatch(getOnewayCabData(cityData))
+        setFilteredData(res?.payload?.data)
     }
 
     useEffect(() => {
 
         fetchDistance()
 
-        if (tripType === "Drop airport") {
-            const data = {
-                tripType: "airpot"
-            }
-            dispatch(getTCDetails(data))
-
+        const data = {
+            tripType: "oneway"
         }
-    }, [location.state])
-
-    useEffect(() => {
+        dispatch(getTCDetails(data))
         setModifyActive(false)
-
     }, [location.state])
 
     const handleBook = (data) => {
@@ -111,20 +64,20 @@ const CarDropList = () => {
             return toast.error("Pickup time is required")
         }
 
-        navigate('/book-airport-cab', {
+        navigate('/book-oneway-trip-cab', {
             state: {
                 cabData: data,
-                pickup: pickup,
-                drop: drop,
+                pickupCity: pickup,
+                dropCity: drop,
                 pickupDate: pickupDate,
                 pickupTime: pickupTime,
-                tripType: "Airport Trip",
+                tripType: tripType,
                 tcData: tc,
-                airpotValue: tripType
+                totalPrice: data?.rate
             }
         })
-
     }
+
 
     const formatPickupDate = (dateString) => {
         // Create a new Date object directly from the "yyyy-mm-dd" string
@@ -149,9 +102,9 @@ const CarDropList = () => {
     };
 
 
-    console.log(data)
     return (
-        <div className=' bg-lightSky min-h-[90vh]'>
+        <div className=' min-h-[90vh] bg-lightSky'>
+
             <div className='flex flex-row items-center bg-[#dfdfdf] py-4 justify-between px-[0.4rem] pl-6 sm:flex-row sm:px-10 gap-4'>
                 <div className='flex flex-col items-center justify-center md:flex-row md:gap-8'>
 
@@ -181,7 +134,7 @@ const CarDropList = () => {
 
                     </div>
                     <p className='text-[0.78rem] md:mt-[0.15rem] sm:text-[0.9rem] font-[500]'>
-                        ({tripType === 1 ? "Drop to Airport" : "Pickup from Airport"})
+                        ({tripType})
                     </p>
                 </div>
                 <div className='flex flex-col items-center justify-center gap-2 md:flex-row'>
@@ -195,7 +148,7 @@ const CarDropList = () => {
                 <div className='fixed top-0 left-0 z-10 flex flex-col items-center justify-center w-full h-screen bg-dark bg-opacity-70'>
 
                     <div className='w-fit h-fit'>
-                        <MainForm mainActive={3} inner={tripType === 1 ? 3.1 : 3.2} mainDate={pickupDate} mainTime={pickupTime} pickupData={pickup} dropData={drop} />
+                        <MainForm mainActive={1} inner={1.1} mainDate={pickupDate} mainTime={pickupTime} pickupData={pickup} dropData={drop} />
                         <button className='bg-white relative bottom-10 text-main rounded-md font-semibold text-[0.95rem] pl-2 px-4 p-[0.25rem] mx-4 flex items-center justify-center' onClick={() => setModifyActive(false)}>
                             <MdArrowLeft className='text-[1.5rem] tracking-wide' />
                             Back
@@ -204,40 +157,36 @@ const CarDropList = () => {
                 </div>}
             <div className='flex flex-col py-10  px-[5vw] sm:px-[7vw] md:px-[9vw] lg:px-[11vw] items-center justify-center gap-4'>
                 {
-                    distance === 0 ? "Loading..." :
+                    !filteredData ? "Loading" :
                         filteredData && filteredData?.length === 0 ?
                             <p>No Cabs available to this city right now</p> :
                             filteredData?.map((data, index) => {
-                                return <div key={index} className='border rounded-md border-main min-w-[19.5rem] text-black max-w-[22rem] cursor-pointer transition-all duration-500 sm:max-w-[45rem] md:max-w-[50rem] lg:max-w-[52rem] w-[90vw] border-b md:border-r-[6px] hover:shadow-none shadow-[0px_5px_16px_-6px_#808080] overflow-hidden lg:hover:border-r-[0.5px]'>
+                                return <div key={index} className='border rounded-md  border-main min-w-[19.5rem] text-black max-w-[22rem] cursor-pointer transition-all duration-500 sm:max-w-[45rem] md:max-w-[50rem] lg:max-w-[52rem] w-[90vw] border-b md:border-r-[6px] hover:shadow-none shadow-[0px_5px_16px_-6px_#808080] overflow-hidden lg:hover:border-r-[0.5px]'>
                                     <div
                                         className='bg-white flex flex-col   sm:flex-row    [#f8fafc] '
                                     >
                                         <div className='flex'>
-                                            <img key={index} src={data?.photo?.secure_url || car1} alt={`car ${index + 1}`}
-                                                className='max-w-[8rem] min-w-[8rem] max-h-[5rem] object-cover sm:max-h-[7.5rem] sm:min-w-[11rem] sm:max-w-[10.9rem]'
-                                            />
+                                            <img key={index} src={data?.category?.photo?.secure_url || car1} alt={`car ${index + 1}`} className='max-w-[8rem] min-w-[8rem] max-h-[5rem] object-cover sm:max-h-[7.5rem] sm:min-w-[11rem] sm:max-w-[10.9rem]' />
+
                                             <div className='px-2 sm:hidden '>
                                                 <div className='flex items-center justify-between mt-1'>
-                                                    <h2 className='text-[1.2rem] lg:text-[1.45rem] font-semibold'>{data?.name}</h2>
+                                                    <h2 className='text-[1.2rem] lg:text-[1.45rem] font-semibold'>{data?.category?.name}</h2>
                                                 </div>
-                                                <div className='flex flex-wrap gap-1'>
+                                                <div className='flex flex-wrap '>
                                                     <div className='flex items-center mr-4 justify-center gap-1 text-[0.87rem] text-[#6e6d6d] font-semibold'>
                                                         <MdLuggage className='' />
-                                                        {data?.numberOfBags} luggage
+                                                        {data?.category?.numberOfBags} luggage
                                                     </div>
 
                                                     <div className='flex items-center mr-4  justify-center gap-1 text-[0.87rem] text-[#6e6d6d] font-semibold'>
                                                         <MdAirlineSeatReclineExtra className='' />
-                                                        <p> {data?.numberOfSeats} seats</p>
+                                                        <p> {data?.category?.numberOfSeats} seats</p>
                                                     </div>
                                                     <div className='flex items-center mr-4  justify-center gap-1 text-[0.87rem] text-[#6e6d6d] font-semibold'>
                                                         <TbAirConditioning className='' />
-                                                        <p>{data?.acAvailable ? "AC" : "NON AC"}</p>
+                                                        <p>{data?.category?.acAvailable ? "AC" : "NON AC"}</p>
                                                     </div>
-                                                    <div className='flex items-center mr-4  justify-center gap-1 text-[0.87rem] text-[#6e6d6d] font-semibold'>
-                                                        <GiTakeMyMoney className='' />
-                                                        <p>{data?.rates[0]?.rate} for {data?.rates[0]?.kilometer} km</p>
-                                                    </div>
+
 
                                                 </div>
                                             </div>
@@ -245,8 +194,11 @@ const CarDropList = () => {
                                         <div className='flex justify-between w-full'>
                                             <div className='relative hidden w-full sm:block'>
                                                 <div className='flex items-center justify-between mt-1 sm:pl-4'>
-                                                    <h2 className='text-[1.2rem] lg:text-[1.45rem] font-semibold'>{data?.name}</h2>
+                                                    <h2 className='text-[1.2rem] lg:text-[1.45rem] font-semibold'>{data?.category?.name}</h2>
+
                                                 </div>
+
+
                                                 <div className='flex flex-wrap sm:pl-4'>
                                                     <div className='flex items-center mr-4 justify-center gap-1 text-[0.87rem] text-[#6e6d6d] font-semibold'>
                                                         <MdLuggage className='' />
@@ -261,10 +213,8 @@ const CarDropList = () => {
                                                         <TbAirConditioning className='' />
                                                         <p>{data?.acAvailable ? "AC" : "NON AC"}</p>
                                                     </div>
-                                                    <div className='flex items-center mr-4  justify-center gap-1 text-[0.87rem] text-[#6e6d6d] font-semibold'>
-                                                        <GiTakeMyMoney className='' />
-                                                        <p>{data?.rates[0]?.rate} for {data?.rates[0]?.kilometer} km</p>
-                                                    </div>
+
+
                                                 </div>
                                                 <div className='absolute bottom-0 items-center justify-between hidden w-full p-1 px-1 sm:px-2 md:px-8 mt-3 border gap-3 bg-opacity-65 sm:flex bg-sky-100 text-[#5f5f5f]'>
                                                     <button
@@ -302,8 +252,8 @@ const CarDropList = () => {
 
                                                     </p>
                                                     <div className='flex flex-col items-center'>
-                                                        <span className='text-[1.2rem] relative top-2 font-semibold text-[#19B56F]'>&#8377; {data?.rates[0]?.rate}</span>
-                                                        <p className='text-[0.75rem] font-semibold pt-1'>Inclusive of GST</p>
+                                                        <span className='text-[1.2rem] relative sm:top-0 sm:my-2 top-[0.35rem] font-semibold text-[#19B56F]'>&#8377; {data?.rate}</span>
+
                                                     </div>
 
                                                     <button onClick={() => handleBook(data)} className='text-[1rem] mt-3 bg-main text-white p-[0.35rem] px-4 rounded font-semibold ml-10 sm:m-0'>Book now</button>
@@ -337,15 +287,15 @@ const CarDropList = () => {
                                             }
                                             {detailsActive === `2.${index}` &&
                                                 <div className='text-[0.8rem] p-2 py-4 flex items-start justify-start w-full flex-wrap gap-4
-                                           relative'>
+                                            relative'>
                                                     <div className='absolute text-main right-3 top-3' onClick={() => setDetailsActive(0)}><FaXmark /></div>
 
-                                                    <div className='flex items-center gap-2'>
+                                                    {/* <div className='flex items-center gap-2'>
                                                         <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
                                                             <GiTakeMyMoney className='text-[1.1rem]' />
                                                         </div>
-                                                        <p>Pay &#8377; {data?.rates[0]?.extra}/km after {data?.rates[0]?.kilometer} km</p>
-                                                    </div>
+                                                        <p>Pay &#8377; {data?.category?.extraKm}/km after { } km</p>
+                                                    </div> */}
                                                     <div className='flex items-center gap-2'>
                                                         <div className='p-[5.5px] border-[0.1px] border-black rounded-full size-fit'>
                                                             <MdLocalParking className='text-[1.15rem]' />
@@ -383,18 +333,18 @@ const CarDropList = () => {
                                                         <p>Base Fare</p>
                                                     </div>
                                                     {/* <div className='flex items-center gap-2'>
-                                                  <div className='p-[3px] border-[0.1px] border-black rounded-full size-fit'>
-                                                      <SiToll className='text-[1.4rem]' />
+                                                   <div className='p-[3px] border-[0.1px] border-black rounded-full size-fit'>
+                                                       <SiToll className='text-[1.4rem]' />
 
-                                                  </div>
+                                                   </div>
 
-                                                  <p>Toll/State tax</p>
-                                              </div> */}
+                                                   <p>Toll/State tax</p>
+                                               </div> */}
 
                                                 </div>}
                                         </div>
                                     </div>
-                                    <div className='sm:block hidden text-[#0f0f0f] '>
+                                    <div className='sm:block hidden text-[#0f0f0f] border-t border-main'>
                                         {detailsActive === `3.${index}` &&
                                             <div className='text-[0.8rem] p-2 py-4 relative'>
                                                 <div className='absolute text-main right-3 top-3' onClick={() => setDetailsActive(0)}><FaXmark /></div>
@@ -406,16 +356,16 @@ const CarDropList = () => {
                                         }
                                         {detailsActive === `2.${index}` &&
                                             <div className='text-[0.8rem] p-2 py-4 flex items-center justify-center w-full flex-wrap gap-4
-                                           relative'>
+                                            relative'>
                                                 <div className='absolute text-main right-3 top-3' onClick={() => setDetailsActive(0)}><FaXmark /></div>
 
-                                                <div className='flex items-center gap-2'>
+                                                {/* <div className='flex items-center gap-2'>
                                                     <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
                                                         <GiTakeMyMoney className='text-[1.1rem]' />
                                                     </div>
-                                                    <p>Pay &#8377; {data?.rates[0]?.extra}/km after {data?.rates[0]?.kilometer} km</p>
+                                                    <p>Pay &#8377; {data?.extraKm}/km after {totalFare()} km</p>
 
-                                                </div>
+                                                </div> */}
                                                 <div className='flex items-center gap-2'>
                                                     <div className='p-[5.5px] border-[0.1px] border-black rounded-full size-fit'>
                                                         <MdLocalParking className='text-[1.15rem]' />
@@ -453,18 +403,17 @@ const CarDropList = () => {
                                                     <p>Base Fare</p>
                                                 </div>
                                                 {/* <div className='flex items-center gap-2'>
-                                                  <div className='p-[3px] border-[0.1px] border-black rounded-full size-fit'>
-                                                      <SiToll className='text-[1.4rem]' />
+                                                   <div className='p-[3px] border-[0.1px] border-black rounded-full size-fit'>
+                                                       <SiToll className='text-[1.4rem]' />
 
-                                                  </div>
+                                                   </div>
 
-                                                  <p>Toll/State tax</p>
-                                              </div> */}
+                                                   <p>Toll/State tax</p>
+                                               </div> */}
 
                                             </div>}
                                     </div>
                                 </div>
-
                             })
                 }
             </div>
@@ -472,4 +421,4 @@ const CarDropList = () => {
     )
 }
 
-export default CarDropList
+export default OnewayCarList

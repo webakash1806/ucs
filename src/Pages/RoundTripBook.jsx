@@ -13,27 +13,26 @@ import { order, verifyPayment } from '../Redux/Slices/razorpaySlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
 import { SiToll } from 'react-icons/si'
+import { sendRoundTripData } from '../Redux/Slices/outstationSlice'
 
-const BookCab = () => {
+const RoundTripBook = () => {
     const navigate = useNavigate()
     const [currentStep, setCurrentStep] = useState(1);
     const [detailsActive, setDetailsActive] = useState(1)
     const [actualPrice, setActualPrice] = useState(0)
     const dispatch = useDispatch()
     const location = useLocation()
-    const { cabData, tcData, pickupDate, pickupCity, totalPrice, pickupTime, selectedType, tripType } = location.state
+    const { cabData, tcData, pickupDate, distance, pickupCity, dropCity, totalPrice, pickupTime, selectedType, returnDate, tripType } = location.state
     const [price10, setPrice10] = useState(Number(totalPrice) * 10 / 100)
     console.log(tcData)
     const userData = useSelector((state) => state?.auth)
 
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
     const order_id = useSelector((state) => state?.razorpay?.orderId);
-    const formatPickupDate = (dateString) => {
-        // Split the date string "dd/mm/yyyy" into individual components
-        const [day, month, year] = dateString.split("/");
 
-        // Create a new Date object with the parsed values
-        const dateObject = new Date(`${year}-${month}-${day}`);
+    const formatPickupDate = (dateString) => {
+        // Create a new Date object directly from the "yyyy-mm-dd" string
+        const dateObject = new Date(dateString);
 
         // Use Intl.DateTimeFormat to get the weekday
         const weekday = new Intl.DateTimeFormat('en-GB', {
@@ -46,6 +45,9 @@ const BookCab = () => {
             day: 'numeric',
         }).format(dateObject);
 
+        // Extract the year directly from the dateObject
+        const year = dateObject.getFullYear();
+
         // Combine the weekday, the formatted date, and the year with commas
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
@@ -54,18 +56,19 @@ const BookCab = () => {
 
 
     const [formData, setFormData] = useState({
-        cityName: pickupCity,
+        fromLocation: pickupCity,
+        pickupAddress: "",
+        toLocation: dropCity,
         tripType: tripType,
-        category: cabData?.category?.name,
+        category: cabData?.name,
         pickupDate: pickupDate,
+        returnDate: returnDate,
         pickupTime: pickupTime,
         name: userData?.data?.name || "",
         email: userData?.data?.email || "",
         phoneNumber: userData?.data?.phoneNumber || "",
         voucherCode: "",
-        pickupAddress: "",
-        dropAddress: "",
-        distance: selectedType === "8 hrs | 80 km" ? 80 : 120,
+        distance: distance,
         paymentMode: '10',
         declaration: false,
     })
@@ -161,10 +164,10 @@ const BookCab = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const { cityName, tripType, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, dropAddress, paymentMode, distance } = formData
+        const { fromLocation, tripType, toLocation, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, paymentMode, distance } = formData
 
         if (currentStep === 1) {
-            if (!cityName || !tripType || !category || !pickupAddress || !pickupDate || !pickupTime || !name || !email || !phoneNumber || !dropAddress || !distance) {
+            if (!fromLocation || !tripType || !toLocation || !category || !pickupAddress || !pickupDate || !pickupTime || !name || !email || !phoneNumber || !distance) {
                 return toast.error("All fields are required!")
             }
 
@@ -199,7 +202,7 @@ const BookCab = () => {
                 paymentDetails.razorpay_signature = res.razorpay_signature;
                 const response = await dispatch(verifyPayment(paymentDetails));
                 if (response?.payload?.success) {
-                    const res = await dispatch(sendBookingData(formData))
+                    const res = await dispatch(sendRoundTripData(formData))
 
                     if (res?.payload?.success) {
                         return toast.success("Booking confirmed")
@@ -244,7 +247,7 @@ const BookCab = () => {
                                 <div className='flex items-center text-[0.9rem]'>
                                     <h2 className='font-semibold tracking-wide'>{pickupCity}</h2>
                                     <MdKeyboardArrowRight className='text-[1.2rem] mt-[0.05rem]' />
-                                    <h2 className='font-semibold tracking-wide'> {pickupCity}
+                                    <h2 className='font-semibold tracking-wide'> {dropCity}
                                     </h2>
                                 </div>
                                 <p className='text-[0.7rem] sm:text-[0.85rem] font-[400]'>{formatPickupDate(pickupDate)}
@@ -254,47 +257,41 @@ const BookCab = () => {
                         </div>
                         <div className='flex gap-2'>
                             <div>
-                                <img src={cabData?.category?.photo?.secure_url || car1} className='max-w-[6.5rem]' alt="" />
+                                <img src={cabData?.photo?.secure_url || car1} className='max-w-[6.5rem]' alt="" />
                             </div>
                             <div className=''>
 
 
-                                <h2 className='font-semibold text-[0.95rem]'>{cabData?.category?.name}</h2>
+                                <h2 className='font-semibold text-[0.95rem]'>{cabData?.name}</h2>
 
                                 <div className='flex flex-wrap '>
                                     <div className='flex items-center mr-4 justify-center gap-[0.15rem] text-[0.78rem] text-[#1c1c1c]'>
                                         <MdLuggage className='' />
-                                        {cabData?.category?.numberOfBags} luggage
+                                        {cabData?.numberOfBags} luggage
                                     </div>
 
                                     <div className='flex items-center mr-4  justify-center gap-[0.15rem] text-[0.78rem] text-[#1c1c1c]'>
                                         <MdAirlineSeatReclineExtra className='' />
-                                        <p>{cabData?.category?.numberOfSeats} seats</p>
+                                        <p>{cabData?.numberOfSeats} seats</p>
                                     </div>
                                     <div className='flex items-center mr-4  justify-center gap-[0.15rem] text-[0.75rem] text-[#1c1c1c]'>
                                         <TbAirConditioning className='' />
-                                        <p>{cabData?.category?.acAvailable ? "AC" : "NON AC"}</p>
+                                        <p>{cabData?.acAvailable ? "AC" : "NON AC"}</p>
                                     </div>
-
-
                                 </div>
-
-
-
-
-
                             </div>
-
                         </div>
-                        <div>
-                            <div className='flex items-center p-1 px-2 text-[0.9rem] gap-1'>
+                        <div className='py-1 border-t'>
+                            <div className='flex items-center px-2 text-[0.9rem] gap-1'>
                                 <h3 className='font-semibold'>Trip Type :</h3><span className='text-[0.85rem] mt-[0.08rem]'>
-                                    {tripType} ({selectedType})
+                                    {tripType} trip
                                 </span>
                             </div>
-                            <div className='flex items-center p-1 px-2 text-[0.9rem] gap-1'>
-                                <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.85rem] mt-[0.08rem] font-semibold'>
-                                    &#8377; {totalPrice}
+                            <div className='flex items-center px-2 text-[0.95rem] gap-1'>
+                                <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.95rem] mt-[0.08rem] font-semibold'>
+                                    &#8377; {totalPrice} <span className='font-[500] text-[0.8rem]'>
+                                        upto {distance}km
+                                    </span>
                                 </span>
                             </div>
                         </div>
@@ -463,7 +460,7 @@ const BookCab = () => {
                                             required
                                         />
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
+                                    {/* <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
                                         <label className="w-full text-blue-800 text-[0.78rem]">Drop address</label>
                                         <input
                                             type="text"
@@ -474,7 +471,7 @@ const BookCab = () => {
                                             className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem]"
                                             required
                                         />
-                                    </div>
+                                    </div> */}
                                     {/* <div className='flex gap-1'>
                                 <input type="checkbox" onClick={() => setFormData(...formData, declaration = true)} name="" id="" />
                                 I accept the terms and conditions
@@ -570,4 +567,4 @@ const BookCab = () => {
     )
 }
 
-export default BookCab
+export default RoundTripBook
