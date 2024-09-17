@@ -10,7 +10,6 @@ import LoginPage from './Pages/Auth/Login';
 import PrivacyPolicy from './Pages/PrivacyPolicy';
 import TermsAndConditions from './Pages/TermsAndConditions';
 import FAQPage from './Pages/FAQPage';
-import Profile from './Pages/Auth/Profile';
 import CarList from './Pages/CarList';
 import BookCab from './Pages/BookCab';
 import CarDropList from './Pages/CarDropList';
@@ -20,7 +19,7 @@ import RoundTripBook from './Pages/RoundTripBook';
 import OnewayCarList from './Pages/OnewayCarList';
 import BookOnewayCab from './Pages/BookOnewayCab';
 import PastBooking from './Pages/Auth/PastBooking';
-import TestPage from './Pages/TestPage';
+import Profile from './Pages/Auth/Profile';
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
@@ -60,7 +59,6 @@ const App = () => {
           <Route path='/book-oneway-trip-cab' element={<BookOnewayCab />} />
           <Route path='/FAQ' element={<FAQPage />} />
           <Route path='/register' element={<RegisterPage />} />
-          <Route path='/test' element={<TestPage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/booking/:id' element={<PastBooking />} />
         </Routes>

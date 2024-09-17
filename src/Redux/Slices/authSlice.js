@@ -68,7 +68,6 @@ export const logout = createAsyncThunk('/user/logout', async () => {
         let res = axiosInstance.get('/user/logout');
 
         res = await res;
-        toast.success(res.data.message)
         return res.data;
     } catch (e) {
         toast.error(e?.response?.data?.message);
@@ -172,17 +171,30 @@ export const cancelBooking = createAsyncThunk('/user/cancel-bookings', async (da
     }
 });
 
+
+
 export const downloadInvoice = createAsyncThunk('/user/invoice', async (data) => {
     try {
-        console.log(data)
-        let res = axiosInstance.post(`/invoice/${data?.invoiceId}`);
+        const res = await axiosInstance.get(`/invoice/${data?.invoiceId}`, {
+            headers: {
+                'Accept': 'application/pdf'
+            },
+            responseType: 'blob'  // To properly handle PDF file as blob data
+        });
 
-        res = await res;
+        // Create a blob URL to open the PDF in a new tab
+        const blob = new Blob([res.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+
+        // Open PDF in a new tab
+        window.open(url, '_blank');
+
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
+        toast.error(e?.response?.data?.message || 'Failed to open invoice.');
     }
 });
+
 
 
 

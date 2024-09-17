@@ -43,8 +43,7 @@ const PastBooking = () => {
     }, [dispatch])
 
     const download = async (invoiceId) => {
-        toast.error("hello")
-        await dispatch(downloadInvoice({ invoiceId }))
+        const res = await dispatch(downloadInvoice({ invoiceId }))
     }
 
     return (
@@ -186,9 +185,7 @@ const PastBooking = () => {
                                         </div>
                                         <span className="text-gray-700">{item?.tripType.split(' ')[0]} trip</span>
                                     </div>
-                                    <div onClick={() => download(item?._id)} className='p-2 bg-blue-50 text-blue-600 border py-[0.42rem] border-blue-500 rounded'>
-                                        <FaDownload />
-                                    </div>
+
                                 </div>
                             </div>
                         </motion.div>
@@ -246,6 +243,7 @@ const PastBooking = () => {
                                                         {item?.totalPrice}
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -279,7 +277,9 @@ const PastBooking = () => {
 
                                 {/* Status and Trip Type */}
                                 <div className='p-2 sm:p-3'>
-
+                                    <div onClick={() => download(item?._id)} className='p-2 flex items-center justify-center gap-2 cursor-pointer min-w-fit bg-blue-50 text-blue-600 border py-[0.42rem] border-blue-500 rounded'>
+                                        <FaDownload /> Download invoice
+                                    </div>
                                     <div className="flex relative  flex-col items-start mt-4 text-[0.9rem] gap-2 sm:mt-0 font-semibold font-sans mb-2">
 
                                         {item?.tripType === "Round" ? (

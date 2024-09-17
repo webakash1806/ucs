@@ -20,8 +20,8 @@ const Header = () => {
     const [profileActive, setProfileActive] = useState(false);
     const profileRef = useRef(null);
 
-    const handleLogout = () => {
-        const res = dispatch(logout());
+    const handleLogout = async () => {
+        const res = await dispatch(logout());
         if (res?.payload?.success) {
             toast.success("Logged out!");
             navigate('/');
