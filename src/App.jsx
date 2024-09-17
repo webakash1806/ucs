@@ -20,6 +20,7 @@ import OnewayCarList from './Pages/OnewayCarList';
 import BookOnewayCab from './Pages/BookOnewayCab';
 import PastBooking from './Pages/Auth/PastBooking';
 import Profile from './Pages/Auth/Profile';
+import RequireAuth from './Components/Auth/RequireAuth';
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
@@ -43,12 +44,12 @@ const App = () => {
       <Header />
       <Suspense fallback={<div className="flex items-center justify-center h-screen"><img className='w-[6rem]' src={carIcon} /></div>}>
         <Routes>
+
           <Route path='/' element={<Home />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/about' element={<About />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
           <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
-          <Route path='/profile' element={<Profile />} />
           <Route path='/cars/:cityName' element={<CarList />} />
           <Route path='/cars/from/:pickupName' element={<CarDropList />} />
           <Route path='/cars/round/:pickupName' element={<RoundCarList />} />
@@ -60,7 +61,12 @@ const App = () => {
           <Route path='/FAQ' element={<FAQPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
-          <Route path='/booking/:id' element={<PastBooking />} />
+
+          {/* Auth */}
+          <Route element={<RequireAuth />}>
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/booking/:id' element={<PastBooking />} />
+          </Route>
         </Routes>
       </Suspense>
       <Footer />
