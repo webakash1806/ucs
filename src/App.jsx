@@ -19,6 +19,8 @@ import RoundCarList from './Pages/RoundCarList';
 import RoundTripBook from './Pages/RoundTripBook';
 import OnewayCarList from './Pages/OnewayCarList';
 import BookOnewayCab from './Pages/BookOnewayCab';
+import PastBooking from './Pages/Auth/PastBooking';
+import TestPage from './Pages/TestPage';
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
@@ -58,7 +60,9 @@ const App = () => {
           <Route path='/book-oneway-trip-cab' element={<BookOnewayCab />} />
           <Route path='/FAQ' element={<FAQPage />} />
           <Route path='/register' element={<RegisterPage />} />
+          <Route path='/test' element={<TestPage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/booking/:id' element={<PastBooking />} />
         </Routes>
       </Suspense>
       <Footer />

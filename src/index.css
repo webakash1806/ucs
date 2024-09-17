@@ -71,4 +71,11 @@
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
+
+
 /* Register page styles ended */
+
+
+button {
+    cursor: pointer;
+}

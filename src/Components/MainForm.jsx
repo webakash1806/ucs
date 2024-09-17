@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import { getAirportCityData } from '../Redux/Slices/airportSlice';
 import { getOnewayCityData, getRoundCityData, getRoundTripData } from '../Redux/Slices/outstationSlice';
 
-const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime }) => {
+const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime, returnMainDate }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [active, setActive] = useState(1);
@@ -86,11 +86,12 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime 
             setRoundPickupValue(pickupData)
             setStartDate(finalDate)
             setStartTime(finalTime)
+            setReturnDate(returnMainDate)
         }
 
         if (inner === 3.1) {
             setAirportActive(3.1)
-            setAirportDropValue(dropData)
+            // setAirportDropValue(dropData)
             setInputValue(pickupData)
             setStartDate(finalDate)
             setStartTime(finalTime)
@@ -98,7 +99,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime 
 
         if (inner === 3.2) {
             setAirportActive(3.2)
-            setAirportDropValue(pickupData)
+            // setAirportDropValue(pickupData)
             setInputValue(dropData)
             setStartDate(finalDate)
             setStartTime(finalTime)
@@ -122,22 +123,27 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime 
         const value = event.target.value;
         setAirportDropValue(value);
         setIsAirportDropVisible(true);
-
-        if (value || airportDropValue) {
-            console.log(1)
+        console.log(1)
+        if (value) {
+            console.log(value)
             const autocompleteService = new window.google.maps.places.AutocompleteService();
             autocompleteService.getPlacePredictions({
                 input: value,
                 types: ['airport'],
-                componentRestrictions: { country: 'IN' }
+                componentRestrictions: { country: 'IN' },
+                language: 'en'
             }, (predictions, status) => {
                 if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                    console.log(2)
+                    console.log(predictions)
                     const transformedSuggestions = predictions.map(prediction => ({
                         airportName: prediction.description,
                         placeId: prediction.place_id
                     }));
+                    console.log(transformedSuggestions)
                     setValidAirportSuggestions(transformedSuggestions); // Update valid suggestions
-                    if (dropData === value) {
+                    console.log(validAirportSuggestions)
+                    if (value === dropData) {
                         setIsAirportDropVisible(false);
                     }
 
@@ -218,7 +224,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime 
 
     useEffect(() => {
         if (mainActive === 3) {
-            handleAirportDropChange({ target: { value: dropData } })
+            // handleAirportDropChange({ target: { value: dropData } })
             handleInputChange({ target: { value: pickupData } })
         }
     }, [dropData, pickupData])
@@ -524,7 +530,6 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime 
             setTripType("Drop Airport")
         }
         const date = formatDateToISO(startDate);
-        const retDate = formatDateToISO(returnDate);
 
         if (active === 3 && airportActive === 3.1) {
             if (!validSuggestions.some(suggestion => suggestion.placeName === inputValue)) {
@@ -532,6 +537,8 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime 
             } else {
                 setInputError('');
             }
+
+
             if (!validAirportSuggestions.some(suggestion => suggestion.airportName === airportDropValue)) {
                 return setAirportError('Select a valid airport from the suggestions');
             } else {
@@ -577,7 +584,11 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime 
             return toast.error("Select pickup time")
         }
 
+
+
         if (active === 1 && outstationActive === 1.2) {
+            const retDate = formatDateToISO(returnDate);
+
             if (!roundPickupValue) {
                 return setRoundPickupError('Select a valid city name');
             }
@@ -645,6 +656,8 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime 
         }
 
         if (active === 1 && outstationActive === 1.2) {
+            const retDate = formatDateToISO(returnDate);
+
             navigate(`/cars/round/${roundPickupValue}`, { state: { tripType: "Round", pickupTime: time, pickupDate: date, returnDate: retDate, pickup: roundPickupValue, drop: roundDropValue, cabData: roundTripData } })
         }
         if (active === 2) {
@@ -1130,7 +1143,7 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                     </div>
                     {active === 1 && outstationActive === 1.2 &&
                         <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                            <label className='w-full  text-light   text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Date</label>
+                            <label className='w-full  text-light   text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Return Date</label>
 
                             <FaRegCalendarAlt className='text-light left-2 absolute md:top-[1.92rem] sm:top-[1.76rem] top-[1.67rem] md:text-[1.2rem] sm:text-[1.1rem]' />
 

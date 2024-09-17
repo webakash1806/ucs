@@ -149,6 +149,42 @@ export const resetPasswords = createAsyncThunk('user/reset-password', async (dat
 });
 
 
+export const allBookings = createAsyncThunk('/user/bookings', async (data) => {
+    try {
+        let res = axiosInstance.get(`/user/history/${data?.id}`);
+
+        res = await res;
+        return res.data;
+    } catch (e) {
+        toast.error(e?.response?.data?.message);
+    }
+});
+
+export const cancelBooking = createAsyncThunk('/user/cancel-bookings', async (data) => {
+    try {
+        console.log(data)
+        let res = axiosInstance.post(`/oneway/booking/cancel/${data?.cancelId}`);
+
+        res = await res;
+        return res.data;
+    } catch (e) {
+        toast.error(e?.response?.data?.message);
+    }
+});
+
+export const downloadInvoice = createAsyncThunk('/user/invoice', async (data) => {
+    try {
+        console.log(data)
+        let res = axiosInstance.post(`/invoice/${data?.invoiceId}`);
+
+        res = await res;
+        return res.data;
+    } catch (e) {
+        toast.error(e?.response?.data?.message);
+    }
+});
+
+
 
 const authSlice = createSlice({
     name: 'auth',

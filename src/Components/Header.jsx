@@ -126,7 +126,7 @@ const Header = () => {
                             <li className='list-none'>Profile</li>
                         </Link>
                         <Link
-                            to={'/about'}
+                            to={`/booking/${data?._id}`}
                             className='flex items-center gap-2 px-3 py-[0.7rem] border cursor-pointer border-b-gray-200 hover:bg-sky-50'
                             onClick={handleProfileClick}
                         >

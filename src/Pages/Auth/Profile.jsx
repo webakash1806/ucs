@@ -20,6 +20,7 @@ const Profile = () => {
     const [passwordCardActive, setPasswordCardActive] = useState(false)
     const data = useSelector((state) => state?.auth?.data);
 
+
     const [profileData, setProfileData] = useState({
         userName: data?.userName || "",
         name: data?.name || "",

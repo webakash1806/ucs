@@ -193,7 +193,7 @@ const CarList = () => {
                                             {/* Car image and details */}
 
                                             <img src={data?.category?.photo?.secure_url || car1} alt={`car ${index + 1}`}
-                                                className='max-w-[7.8rem] min-w-[7.8rem] min-h-[5.3rem] max-h-[5.3rem] object-cover sm:max-h-[7.5rem] sm:min-w-[9.9rem] sm:max-w-[9.8rem]'
+                                                className='max-w-[7.8rem] min-w-[7.8rem] min-h-[5.3rem] max-h-[5.3rem] object-cover sm:max-h-[6rem] sm:min-h-[6rem] sm:min-w-[9.9rem] sm:max-w-[9.8rem]'
 
                                             />
 
@@ -219,7 +219,8 @@ const CarList = () => {
                                         </div>
 
                                         {/* Right section */}
-                                        <div className='w-full max-w-[30rem] pl-2'>
+                                        <div className='w-full sm:max-w-[70%] pl-2'>
+
                                             <div className="hidden text-center sm:block sm:text-left">
                                                 <h2 className="mb-2 text-2xl font-semibold">{data?.category?.name}</h2>
 
@@ -251,7 +252,8 @@ const CarList = () => {
                                             </div>
                                         </div>
                                         {/* Price and button */}
-                                        <div className="hidden sm:flex sm:flex-col w-[10rem] items-center ">
+                                        <div className="hidden sm:flex sm:flex-col  min-w-[9rem] max-w-[9rem]  items-center ">
+
                                             <div>
                                                 <div className="flex items-center text-2xl font-bold text-gray-800">
                                                     <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " /> {data?.rateFor80Km8Hours}
@@ -267,20 +269,20 @@ const CarList = () => {
                                     <div className='flex items-center justify-between gap-2 p-3 pl-1 sm:pl-4 text-[0.85rem] sm:text-[0.95rem] font-semibold text-main'>
                                         {/* Safety icon */}
                                         <div className='flex gap-2'>
-                                            <div onClick={() => setDetailsActive(`2.${index}`)} className="flex items-center p-[0.15rem] pr-1 sm:px-3 sm:pl-2 bg-red-100 border border-red-500 rounded">
+                                            <div onClick={() => setDetailsActive(`2.${index}`)} className="flex cursor-pointer items-center p-[0.15rem] pr-1 sm:px-3 sm:pl-2 bg-red-100 border border-red-500 rounded">
                                                 <div className="p-1 rounded-full">
                                                     <FaTriangleExclamation className="w-4 h-4 text-red-600" />
                                                 </div>
                                                 <span className="text-gray-700 ">Exclusions</span>
                                             </div>
-                                            <div onClick={() => setDetailsActive(`3.${index}`)} className="flex items-center p-[0.15rem] px-[0.4rem] pl-[0.1rem] bg-green-100 border border-green-500 rounded">
+                                            <div onClick={() => setDetailsActive(`3.${index}`)} className="flex cursor-pointer items-center p-[0.15rem] px-[0.4rem] pl-[0.1rem] bg-green-100 border border-green-500 rounded">
                                                 <div className="p-1 rounded-full">
                                                     <IoIosInformationCircleOutline className="w-4 h-4 text-green-600" />
                                                 </div>
                                                 <span className="text-gray-700">T&C</span>
                                             </div>
                                         </div>
-                                        <div className="flex items-center p-[0.15rem] pr-2 sm:px-3 sm:pl-2 bg-blue-50 border border-main rounded">
+                                        <div className="flex items-center p-[0.15rem] pr-2 sm:px-3 cursor-pointer sm:pl-2 bg-blue-50 border border-main rounded">
                                             <div className="p-1 rounded-full">
                                                 <MdContactSupport className="w-4 h-4 text-main" />
                                             </div>
@@ -293,7 +295,7 @@ const CarList = () => {
                                             <div className='text-[0.8rem] p-2 py-4 relative'>
                                                 <div className='absolute text-main right-3 top-3' onClick={() => setDetailsActive(0)}><FaXmark /></div>
                                                 <h3 className='text-[0.9rem] font-semibold '>Terms and Conditions</h3>
-                                                {tc.map((t, i) => (
+                                                {tc?.map((t, i) => (
                                                     <li key={i} className='pl-2 mt-1 list-disc'>{t}</li>
                                                 ))}
                                             </div>
@@ -378,7 +380,7 @@ const CarList = () => {
                                             {/* Car image and details */}
 
                                             <img src={data?.category?.photo?.secure_url || car1} alt={`car ${index + 1}`}
-                                                className='max-w-[7.8rem] min-w-[7.8rem] min-h-[5.3rem] max-h-[5.3rem] object-cover sm:max-h-[7.5rem] sm:min-w-[9.9rem] sm:max-w-[9.8rem]'
+                                                className='max-w-[7.8rem] min-w-[7.8rem] min-h-[5.3rem] max-h-[5.3rem] object-cover sm:max-h-[6rem] sm:min-h-[6rem] sm:min-w-[9.9rem] sm:max-w-[9.8rem]'
 
                                             />
 
@@ -404,7 +406,8 @@ const CarList = () => {
                                         </div>
 
                                         {/* Right section */}
-                                        <div className='w-full max-w-[30rem] pl-2'>
+                                        <div className='w-full sm:max-w-[70%] pl-2'>
+
                                             <div className="hidden text-center sm:block sm:text-left">
                                                 <h2 className="mb-2 text-2xl font-semibold">{data?.category?.name}</h2>
 
@@ -436,7 +439,8 @@ const CarList = () => {
                                             </div>
                                         </div>
                                         {/* Price and button */}
-                                        <div className="hidden sm:flex sm:flex-col w-[10rem] items-center ">
+                                        <div className="hidden sm:flex sm:flex-col  min-w-[9rem] max-w-[9rem]  items-center ">
+
                                             <div>
                                                 <div className="flex items-center text-2xl font-bold text-gray-800">
                                                     <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " /> {data?.rateFor120Km12Hours}
@@ -452,20 +456,20 @@ const CarList = () => {
                                     <div className='flex items-center justify-between gap-2 p-3 pl-1 sm:pl-4 text-[0.85rem] sm:text-[0.95rem] font-semibold text-main'>
                                         {/* Safety icon */}
                                         <div className='flex gap-2'>
-                                            <div onClick={() => setDetailsActive(`2.${index}`)} className="flex items-center p-[0.15rem] pr-1 sm:px-3 sm:pl-2 bg-red-100 border border-red-500 rounded">
+                                            <div onClick={() => setDetailsActive(`2.${index}`)} className="flex cursor-pointer  items-center p-[0.15rem] pr-1 sm:px-3 sm:pl-2 bg-red-100 border border-red-500 rounded">
                                                 <div className="p-1 rounded-full">
                                                     <FaTriangleExclamation className="w-4 h-4 text-red-600" />
                                                 </div>
                                                 <span className="text-gray-700 ">Exclusions</span>
                                             </div>
-                                            <div onClick={() => setDetailsActive(`3.${index}`)} className="flex items-center p-[0.15rem] px-[0.4rem] pl-[0.1rem] bg-green-100 border border-green-500 rounded">
+                                            <div onClick={() => setDetailsActive(`3.${index}`)} className="flex cursor-pointer items-center p-[0.15rem] px-[0.4rem] pl-[0.1rem] bg-green-100 border border-green-500 rounded">
                                                 <div className="p-1 rounded-full">
                                                     <IoIosInformationCircleOutline className="w-4 h-4 text-green-600" />
                                                 </div>
                                                 <span className="text-gray-700">T&C</span>
                                             </div>
                                         </div>
-                                        <div className="flex items-center p-[0.15rem] pr-2 sm:px-3 sm:pl-2 bg-blue-50 border border-main rounded">
+                                        <div className="flex items-center p-[0.15rem] pr-2 sm:px-3 cursor-pointer sm:pl-2 bg-blue-50 border border-main rounded">
                                             <div className="p-1 rounded-full">
                                                 <MdContactSupport className="w-4 h-4 text-main" />
                                             </div>
@@ -478,7 +482,7 @@ const CarList = () => {
                                             <div className='text-[0.8rem] p-2 py-4 relative'>
                                                 <div className='absolute text-main right-3 top-3' onClick={() => setDetailsActive(0)}><FaXmark /></div>
                                                 <h3 className='text-[0.9rem] font-semibold '>Terms and Conditions</h3>
-                                                {tc.map((t, i) => (
+                                                {tc?.map((t, i) => (
                                                     <li key={i} className='pl-2 mt-1 list-disc'>{t}</li>
                                                 ))}
                                             </div>
