@@ -285,11 +285,28 @@ const BookOnewayCab = () => {
     }
 
     return (
-        <div className='flex flex-wrap items-start md:pt-16 justify-center min-h-[90vh] p-4 py-8 bg-gray-100'>
+        <div className='flex flex-wrap items-start pb-20 md:pt-10 justify-center min-h-[90vh] p-4 py-8 bg-gray-100'>
             <div className='flex flex-col items-center justify-center gap-2'>
+                <div className='mb-6'>
+                    <h1 className='text-[1.7rem] mb-2 leading-8  font-bold'>Book your journey</h1>
+                    <div className='flex items-center gap-1 ml-9'>
+                        <div className='w-[5rem] h-[0.35rem] rounded bg-main'>
+
+                        </div>
+                        <div className='w-[3rem] h-[0.35rem] rounded bg-main'>
+
+                        </div>
+                        <div className='w-[1rem] h-[0.35rem] rounded bg-main'>
+
+                        </div>
+                        <div className='w-[0.35rem] h-[0.35rem] rounded bg-main'>
+
+                        </div>
+                    </div>
+                </div>
                 <div className='flex flex-row-reverse flex-wrap items-start justify-center gap-4 md:gap-6 flex-wrap- '>
                     <div
-                        className='bg-white  flex flex-col h-full   min-w-[19.5rem] text-black max-w-[32rem] w-[90vw] hover:from-[#f3fbff] cursor-pointer transition-all duration-500 border border-main hover:bg-gradient-to-b hover:to-[#f8fafc] rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'
+                        className='bg-white  flex flex-col h-full   min-w-[19.5rem] text-black max-w-[35rem] w-[90vw] hover:from-[#f3fbff] cursor-pointer transition-all duration-500 border border-main hover:bg-gradient-to-b hover:to-[#f8fafc] rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'
                     >
 
                         <div className='flex items-center gap-2 p-2 h-full rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
@@ -297,7 +314,7 @@ const BookOnewayCab = () => {
                                 <FaCar />
                             </div>
                             <div>
-                                <div className='flex items-center text-[0.95rem] sm:text-[1.1rem]'>
+                                <div className='flex items-center text-[0.95rem] sm:text-[1.15rem]'>
                                     <h2 className='font-semibold tracking-wide'>{pickupCity.split(',')[0]}</h2>
                                     <MdKeyboardArrowRight className='text-[1.2rem] mt-[0.05rem]' />
                                     <h2 className='font-semibold tracking-wide'> {dropCity.split(',')[0]}
@@ -315,35 +332,35 @@ const BookOnewayCab = () => {
                             <div className=''>
 
 
-                                <h2 className='font-semibold text-[0.98rem] sm:text-[1.2rem]'>{cabData?.category?.name}</h2>
+                                <h2 className='font-semibold text-[0.98rem] sm:text-[1.4rem]'>{cabData?.category?.name}</h2>
 
                                 <div className='flex flex-wrap '>
                                     <div className='flex items-center mr-4 justify-center gap-[0.15rem]                                                     
-text-[0.78rem] sm:text-[0.82rem] font-semibold text-[#1c1c1c]'>
+text-[0.85rem] sm:text-[0.95rem] font-semibold text-[#1c1c1c]'>
                                         <MdLuggage className='' />
                                         {cabData?.category?.numberOfBags} luggage
                                     </div>
 
                                     <div className='flex items-center mr-4  justify-center gap-[0.15rem]                                                     
-text-[0.78rem] sm:text-[0.82rem] font-semibold text-[#1c1c1c]'>
+text-[0.85rem] sm:text-[0.95rem] font-semibold text-[#1c1c1c]'>
                                         <MdAirlineSeatReclineExtra className='' />
                                         <p>{cabData?.category?.numberOfSeats} seats</p>
                                     </div>
-                                    <div className='flex items-center mr-4  justify-center gap-[0.15rem] text-[0.75rem] sm:text-[0.82rem] font-semibold text-[#1c1c1c]'>
+                                    <div className='flex items-center mr-4  justify-center gap-[0.15rem] text-[0.85rem] sm:text-[0.95rem] font-semibold text-[#1c1c1c]'>
                                         <TbAirConditioning className='' />
                                         <p>{cabData?.category?.acAvailable ? "AC" : "NON AC"}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className='py-1 space-y-1 border-t'>
-                            <div className='flex items-center px-2 text-[0.9rem] sm:text-[0.95rem] gap-1'>
+                        <div className='py-1 space-y-1 border-t sm:space-y-2'>
+                            <div className='flex items-center px-2 text-[0.9rem] sm:text-[0.98rem] gap-1'>
                                 <h3 className='font-semibold'>Trip Type :</h3><span className='mt-[0.08rem]'>
                                     {tripType}
                                 </span>
                             </div>
-                            <div className='flex items-center px-2 text-[0.95rem] sm:text-[1rem] gap-1'>
-                                <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.95rem] mt-[0.08rem] font-semibold'>
+                            <div className='flex items-center px-2 text-[0.95rem] sm:text-[1.1rem] gap-1'>
+                                <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.95rem] mt-[0.08rem] sm:text-[1.1rem] font-semibold'>
                                     &#8377; {Math.ceil(finalPrice)}
 
                                 </span>
@@ -452,7 +469,7 @@ text-[0.78rem] sm:text-[0.82rem] font-semibold text-[#1c1c1c]'>
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} noValidate className='bg-white   flex flex-col  border border-main  min-w-[19.5rem] text-black max-w-[32rem] w-[90vw]  cursor-pointer transition-all duration-500 hover:bg-gradient-to-b  rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'>
+                    <form onSubmit={handleSubmit} noValidate className='bg-white   flex flex-col  border border-main  min-w-[19.5rem] text-black max-w-[35rem] w-[90vw]  cursor-pointer transition-all duration-500 hover:bg-gradient-to-b  rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'>
                         {currentStep === 1 &&
                             <>
                                 <div className='flex items-center gap-2 p-2 rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
@@ -462,7 +479,7 @@ text-[0.78rem] sm:text-[0.82rem] font-semibold text-[#1c1c1c]'>
                                     <h2 className='font-semibold tracking-wide sm:text-[1.2rem]'>Travelers </h2>
 
                                 </div>
-                                <div className='p-2'>
+                                <div className='p-2 pb-6 space-y-2'>
                                     <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
                                         <label className="w-full text-blue-800                                                     
 text-[0.79rem] sm:text-[0.88rem] font-semibold">Full name</label>
@@ -535,7 +552,7 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Drop address</label>
 
 
 
-                                    <button className='w-full p-2 py-[0.4rem] mt-3 rounded text-white  bg-main' type='submit'>Proceed</button>
+                                    <button className='w-full p-2  py-[0.4rem] mt-4 rounded text-white  bg-main' type='submit'>Proceed</button>
                                 </div>
                             </>}
 

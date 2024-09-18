@@ -7,7 +7,6 @@ import { MdAirlineSeatReclineExtra, MdKeyboardArrowRight, MdLocalParking, MdLugg
 import { TbAirConditioning } from 'react-icons/tb'
 import { PiUsersThreeFill } from 'react-icons/pi'
 import { useDispatch, useSelector } from 'react-redux'
-import { sendBookingData } from '../Redux/Slices/localTripSlice'
 import { toast } from 'react-toastify'
 import { order, verifyPayment } from '../Redux/Slices/razorpaySlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
