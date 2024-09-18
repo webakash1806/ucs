@@ -116,12 +116,12 @@ export const changePassword = createAsyncThunk('user/update-password', async (da
 export const forgotPassword = createAsyncThunk('user/forgot-password', async (data) => {
     try {
         console.log(data)
-        let res = axiosInstance.post('user/forgot-password', data);
-        toast.promise(res, {
-            loading: "Sending password reset link to registered mail!",
-            success: (data) => data?.data.message,
-            error: "Failed to send reset link"
-        });
+        let res = axiosInstance.post('user/forget', data);
+        // toast.promise(res, {
+        //     loading: "Sending password reset link to registered mail!",
+        //     success: (data) => data?.data.message,
+        //     error: "Failed to send reset link"
+        // });
         res = await res;
         return res.data;
     } catch (e) {
@@ -133,12 +133,12 @@ export const forgotPassword = createAsyncThunk('user/forgot-password', async (da
 export const resetPasswords = createAsyncThunk('user/reset-password', async (data) => {
     try {
         console.log(data)
-        let res = axiosInstance.post(`user/reset-password/${data[0]}`, data[1]);
-        toast.promise(res, {
-            loading: "Resetting Password!",
-            success: (data) => data?.data.message,
-            error: "Failed to reset password"
-        });
+        let res = axiosInstance.post(`user/verifyPassword`, data);
+        // toast.promise(res, {
+        //     loading: "Resetting Password!",
+        //     success: (data) => data?.data.message,
+        //     error: "Failed to reset password"
+        // });
         res = await res;
         return res.data;
     } catch (e) {
