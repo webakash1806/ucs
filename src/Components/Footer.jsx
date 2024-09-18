@@ -86,16 +86,14 @@ const Footer = () => {
                                         <Link to="/services/local-car-rentals">Local Car Rentals</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/services/outstation-taxi">Outstation Taxi</Link>
+                                        <Link to="/services/round-trip">Round trip</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
                                         <Link to="/services/one-way-cabs">One-way Cabs</Link>
                                     </li>
+
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/services/corporate-car-rental">Corporate Car Rental</Link>
-                                    </li>
-                                    <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/services/airport-taxi">Airport Taxi</Link>
+                                        <Link to="/services/airport-cabs">Airport Taxi</Link>
                                     </li>
                                 </ul>
                             </div>

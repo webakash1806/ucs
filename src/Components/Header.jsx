@@ -115,7 +115,7 @@ const Header = () => {
                 {(isLoggedIn && profileActive) &&
                     <div
                         ref={profileRef}
-                        className='absolute overflow-hidden text-[#222222] z-[100] bg-white top-[4.7rem] right-6 h-fit rounded w-[11rem]'
+                        className='absolute border border-main shadow-[0px_0px_16px] overflow-hidden text-[#222222] z-[100] bg-white top-[4.7rem] right-6 h-fit rounded w-[11rem]'
                     >
                         <Link
                             to={'/profile'}

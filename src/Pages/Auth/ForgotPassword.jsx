@@ -8,7 +8,7 @@ import verify from '../../assets/icons/verify.gif';
 import { Link, useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
 
-const LoginPage = () => {
+const ForgotPassword = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     // Local loading state
@@ -16,7 +16,6 @@ const LoginPage = () => {
 
     const [loading, setLoading] = useState(false);
     const [verifyActive, setVerifyActive] = useState(false)
-    const [forgetPasswordActive, setForgetPasswordActive] = useState(false)
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -168,38 +167,9 @@ const LoginPage = () => {
                         {loading ? "Verifying..." : "Verify"}
                     </button>
                 </form>
-                {/* Forgot password Form */}
-                <form onSubmit={handleVerify}
-                    noValidate
-                    style={{ transform: "rotateX(180deg)" }}
-                    className={`verify-form w-full  max-w-[24rem] p-3 py-4 pb-8 bg-white rounded-xl border-main border border-opacity-55 shadow-md ${forgetPasswordActive ? 'block' : 'hidden'}`}
-                >
-                    <img src={verify} className="w-[4.8rem] mb-5 mt-1 mx-auto relative top-2" alt="verify" />
-                    <div className="relative mb-4 border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <label className='w-full  text-light   text-[0.8rem]'>Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
-                            placeholder="Enter email..."
-                            required
-                        />
-
-                    </div>
-                    <p onClick={otpResend} className="pr-1 mt-2"> <span className="font-semibold text-[0.95rem] underline text-main tracking-wide">Resend Link!</span></p>
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className={`w-full p-2 mt-4 font-bold text-white rounded ${loading ? "bg-gray-500" : "bg-main"}`}
-                    >
-                        Send reset link
-                    </button>
-                </form>
             </div>
         </div>
     );
 };
 
-export default LoginPage;
+export default ForgotPassword;

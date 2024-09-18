@@ -15,12 +15,17 @@ import BookCab from './Pages/BookCab';
 import CarDropList from './Pages/CarDropList';
 import BookAirportCab from './Pages/BookAirportCab';
 import RoundCarList from './Pages/RoundCarList';
+import LocalCarRentals from './Pages/ServicePage/LocalCarRentals';
 import RoundTripBook from './Pages/RoundTripBook';
 import OnewayCarList from './Pages/OnewayCarList';
 import BookOnewayCab from './Pages/BookOnewayCab';
 import PastBooking from './Pages/Auth/PastBooking';
 import Profile from './Pages/Auth/Profile';
 import RequireAuth from './Components/Auth/RequireAuth';
+import RoundTripService from './Pages/ServicePage/RoundTripService';
+import AirportCabService from './Pages/ServicePage/AirportCabService';
+import OneWayService from './Pages/ServicePage/OneWayService';
+import ForgotPassword from './Pages/Auth/ForgotPassword';
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
@@ -61,6 +66,11 @@ const App = () => {
           <Route path='/FAQ' element={<FAQPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/services/local-car-rentals' element={<LocalCarRentals />} />
+          <Route path='/services/round-trip' element={<RoundTripService />} />
+          <Route path='/services/airport-cabs' element={<AirportCabService />} />
+          <Route path='/services/one-way-cabs' element={<OneWayService />} />
 
           {/* Auth */}
           <Route element={<RequireAuth />}>
