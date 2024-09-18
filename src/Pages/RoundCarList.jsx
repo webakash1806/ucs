@@ -22,30 +22,19 @@ import { IoIosInformationCircleOutline } from 'react-icons/io'
 const RoundCarList = () => {
     const [modifyActive, setModifyActive] = useState(false)
 
-    const [active, setActive] = useState(1);
     const dispatch = useDispatch()
     const [detailsActive, setDetailsActive] = useState()
     const navigate = useNavigate()
     const location = useLocation()
-    const [pickupCity, setPickupCity] = useState('')
-    const [filteredData, setFilteredData] = useState({})
+
     const { cabData, pickupDate, returnDate, tripType, pickupTime, pickup, drop } = location.state
     const [distance, setDistance] = useState()
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
-    console.log(tcData)
     const tc = tcData?.tC?.map(data => data?.text)
 
-    console.log(cabData)
 
-    console.log(active)
 
-    // const pickupDate = data?.pickupDate
-    // const pickupTime = data?.pickupTime
-    // const tripType = data?.tripType
-
-    console.log(returnDate)
-    console.log(pickupDate)
 
     const calculateTotalDays = (pickupDate, returnDate) => {
         // Convert the date strings to Date objects
@@ -84,7 +73,6 @@ const RoundCarList = () => {
         setDistance(Math.ceil((res?.payload?.distance) * 2))
     }
 
-    console.log(distance)
     useEffect(() => {
 
         fetchDistance()
@@ -101,7 +89,6 @@ const RoundCarList = () => {
 
     const handleBook = (data) => {
 
-        console.log(data)
 
         if (!pickupDate) {
             return toast.error("Pickup date is required")
@@ -148,6 +135,8 @@ const RoundCarList = () => {
         // Combine the weekday, the formatted date, and the year with commas
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
+
+
     return (
         <div className=' min-h-[90vh] bg-lightSky'>
             <div className='flex flex-row items-center bg-[#dfdfdf] py-4 justify-between px-[0.4rem] pl-6 sm:flex-row sm:px-10 gap-4'>
@@ -190,9 +179,9 @@ const RoundCarList = () => {
                 </div>
             </div>
             {modifyActive &&
-                <div className='fixed left-0 z-10 flex flex-col items-center justify-center w-full h-screen top-16 bg-dark bg-opacity-70'>
+                <div className='fixed left-0 z-10 flex flex-col items-center justify-center w-full h-screen top-12 bg-dark bg-opacity-70'>
 
-                    <div className='w-fit h-fit'>
+                    <div className=' w-fit h-fit'>
                         <MainForm mainActive={1} inner={1.2} mainDate={pickupDate} mainTime={pickupTime} returnMainDate={returnDate} pickupData={pickup} dropData={drop} />
                         <button className='bg-white relative bottom-10 text-main rounded-md font-semibold text-[0.95rem] pl-2 px-4 p-[0.25rem] mx-4 flex items-center justify-center' onClick={() => setModifyActive(false)}>
                             <MdArrowLeft className='text-[1.5rem] tracking-wide' />
@@ -207,7 +196,7 @@ const RoundCarList = () => {
                             cabData && cabData?.rates?.length === 0 ?
                                 <p>No Cabs available to this city right now</p> :
                                 cabData?.map((data, index) => {
-                                    return <div key={index} className="flex flex-col max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden border-gray-200 border rounded-lg shadow-md">
+                                    return <div key={index} className="flex flex-col max-w-[27rem] sm:max-w-[55rem]  hover:shadow-none transition-all duration-300 w-full overflow-hidden border-main border rounded-lg shadow-lg">
                                         <div className='flex flex-col items-center justify-between w-full mx-auto bg-white border-b sm:flex-row'>
                                             {/* Left section */}
                                             <div className="flex items-start justify-between w-full pr-3 border-b sm:w-fit">

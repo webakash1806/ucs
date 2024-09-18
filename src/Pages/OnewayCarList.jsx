@@ -166,7 +166,8 @@ const OnewayCarList = () => {
                         filteredData && filteredData?.length === 0 ?
                             <p>No Cabs available to this city right now</p> :
                             filteredData?.map((data, index) => {
-                                return <div key={index} className="flex flex-col max-w-[22rem] sm:max-w-[55rem] w-full overflow-hidden border-gray-200 border rounded-lg shadow-md">
+                                return <div key={index} className="flex flex-col max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden border-main  hover:shadow-none transition-all duration-300 border rounded-lg shadow-lg">
+
                                     <div className='flex flex-col items-center justify-between w-full mx-auto bg-white border-b sm:flex-row'>
                                         {/* Left section */}
                                         <div className="flex items-start justify-between w-full pr-3 border-b sm:w-fit">

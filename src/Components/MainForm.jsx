@@ -55,6 +55,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
         // Example usage
         const finalTime = parseTimeString(mainTime);
         const finalDate = new Date(mainDate)
+        const finalReturnDate = new Date(returnMainDate)
 
 
         if (mainActive === 1) {
@@ -80,13 +81,14 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
             setStartTime(finalTime)
         }
 
-        if (inner === 1.2) {
+        if (mainActive === 1 && inner === 1.2) {
             setOutstationActive(1.2)
             setRoundDropValue(dropData)
             setRoundPickupValue(pickupData)
             setStartDate(finalDate)
             setStartTime(finalTime)
-            setReturnDate(returnMainDate)
+
+            setReturnDate(finalReturnDate)
         }
 
         if (inner === 3.1) {
@@ -503,6 +505,8 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     };
 
     const formatDateToISO = (date) => {
+        console.log(12)
+        console.log(date)
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
         const day = String(date.getDate()).padStart(2, '0');
@@ -587,7 +591,12 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
 
 
         if (active === 1 && outstationActive === 1.2) {
+
+            const dateObj = new Date(date);
+
             const retDate = formatDateToISO(returnDate);
+            const retDateObj = new Date(retDate);
+
 
             if (!roundPickupValue) {
                 return setRoundPickupError('Select a valid city name');
@@ -609,8 +618,6 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
                 return toast.error("Select return date")
             }
 
-            const dateObj = new Date(date);
-            const retDateObj = new Date(retDate);
 
             if (dateObj > retDateObj) {
                 return toast.error("Return date must be after pickup date")
@@ -638,9 +645,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
                 return setOnewayDropError('Select a valid city name');
             }
 
-            if (!returnDate) {
-                return toast.error("Select return date")
-            }
+
 
 
         }

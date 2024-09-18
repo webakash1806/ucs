@@ -42,10 +42,9 @@ const RegisterPage = () => {
         setLoading(false); // Stop loading once request is complete
 
         if (response?.payload?.success) {
-            console.log(response)
             setVerifyActive(true);
         } else {
-            toast.error("Something went wrong");
+            return
         }
     };
 
@@ -128,10 +127,21 @@ const RegisterPage = () => {
                     </div>
                     <button
                         type="submit"
-                        disabled={loading}
-                        className={`w-full p-2 mt-4 font-bold text-white rounded ${loading ? "bg-gray-500" : "bg-main"}`}
+                        disabled={loading} // Disable button during loading
+                        className={`w-full flex items-center justify-center gap-4 p-2 mt-4 font-bold text-white rounded ${loading ? "bg-gray-500" : "bg-main"
+                            }`}
                     >
-                        {loading ? "Creating Account..." : "Register"}
+                        {loading && /* From Uiverse.io by abrahamcalsin */
+                            <div className="dot-spinner">
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                            </div>} Sign up
                     </button>
                     <p className="mt-2 text-center">Already have an account? <Link to={'/login'} className="font-semibold underline text-main">Login</Link></p>
                 </form>
@@ -156,10 +166,21 @@ const RegisterPage = () => {
                     <p className="pr-1 mt-2"> <Link to={'/'} className="font-semibold text-[0.95rem] underline text-main tracking-wide">Resend OTP!</Link></p>
                     <button
                         type="submit"
-                        disabled={loading}
-                        className={`w-full p-2 mt-4 font-bold text-white rounded ${loading ? "bg-gray-500" : "bg-main"}`}
+                        disabled={loading} // Disable button during loading
+                        className={`w-full flex items-center justify-center gap-4 p-2 mt-4 font-bold text-white rounded ${loading ? "bg-gray-500" : "bg-main"
+                            }`}
                     >
-                        {loading ? "Verifying..." : "Verify"}
+                        {loading && /* From Uiverse.io by abrahamcalsin */
+                            <div className="dot-spinner">
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                                <div className="dot-spinner__dot"></div>
+                            </div>} Verify
                     </button>
                 </form>
             </div>

@@ -47,16 +47,17 @@ const PastBooking = () => {
     }
 
     return (
-        <div className='flex flex-col items-center justify-center w-full min-h-screen gap-6 p-3'>
+        <div className='flex flex-col items-center justify-start w-full min-h-screen gap-6 p-3 pt-6'>
+            <p className='text-[1.6rem] font-bold underline'>My Bookings</p>
             {!bookingData ?
-                <p>Loading</p> :
+                <p>Loading...</p> :
                 bookingData && bookingData?.length === 0 ?
                     <p>No booking till now</p> :
                     bookingData?.reverse()?.map((item, index) => {
                         return <motion.div
                             key={index}
                             layoutId={item?._id}
-                            className="flex flex-col max-w-[22rem] sm:max-w-[55rem] w-full overflow-hidden border-gray-200 border rounded-lg shadow-md cursor-pointer"
+                            className="flex flex-col max-w-[27rem] border border-main sm:max-w-[55rem] w-full overflow-hidden  rounded-lg shadow-md cursor-pointer"
                             onClick={() => setItem(item)} // On click, set the selected card ID
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -81,7 +82,8 @@ const PastBooking = () => {
                                             <div className="flex flex-col items-center">
                                                 <div className="flex items-center mr-2 text-[1.1rem] font-bold text-gray-800">
                                                     <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
-                                                    {item?.totalPrice}
+                                                    {Math.ceil(item?.totalPrice)}
+
                                                 </div>
                                             </div>
                                         </div>
@@ -117,7 +119,7 @@ const PastBooking = () => {
                                     <div>
                                         <div className="flex items-center text-2xl font-bold text-gray-800">
                                             <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
-                                            {item?.totalPrice}
+                                            {Math.ceil(item?.totalPrice)}
                                         </div>
                                     </div>
                                     <button className="px-4 py-[0.25rem] mt-1 text-white transition rounded-md shadow bg-main border">
@@ -217,7 +219,7 @@ const PastBooking = () => {
                             <div className='relative border border-main mt-10 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md'>
                                 <motion.button
                                     onClick={() => setItem(null)}
-                                    className="absolute  right-0 top-[-1rem]  mt-4 text-red-600 bg-red-100 border border-red-500 rounded-full p-1 rounded-tr-lg"
+                                    className="absolute  right-1 top-[-0.75rem]  mt-4 text-red-600 bg-red-50 border border-red-500 rounded-full p-1 rounded-tr-lg"
                                 >
                                     <FaXmark />
                                 </motion.button>
@@ -240,7 +242,8 @@ const PastBooking = () => {
                                                 <div className="flex flex-col items-center">
                                                     <div className="flex items-center mr-2 text-[1.1rem] font-bold text-gray-800">
                                                         <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
-                                                        {item?.totalPrice}
+                                                        {Math.ceil(item?.totalPrice)}
+
                                                     </div>
                                                 </div>
 
@@ -267,7 +270,8 @@ const PastBooking = () => {
                                         <div>
                                             <div className="flex items-center text-2xl font-bold text-gray-800">
                                                 <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
-                                                {item?.totalPrice}
+                                                {Math.ceil(item?.totalPrice)}
+
                                             </div>
                                         </div>
 

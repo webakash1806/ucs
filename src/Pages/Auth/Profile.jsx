@@ -54,7 +54,7 @@ const Profile = () => {
     const fetchBookingDetails = async () => {
         const id = data?._id
         const res = await dispatch(allBookings({ id }))
-        setBookingData(res?.payload?.bookingHistory)
+        setBookingData(res?.payload?.bookingHistory.reverse())
     }
 
     const cancel = async (cancelId) => {
@@ -299,13 +299,13 @@ const Profile = () => {
                                 </div>
                             </form>}
                         {sideActive === 2 &&
-                            <div className='flex flex-col items-center justify-center w-full min-h-screen gap-6 p-3 mt-10 md:mt-16'>
+                            <div className='flex flex-col items-center justify-start w-full min-h-screen gap-6 p-3 mt-10 md:mt-16'>
                                 <h1 className='w-full text-[1.2rem] font-bold mt-1'>Booking List</h1>
                                 {!bookingData ?
                                     <p>Loading</p> :
                                     bookingData && bookingData?.length === 0 ?
                                         <p>No booking till now</p> :
-                                        bookingData?.reverse()?.map((item, index) => {
+                                        bookingData?.map((item, index) => {
                                             return <motion.div
                                                 key={index}
                                                 layoutId={item?._id}
@@ -342,7 +342,8 @@ const Profile = () => {
                                                         </div>
                                                         <div className="flex items-center md:hidden mr-2 w-fit text-[1.1rem] font-bold text-gray-800">
                                                             <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
-                                                            {item?.totalPrice}
+                                                            {Math.ceil(item?.totalPrice)}
+
                                                         </div>
                                                         <div className="flex relative pl-3 flex-col items-start  text-[0.9rem] md:mt-0 font-semibold font-sans mb-2">
                                                             <div className="absolute top-[0.3rem] text-light left-[-0.3rem] text-[0.75rem] flex items-center justify-center flex-col">
@@ -367,7 +368,8 @@ const Profile = () => {
                                                         <div>
                                                             <div className="flex items-center text-2xl font-bold text-gray-800">
                                                                 <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
-                                                                {item?.totalPrice}
+                                                                {Math.ceil(item?.totalPrice)}
+
                                                             </div>
                                                         </div>
                                                         <button className="px-4 py-[0.25rem] mt-1 text-white transition rounded-md shadow bg-main border">
@@ -489,7 +491,8 @@ const Profile = () => {
                                                                     <div className="flex flex-col items-center">
                                                                         <div className="flex items-center mr-2 text-[1.1rem] font-bold text-gray-800">
                                                                             <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
-                                                                            {item?.totalPrice}
+                                                                            {Math.ceil(item?.totalPrice)}
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -515,7 +518,8 @@ const Profile = () => {
                                                             <div>
                                                                 <div className="flex items-center text-2xl font-bold text-gray-800">
                                                                     <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
-                                                                    {item?.totalPrice}
+                                                                    {Math.ceil(item?.totalPrice)}
+
                                                                 </div>
                                                             </div>
 
@@ -692,17 +696,17 @@ const Profile = () => {
                                 </button>
                             </form>}
                         {sideActive === 4 &&
-                            <div className='flex flex-col items-center justify-center w-full gap-6 p-3 mt-10 md:mt-16'>
+                            <div className='flex flex-col items-center justify-start w-full gap-6 p-3 mt-10 md:mt-16'>
                                 {!bookingData ?
                                     <p>Loading</p> :
-                                    bookingData && bookingData?.filter(detail => detail?.status === "ongoing")?.reverse()?.length === 0 ?
+                                    bookingData && bookingData?.filter(detail => detail?.status === "ongoing")?.length === 0 ?
                                         <div className='flex flex-col items-center gap-2'>
                                             <p>No Ongoing booking till now</p>
                                             <button onClick={() => navigate("/")} className='p-1 px-3 text-white rounded bg-main'>Book now</button>
                                         </div> :
                                         <>
-                                            <h1 className='w-full text-[1.2rem] font-bold mt-1'>Completed Booking List</h1>
-                                            {bookingData?.filter(detail => detail?.status === "ongoing")?.reverse()?.map((item, index) => {
+                                            <h1 className='w-full text-[1.2rem] font-bold mt-1'>Ongoing Booking List</h1>
+                                            {bookingData?.filter(detail => detail?.status === "ongoing")?.map((item, index) => {
                                                 return <motion.div
                                                     key={index}
                                                     layoutId={item?._id}
@@ -739,7 +743,8 @@ const Profile = () => {
                                                             </div>
                                                             <div className="flex items-center md:hidden mr-2 w-fit text-[1.1rem] font-bold text-gray-800">
                                                                 <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
-                                                                {item?.totalPrice}
+                                                                {Math.ceil(item?.totalPrice)}
+
                                                             </div>
                                                             <div className="flex relative pl-3 flex-col items-start  text-[0.9rem] md:mt-0 font-semibold font-sans mb-2">
                                                                 <div className="absolute top-[0.3rem] text-light left-[-0.3rem] text-[0.75rem] flex items-center justify-center flex-col">
@@ -764,7 +769,8 @@ const Profile = () => {
                                                             <div>
                                                                 <div className="flex items-center text-2xl font-bold text-gray-800">
                                                                     <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
-                                                                    {item?.totalPrice}
+                                                                    {Math.ceil(item?.totalPrice)}
+
                                                                 </div>
                                                             </div>
                                                             <button className="px-4 py-[0.25rem] mt-1 text-white transition rounded-md shadow bg-main border">
@@ -887,7 +893,8 @@ const Profile = () => {
                                                                     <div className="flex flex-col items-center">
                                                                         <div className="flex items-center mr-2 text-[1.1rem] font-bold text-gray-800">
                                                                             <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
-                                                                            {item?.totalPrice}
+                                                                            {Math.ceil(item?.totalPrice)}
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -913,7 +920,8 @@ const Profile = () => {
                                                             <div>
                                                                 <div className="flex items-center text-2xl font-bold text-gray-800">
                                                                     <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
-                                                                    {item?.totalPrice}
+                                                                    {Math.ceil(item?.totalPrice)}
+
                                                                 </div>
                                                             </div>
 
@@ -1039,17 +1047,17 @@ const Profile = () => {
 
                             </div>}
                         {sideActive === 5 &&
-                            <div className='flex flex-col items-center justify-center w-full gap-6 p-3 mt-10 md:mt-16'>
+                            <div className='flex flex-col items-center justify-start w-full gap-6 p-3 mt-10 md:mt-16'>
                                 {!bookingData ?
                                     <p>Loading</p> :
-                                    bookingData && bookingData?.filter(detail => detail?.status === "completed")?.reverse()?.length === 0 ?
+                                    bookingData && bookingData?.filter(detail => detail?.status === "completed")?.length === 0 ?
                                         <div className='flex flex-col items-center gap-2'>
                                             <p>No Completed booking till now</p>
                                             <button onClick={() => navigate("/")} className='p-1 px-3 text-white rounded bg-main'>Book now</button>
                                         </div> :
                                         <>
                                             <h1 className='w-full text-[1.2rem] font-bold mt-1'>Completed Booking List</h1>
-                                            {bookingData?.filter(detail => detail?.status === "completed")?.reverse()?.map((item, index) => {
+                                            {bookingData?.filter(detail => detail?.status === "completed")?.map((item, index) => {
                                                 return <motion.div
                                                     key={index}
                                                     layoutId={item?._id}
@@ -1086,7 +1094,8 @@ const Profile = () => {
                                                             </div>
                                                             <div className="flex items-center md:hidden mr-2 w-fit text-[1.1rem] font-bold text-gray-800">
                                                                 <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
-                                                                {item?.totalPrice}
+                                                                {Math.ceil(item?.totalPrice)}
+
                                                             </div>
                                                             <div className="flex relative pl-3 flex-col items-start  text-[0.9rem] md:mt-0 font-semibold font-sans mb-2">
                                                                 <div className="absolute top-[0.3rem] text-light left-[-0.3rem] text-[0.75rem] flex items-center justify-center flex-col">
@@ -1111,7 +1120,8 @@ const Profile = () => {
                                                             <div>
                                                                 <div className="flex items-center text-2xl font-bold text-gray-800">
                                                                     <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
-                                                                    {item?.totalPrice}
+                                                                    {Math.ceil(item?.totalPrice)}
+
                                                                 </div>
                                                             </div>
                                                             <button className="px-4 py-[0.25rem] mt-1 text-white transition rounded-md shadow bg-main border">
@@ -1234,7 +1244,8 @@ const Profile = () => {
                                                                     <div className="flex flex-col items-center">
                                                                         <div className="flex items-center mr-2 text-[1.1rem] font-bold text-gray-800">
                                                                             <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
-                                                                            {item?.totalPrice}
+                                                                            {Math.ceil(item?.totalPrice)}
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1260,7 +1271,8 @@ const Profile = () => {
                                                             <div>
                                                                 <div className="flex items-center text-2xl font-bold text-gray-800">
                                                                     <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
-                                                                    {item?.totalPrice}
+                                                                    {Math.ceil(item?.totalPrice)}
+
                                                                 </div>
                                                             </div>
 
