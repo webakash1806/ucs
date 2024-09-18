@@ -22,7 +22,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [returnDate, setReturnDate] = useState(new Date());
     const [startTime, setStartTime] = useState(() => {
         const now = new Date();
-        now.setMinutes(now.getMinutes() + 30);
+        now.setHours(now.getHours() + 3);
         return now;
     });
 
@@ -1182,7 +1182,7 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                                 minTime={startDate && isToday(startDate)
                                     ? (() => {
                                         const now = new Date();
-                                        now.setMinutes(now.getMinutes() + 30); // 30 minutes from now
+                                        now.setHours(now.getHours() + 3); // 30 minutes from now
 
                                         // Set the date to today's date
                                         const todayMinTime = new Date(startDate);
@@ -1215,7 +1215,7 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                             minTime={startDate && isToday(startDate)
                                 ? (() => {
                                     const now = new Date();
-                                    now.setMinutes(now.getMinutes() + 30); // 30 minutes from now
+                                    now.setHours(now.getHours() + 3); // 30 minutes from now
 
                                     // Set the date to today's date
                                     const todayMinTime = new Date(startDate);

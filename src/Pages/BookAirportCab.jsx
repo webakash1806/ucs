@@ -31,7 +31,7 @@ const BookAirportCab = () => {
     const [price10, setPrice10] = useState(Number(finalPrice) * 10 / 100)
     const [discountPrice, setDiscountPrice] = useState(0)
     const [voucherLoading, setVoucherLoading] = useState(false)
-
+    const [gstActive, setGstActive] = useState(false)
 
     const userData = useSelector((state) => state?.auth)
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
@@ -68,13 +68,24 @@ const BookAirportCab = () => {
 
         const discount = res?.payload?.discount
 
+        if (res?.payload?.dataType === 1) {
+
+            const discountPrice = Number(discount) * finalPrice / 100
+            setDiscountPrice(Number(discountPrice))
+            setFinalPrice(Number(finalPrice) - Number(discountPrice))
+            setVoucherLoading(false)
+        }
+
         if (res?.payload?.dataType === 2) {
             setDiscountPrice(Number(discount))
             setFinalPrice(Number(finalPrice) - Number(discount))
             setVoucherLoading(false)
         }
+
+        setVoucherLoading(false)
         console.log(res?.payload)
     }
+
 
 
     const [formData, setFormData] = useState({
@@ -96,8 +107,11 @@ const BookAirportCab = () => {
     })
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === "checkbox" ? checked : value, // Handle checkbox separately
+        });
     };
 
     const paymentDetails = {
@@ -107,7 +121,22 @@ const BookAirportCab = () => {
     };
 
 
+    const handleGst = () => {
+        const gst = totalPrice * 5 / 100
+        if (formData.gst) {
+            setFinalPrice(Math.ceil(Number(gst) + Number(finalPrice)))
+            setGstActive(true)
+        }
 
+        if (gstActive) {
+            setFinalPrice(Math.ceil(Number(finalPrice) - Number(gst)))
+            setGstActive(false)
+        }
+    }
+
+    useEffect(() => {
+        handleGst()
+    }, [formData?.gst])
 
     const checkPickupTime = (pickupDate, pickupTime) => {
         const currentTime = new Date();
@@ -171,7 +200,7 @@ const BookAirportCab = () => {
 
         const paymentMode = Number(formData?.paymentMode);
         setActualPrice(paymentMode === 10 ? price10 : finalPrice)
-    }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice])
+    }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice, formData?.gst])
 
     const fetchOrderId = async () => {
         const res = await dispatch(order({ amount: actualPrice, forName: "Airport" }));
@@ -603,9 +632,22 @@ const BookAirportCab = () => {
                                             </label>
                                         </div>
                                     </div>
+
                                     {discountPrice > 0 &&
                                         <p className='font-semibold text-green-600 text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied {discountPrice} off </p>
                                     }
+
+                                    <label className="flex items-center p-1 px-4 mt-3 text-black border border-gray-400 rounded bg-blue-50">
+                                        <input
+                                            type="checkbox"
+                                            name="gst"
+                                            checked={formData.gst || false}  // Handle the checked state for GST
+                                            onChange={handleChange}          // Handle the change
+                                            className="mt-1 mr-2"
+                                        />
+                                        Need a invoice with GST?
+                                    </label>
+
                                     <button className='w-full p-2 py-[0.4rem] mt-3 rounded text-white  bg-main' type='submit'>Proceed</button>
                                 </div>
                             </>}
