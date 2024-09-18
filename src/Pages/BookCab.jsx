@@ -35,12 +35,10 @@ const BookCab = () => {
 
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
     const order_id = useSelector((state) => state?.razorpay?.orderId);
-    const formatPickupDate = (dateString) => {
-        // Split the date string "dd/mm/yyyy" into individual components
-        const [day, month, year] = dateString.split("/");
 
-        // Create a new Date object with the parsed values
-        const dateObject = new Date(`${year}-${month}-${day}`);
+    const formatPickupDate = (dateString) => {
+        // Create a new Date object directly from the "yyyy-mm-dd" string
+        const dateObject = new Date(dateString);
 
         // Use Intl.DateTimeFormat to get the weekday
         const weekday = new Intl.DateTimeFormat('en-GB', {
@@ -53,9 +51,13 @@ const BookCab = () => {
             day: 'numeric',
         }).format(dateObject);
 
+        // Extract the year directly from the dateObject
+        const year = dateObject.getFullYear();
+
         // Combine the weekday, the formatted date, and the year with commas
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
+
 
     const handleVoucher = async () => {
         setVoucherLoading(true)
