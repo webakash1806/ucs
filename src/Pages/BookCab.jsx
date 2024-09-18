@@ -13,6 +13,7 @@ import { order, verifyPayment } from '../Redux/Slices/razorpaySlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
 import { SiToll } from 'react-icons/si'
+import { verifyVoucher } from '../Redux/Slices/authSlice'
 
 const BookCab = () => {
     const navigate = useNavigate()
@@ -22,7 +23,8 @@ const BookCab = () => {
     const dispatch = useDispatch()
     const location = useLocation()
     const { cabData, tcData, pickupDate, pickupCity, totalPrice, pickupTime, selectedType, tripType } = location.state
-    const [price10, setPrice10] = useState(Number(totalPrice) * 10 / 100)
+    const [finalPrice, setFinalPrice] = useState(Number(totalPrice))
+    const [price10, setPrice10] = useState(Number(finalPrice) * 10 / 100)
     console.log(tcData)
     const userData = useSelector((state) => state?.auth)
 
@@ -49,9 +51,6 @@ const BookCab = () => {
         // Combine the weekday, the formatted date, and the year with commas
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
-
-
-
 
     const [formData, setFormData] = useState({
         cityName: pickupCity,
@@ -143,20 +142,29 @@ const BookCab = () => {
     console.log(pickupDate, pickupTime)
 
     useEffect(() => {
-        setPrice10(Number(totalPrice) * 10 / 100)
-    }, [])
+        setPrice10(Number(finalPrice) * 10 / 100)
+    }, [finalPrice])
 
     useEffect(() => {
 
         const paymentMode = Number(formData?.paymentMode);
-        setActualPrice(paymentMode === 10 ? price10 : totalPrice)
-    }, [formData.paymentMode, price10, totalPrice])
+        setActualPrice(paymentMode === 10 ? price10 : finalPrice)
+    }, [formData.paymentMode, price10, totalPrice, finalPrice])
 
     useEffect(() => {
         if (actualPrice > 0) {
             fetchOrderId();
         }
     }, [actualPrice]);
+
+    const handleVoucher = async () => {
+        const res = await dispatch(verifyVoucher({
+            voucherCode: formData?.voucherCode,
+            tripType: "Local Trip"
+        }))
+
+        console.log(res?.payload)
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -171,7 +179,7 @@ const BookCab = () => {
             checkPickupDate(pickupDate)
 
             if (checkPickupTime(pickupDate, pickupTime)) {
-
+                navigate('/')
                 return toast.error("Pickup time is expired!")
             }
 
@@ -294,7 +302,7 @@ const BookCab = () => {
                             </div>
                             <div className='flex items-center p-1 px-2 text-[0.9rem] gap-1'>
                                 <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.85rem] mt-[0.08rem] font-semibold'>
-                                    &#8377; {totalPrice}
+                                    &#8377; {Math.ceil(finalPrice)}
                                 </span>
                             </div>
                         </div>
@@ -516,7 +524,7 @@ const BookCab = () => {
                                                 className="w-full pl-2 font-semibold tracking-wider outline-none"
                                             />
                                             <div
-                                                // onClick={handleApplyCoupon}
+                                                onClick={handleVoucher}
                                                 className="px-5 py-[0.4rem] bg-main text-white font-semibold rounded hover:bg-blue-600 transition-colors text-[0.85rem]"
                                             >
                                                 Apply

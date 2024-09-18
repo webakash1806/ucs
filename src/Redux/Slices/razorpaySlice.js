@@ -24,6 +24,7 @@ export const order = createAsyncThunk('/razorpay/purchase', async (data) => {
     try {
         console.log(data)
         const response = await axiosInstance.post('/payment/checkout', data)
+        console.log(response)
         return response.data
     } catch (e) {
         return e

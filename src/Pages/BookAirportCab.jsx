@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FaArrowRight, FaCar, FaHotel, FaLocationDot } from 'react-icons/fa6'
+import { FaAnchorCircleExclamation, FaArrowRight, FaCar, FaHotel, FaLocationDot } from 'react-icons/fa6'
 import { IoBed, IoDocumentText } from 'react-icons/io5'
 import { useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../assets/car1.jpg'
@@ -14,6 +14,8 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
 import { SiToll } from 'react-icons/si'
 import { sendAirportBookingData } from '../Redux/Slices/airportSlice'
+import { verifyVoucher } from '../Redux/Slices/authSlice'
+import { FaRegCheckCircle } from 'react-icons/fa'
 
 const BookAirportCab = () => {
     const navigate = useNavigate()
@@ -25,10 +27,13 @@ const BookAirportCab = () => {
     console.log(location.state)
     const { cabData, tcData, pickupDate, pickup, drop, airpotValue, pickupTime, tripType } = location.state
     const totalPrice = cabData?.rates[0]?.rate
-    const [price10, setPrice10] = useState(Number(totalPrice) * 10 / 100)
+    const [finalPrice, setFinalPrice] = useState(Number(totalPrice))
+    const [price10, setPrice10] = useState(Number(finalPrice) * 10 / 100)
+    const [discountPrice, setDiscountPrice] = useState(0)
+    const [voucherLoading, setVoucherLoading] = useState(false)
+
 
     const userData = useSelector((state) => state?.auth)
-
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
     const order_id = useSelector((state) => state?.razorpay?.orderId);
     const formatPickupDate = (dateString) => {
@@ -52,9 +57,24 @@ const BookAirportCab = () => {
         // Combine the weekday, the formatted date, and the year with commas
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
-
     console.log(userData)
 
+    const handleVoucher = async () => {
+        setVoucherLoading(true)
+        const res = await dispatch(verifyVoucher({
+            voucherCode: formData?.voucherCode,
+            tripType: "Airport Trip"
+        }))
+
+        const discount = res?.payload?.discount
+
+        if (res?.payload?.dataType === 2) {
+            setDiscountPrice(Number(discount))
+            setFinalPrice(Number(finalPrice) - Number(discount))
+            setVoucherLoading(false)
+        }
+        console.log(res?.payload)
+    }
 
 
     const [formData, setFormData] = useState({
@@ -71,7 +91,8 @@ const BookAirportCab = () => {
         distance: cabData?.rates[0]?.kilometer,
         paymentMode: '10',
         declaration: false,
-        airpotValue: airpotValue
+        airpotValue: airpotValue,
+        gst: false
     })
 
     const handleChange = (e) => {
@@ -85,9 +106,7 @@ const BookAirportCab = () => {
         razorpay_signature: ""
     };
 
-    const fetchOrderId = async () => {
-        await dispatch(order({ amount: actualPrice, forName: "Local" }));
-    };
+
 
 
     const checkPickupTime = (pickupDate, pickupTime) => {
@@ -123,8 +142,6 @@ const BookAirportCab = () => {
         return null; // No error
     };
 
-
-
     const checkPickupDate = (pickupDate) => {
 
         const currentDate = new Date();
@@ -147,20 +164,28 @@ const BookAirportCab = () => {
     console.log(pickupDate, pickupTime)
 
     useEffect(() => {
-        setPrice10(Number(totalPrice) * 10 / 100)
-    }, [])
+        setPrice10(Number(finalPrice) * 10 / 100)
+    }, [finalPrice])
 
     useEffect(() => {
 
         const paymentMode = Number(formData?.paymentMode);
-        setActualPrice(paymentMode === 10 ? price10 : totalPrice)
-    }, [formData.paymentMode, price10, totalPrice])
+        setActualPrice(paymentMode === 10 ? price10 : finalPrice)
+    }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice])
+
+    const fetchOrderId = async () => {
+        const res = await dispatch(order({ amount: actualPrice, forName: "Airport" }));
+        console.log(res)
+    };
 
     useEffect(() => {
+        console.log(actualPrice)
         if (actualPrice > 0) {
-            fetchOrderId();
+            fetchOrderId()
         }
     }, [actualPrice]);
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -191,7 +216,7 @@ const BookAirportCab = () => {
 
         const options = {
             key: razorpayKey,
-            amount: formData?.totalPrice * 100,
+            amount: formData?.finalPrice * 100,
             currency: "INR",
             name: "UCS",
             description: "",
@@ -226,10 +251,8 @@ const BookAirportCab = () => {
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
 
-
-
-
     }
+
 
 
     return (
@@ -246,9 +269,9 @@ const BookAirportCab = () => {
                             </div>
                             <div>
                                 <div className='flex items-center text-[0.9rem]'>
-                                    <h2 className='font-semibold tracking-wide'>{pickup}</h2>
+                                    <h2 className='font-semibold tracking-wide'>{pickup.split(',')[0]}</h2>
                                     <MdKeyboardArrowRight className='text-[1.2rem] mt-[0.05rem]' />
-                                    <h2 className='font-semibold tracking-wide'> {drop}
+                                    <h2 className='font-semibold tracking-wide'> {drop.split(',')[0]}
                                     </h2>
                                 </div>
                                 <p className='text-[0.7rem] sm:text-[0.85rem] font-[400]'>{formatPickupDate(pickupDate)}
@@ -295,9 +318,11 @@ const BookAirportCab = () => {
                                 </span>
                             </div>
                             <div className='flex items-center p-1 px-2 text-[0.9rem] gap-1'>
-                                <h3 className='font-semibold'>Total Fare :</h3>                                                        <p>&#8377;{cabData?.rates[0]?.rate} for {cabData?.rates[0]?.kilometer} km</p>
-
+                                <h3 className='font-semibold'>Total Fare :</h3>                                                        <p>&#8377;{finalPrice} for {cabData?.rates[0]?.kilometer} km</p>
                             </div>
+                            {discountPrice > 0 &&
+                                <p className='font-semibold pl-2 pb-1 text-green-600 text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied {discountPrice} off </p>
+                            }
                         </div>
                         <div>
                             <div className='flex items-center justify-between rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
@@ -513,14 +538,34 @@ const BookAirportCab = () => {
                                                 onChange={handleChange}
                                                 className="w-full pl-2 font-semibold tracking-wider outline-none"
                                             />
-                                            <div
-                                                // onClick={handleApplyCoupon}
-                                                className="px-5 py-[0.4rem] bg-main text-white font-semibold rounded hover:bg-blue-600 transition-colors text-[0.85rem]"
-                                            >
-                                                Apply
-                                            </div>
+
+                                            {discountPrice > 0 ?
+                                                <p className='font-semibold bg-green-600 text-white p-2 px-4 rounded-r text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied  </p>
+                                                :
+                                                <div
+
+                                                    onClick={(discountPrice > 0 || voucherLoading) ? undefined : handleVoucher}
+                                                    className="px-5 py-[0.4rem] bg-main  text-white font-semibold rounded-r hover:bg-blue-600 transition-colors text-[0.85rem]"
+                                                >
+                                                    {voucherLoading && /* From Uiverse.io by abrahamcalsin */
+                                                        <div className="dot-spinner">
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                        </div>}
+                                                    {!voucherLoading && discountPrice === 0 && /* From Uiverse.io by abrahamcalsin */
+                                                        'Apply'}
+
+                                                </div>}
                                         </div>
                                     </div>
+
+
                                     <div className="relative flex-col items-center w-full p-1 px-0 mt-2 mb-1 fle3">
                                         <label className="w-full text-blue-800 text-[0.78rem]">Payment Details</label>
 
@@ -553,11 +598,14 @@ const BookAirportCab = () => {
                                                     className="hidden mr-2 peer"
                                                 />
                                                 <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
-                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{totalPrice}</span>
+                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{finalPrice}</span>
                                                 <span className='ml-1'> now</span>
                                             </label>
                                         </div>
                                     </div>
+                                    {discountPrice > 0 &&
+                                        <p className='font-semibold text-green-600 text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied {discountPrice} off </p>
+                                    }
                                     <button className='w-full p-2 py-[0.4rem] mt-3 rounded text-white  bg-main' type='submit'>Proceed</button>
                                 </div>
                             </>}

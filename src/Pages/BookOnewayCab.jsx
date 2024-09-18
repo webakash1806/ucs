@@ -223,32 +223,28 @@ const BookOnewayCab = () => {
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
 
-
-
-
     }
 
-
     return (
-        <div className='flex flex-wrap items-start justify-center min-h-[90vh] p-4 py-8 bg-gray-100'>
+        <div className='flex flex-wrap items-start md:pt-16 justify-center min-h-[90vh] p-4 py-8 bg-gray-100'>
             <div className='flex flex-col items-center justify-center gap-2'>
-                <div className='flex flex-wrap items-start justify-center gap-4'>
+                <div className='flex flex-row-reverse flex-wrap items-start justify-center gap-4 md:gap-6 flex-wrap- '>
                     <div
-                        className='bg-white  flex flex-col   min-w-[19.5rem] text-black max-w-[29rem] w-[90vw] hover:from-[#f3fbff] cursor-pointer transition-all duration-500 border border-main hover:bg-gradient-to-b hover:to-[#f8fafc] rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'
+                        className='bg-white  flex flex-col h-full   min-w-[19.5rem] text-black max-w-[32rem] w-[90vw] hover:from-[#f3fbff] cursor-pointer transition-all duration-500 border border-main hover:bg-gradient-to-b hover:to-[#f8fafc] rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'
                     >
 
-                        <div className='flex items-center gap-2 p-2 rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
+                        <div className='flex items-center gap-2 p-2 h-full rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
                             <div className='p-[8px] border-[0.1px] border-black rounded-full size-fit'>
                                 <FaCar />
                             </div>
                             <div>
-                                <div className='flex items-center text-[0.9rem]'>
-                                    <h2 className='font-semibold tracking-wide'>{pickupCity}</h2>
+                                <div className='flex items-center text-[0.95rem] sm:text-[1.1rem]'>
+                                    <h2 className='font-semibold tracking-wide'>{pickupCity.split(',')[0]}</h2>
                                     <MdKeyboardArrowRight className='text-[1.2rem] mt-[0.05rem]' />
-                                    <h2 className='font-semibold tracking-wide'> {dropCity}
+                                    <h2 className='font-semibold tracking-wide'> {dropCity.split(',')[0]}
                                     </h2>
                                 </div>
-                                <p className='text-[0.7rem] sm:text-[0.85rem] font-[400]'>{formatPickupDate(pickupDate)}
+                                <p className='text-[0.8rem] sm:text-[0.9rem] font-[400]'>{formatPickupDate(pickupDate)}
                                     <span> {pickupTime}</span>
                                 </p>
                             </div>
@@ -260,42 +256,44 @@ const BookOnewayCab = () => {
                             <div className=''>
 
 
-                                <h2 className='font-semibold text-[0.95rem]'>{cabData?.category?.name}</h2>
+                                <h2 className='font-semibold text-[0.98rem] sm:text-[1.2rem]'>{cabData?.category?.name}</h2>
 
                                 <div className='flex flex-wrap '>
-                                    <div className='flex items-center mr-4 justify-center gap-[0.15rem] text-[0.78rem] text-[#1c1c1c]'>
+                                    <div className='flex items-center mr-4 justify-center gap-[0.15rem]                                                     
+text-[0.78rem] sm:text-[0.82rem] font-semibold text-[#1c1c1c]'>
                                         <MdLuggage className='' />
                                         {cabData?.category?.numberOfBags} luggage
                                     </div>
 
-                                    <div className='flex items-center mr-4  justify-center gap-[0.15rem] text-[0.78rem] text-[#1c1c1c]'>
+                                    <div className='flex items-center mr-4  justify-center gap-[0.15rem]                                                     
+text-[0.78rem] sm:text-[0.82rem] font-semibold text-[#1c1c1c]'>
                                         <MdAirlineSeatReclineExtra className='' />
                                         <p>{cabData?.category?.numberOfSeats} seats</p>
                                     </div>
-                                    <div className='flex items-center mr-4  justify-center gap-[0.15rem] text-[0.75rem] text-[#1c1c1c]'>
+                                    <div className='flex items-center mr-4  justify-center gap-[0.15rem] text-[0.75rem] sm:text-[0.82rem] font-semibold text-[#1c1c1c]'>
                                         <TbAirConditioning className='' />
                                         <p>{cabData?.category?.acAvailable ? "AC" : "NON AC"}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className='py-1 border-t'>
-                            <div className='flex items-center px-2 text-[0.9rem] gap-1'>
-                                <h3 className='font-semibold'>Trip Type :</h3><span className='text-[0.85rem] mt-[0.08rem]'>
+                        <div className='py-1 space-y-1 border-t'>
+                            <div className='flex items-center px-2 text-[0.9rem] sm:text-[0.95rem] gap-1'>
+                                <h3 className='font-semibold'>Trip Type :</h3><span className='mt-[0.08rem]'>
                                     {tripType}
                                 </span>
                             </div>
-                            <div className='flex items-center px-2 text-[0.95rem] gap-1'>
+                            <div className='flex items-center px-2 text-[0.95rem] sm:text-[1rem] gap-1'>
                                 <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.95rem] mt-[0.08rem] font-semibold'>
                                     &#8377; {totalPrice}
                                 </span>
                             </div>
                         </div>
                         <div>
-                            <div className='flex items-center justify-between rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
+                            <div className='flex text-[0.8rem] mt-1 sm:text-[0.9rem] items-center justify-between rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
                                 <button
                                     onClick={() => setDetailsActive(1)}
-                                    className={`flex items-center gap-1 w-full p-2 text-[0.8rem]  justify-center  font-semibold ${detailsActive === 1 ? 'bg-main text-white' : 'bg-transparent'}`}
+                                    className={`flex items-center gap-1 w-full p-2   justify-center  font-semibold ${detailsActive === 1 ? 'bg-main text-white' : 'bg-transparent'}`}
                                 >
                                     {detailsActive === 1 ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                     Inclusive
@@ -303,7 +301,7 @@ const BookOnewayCab = () => {
 
                                 <button
                                     onClick={() => setDetailsActive(2)}
-                                    className={`flex items-center gap-1 p-2 text-[0.8rem] w-full justify-center font-semibold ${detailsActive === 2 ? 'bg-main text-white' : 'bg-transparent'}`}
+                                    className={`flex items-center gap-1 p-2  w-full justify-center font-semibold ${detailsActive === 2 ? 'bg-main text-white' : 'bg-transparent'}`}
                                 >
                                     {detailsActive === 2 ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                     Exclusive
@@ -311,7 +309,7 @@ const BookOnewayCab = () => {
 
                                 <button
                                     onClick={() => setDetailsActive(3)}
-                                    className={`flex items-center gap-1 p-2 text-[0.8rem] justify-center w-full font-semibold ${detailsActive === 3 ? 'bg-main text-white' : 'bg-transparent'}`}
+                                    className={`flex items-center gap-1 p-2  justify-center w-full font-semibold ${detailsActive === 3 ? 'bg-main text-white' : 'bg-transparent'}`}
                                 >
                                     {detailsActive === 3 ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                     T&C
@@ -335,12 +333,12 @@ const BookOnewayCab = () => {
                                                  relative'>
 
 
-                                        <div className='flex items-center gap-2'>
+                                        {/* <div className='flex items-center gap-2'>
                                             <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
                                                 <GiTakeMyMoney className='text-[1.1rem]' />
                                             </div>
                                             <p>Pay &#8377; {cabData?.data?.perKm}/km after 80 km</p>
-                                        </div>
+                                        </div> */}
                                         <div className='flex items-center gap-2'>
                                             <div className='p-[5.5px] border-[0.1px] border-black rounded-full size-fit'>
                                                 <MdLocalParking className='text-[1.15rem]' />
@@ -348,14 +346,14 @@ const BookOnewayCab = () => {
                                             </div>
                                             <p>Parking</p>
                                         </div>
-                                        <div className='flex items-center gap-2'>
+                                        {/* <div className='flex items-center gap-2'>
                                             <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
                                                 <GiTakeMyMoney className='text-[1.1rem]' />
 
                                             </div>
 
                                             <p>Pay &#8377; {cabData?.data?.perHour}/hr after 8 hr</p>
-                                        </div>
+                                        </div> */}
                                         <div className='flex items-center gap-2'>
                                             <div className='p-[3px] border-[0.1px] border-black rounded-full size-fit'>
                                                 <SiToll className='text-[1.4rem]' />
@@ -367,8 +365,7 @@ const BookOnewayCab = () => {
 
                                     </div>}
                                 {detailsActive === 1 &&
-                                    <div className='text-[0.8rem] p-2 py-4 flex flex-col items-start justify-center gap-6 relative'>
-
+                                    <div className='text-[0.8rem] p-2 py-4 flex flex-col items-start justify-center gap-3 relative'>
                                         <div className='flex items-center gap-2'>
                                             <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
                                                 <IoDocumentText className='text-[1.1rem]' />
@@ -378,9 +375,7 @@ const BookOnewayCab = () => {
                                         <div className='flex items-center gap-2'>
                                             <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
                                                 <GiGasPump className='text-[1.1rem]' />
-
                                             </div>
-
                                             <p>Base Fare</p>
                                         </div>
                                         {/* <div className='flex items-center gap-2'>
@@ -397,74 +392,79 @@ const BookOnewayCab = () => {
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} noValidate className='bg-white   flex flex-col  border border-main  min-w-[19.5rem] text-black max-w-[29rem] w-[90vw]  cursor-pointer transition-all duration-500 hover:bg-gradient-to-b  rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'>
+                    <form onSubmit={handleSubmit} noValidate className='bg-white   flex flex-col  border border-main  min-w-[19.5rem] text-black max-w-[32rem] w-[90vw]  cursor-pointer transition-all duration-500 hover:bg-gradient-to-b  rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'>
                         {currentStep === 1 &&
                             <>
                                 <div className='flex items-center gap-2 p-2 rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
                                     <div className='p-[5px] border-[0.1px] border-black rounded-full size-fit'>
                                         <PiUsersThreeFill className='text-[1.3rem]' />
                                     </div>
-                                    <h2 className='font-semibold tracking-wide'>Travelers </h2>
+                                    <h2 className='font-semibold tracking-wide sm:text-[1.2rem]'>Travelers </h2>
 
                                 </div>
                                 <div className='p-2'>
                                     <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem]">Full name</label>
+                                        <label className="w-full text-blue-800                                                     
+text-[0.79rem] sm:text-[0.88rem] font-semibold">Full name</label>
                                         <input
                                             type="text"
                                             name="name"
                                             placeholder="Enter full name..."
                                             value={formData.name}
                                             onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem]"
+                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
                                             required
                                         />
                                     </div>
                                     <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem]">Email</label>
+                                        <label className="w-full text-blue-800                                                     
+text-[0.79rem] sm:text-[0.88rem] font-semibold">Email</label>
                                         <input
                                             type="email"
                                             name="email"
                                             placeholder="Enter email..."
                                             value={formData.email}
                                             onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem]"
+                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
                                             required
                                         />
                                     </div>
                                     <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem]">Phone number</label>
+                                        <label className="w-full text-blue-800                                                     
+text-[0.79rem] sm:text-[0.88rem] font-semibold">Phone number</label>
                                         <input
                                             type="number"
                                             name="phoneNumber"
                                             placeholder="Enter phone number..."
                                             value={formData.phoneNumber}
                                             onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem]"
+                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
                                             required
                                         />
                                     </div>
                                     <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem]">Pickup address</label>
+                                        <label className="w-full text-blue-800                                                     
+text-[0.79rem] sm:text-[0.88rem] font-semibold">Pickup address</label>
                                         <input
                                             type="text"
                                             name="pickupAddress"
                                             placeholder="Enter pickup address..."
                                             value={formData.pickupAddress}
                                             onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem]"
+                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
                                             required
                                         />
                                     </div>
                                     <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem]">Drop address</label>
+                                        <label className="w-full text-blue-800                                                     
+text-[0.79rem] sm:text-[0.88rem] font-semibold">Drop address</label>
                                         <input
                                             type="text"
                                             name="dropAddress"
                                             placeholder="Enter drop address..."
                                             value={formData.dropAddress}
                                             onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem]"
+                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
                                             required
                                         />
                                     </div>
@@ -486,7 +486,7 @@ const BookOnewayCab = () => {
                                     <div className='p-[5px] border-[0.1px] border-black rounded-full size-fit'>
                                         <PiUsersThreeFill className='text-[1.3rem]' />
                                     </div>
-                                    <h2 className='font-semibold tracking-wide'>Payment Details </h2>
+                                    <h2 className='font-semibold tracking-wide sm:text-[1.2rem]'>Payment Details </h2>
                                     <button className='absolute px-3 py-[0.2rem] text-white rounded right-2 bg-main' onClick={() => setCurrentStep(1)}>Back</button>
                                 </div>
                                 <div className='p-2'>
@@ -498,7 +498,8 @@ const BookOnewayCab = () => {
 
 
                                     <div className="mt-1">
-                                        <label className="w-full text-blue-800 text-[0.78rem]">Have a Coupon Code?</label>
+                                        <label className="w-full text-blue-800                                                     
+text-[0.79rem] sm:text-[0.88rem] font-semibold">Have a Coupon Code?</label>
                                         <div className="flex items-center gap-2 mt-1 tracking-wide border border-gray-300 rounded bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem]">
                                             <input
                                                 type="text"
@@ -506,21 +507,22 @@ const BookOnewayCab = () => {
                                                 placeholder="Enter coupon code"
                                                 value={formData.voucherCode}
                                                 onChange={handleChange}
-                                                className="w-full pl-2 font-semibold tracking-wider outline-none"
+                                                className="w-full pl-2 font-semibold tracking-wider outline-none sm:text-[1.05rem]"
                                             />
                                             <div
                                                 // onClick={handleApplyCoupon}
-                                                className="px-5 py-[0.4rem] bg-main text-white font-semibold rounded hover:bg-blue-600 transition-colors text-[0.85rem]"
+                                                className="px-5 py-[0.4rem] bg-main text-white font-semibold rounded hover:bg-blue-600 transition-colors text-[0.85rem] sm:text-[1.05rem]"
                                             >
                                                 Apply
                                             </div>
                                         </div>
                                     </div>
                                     <div className="relative flex-col items-center w-full p-1 px-0 mt-2 mb-1 fle3">
-                                        <label className="w-full text-blue-800 text-[0.78rem]">Payment Details</label>
+                                        <label className="w-full text-blue-800                                                     
+text-[0.79rem] sm:text-[0.88rem] font-semibold">Payment Details</label>
 
                                         <div className="flex flex-col w-full gap-2 mt-2">
-                                            <label className="flex items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
+                                            <label className="flex sm:text-[1.05rem] items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
                                                 <input
                                                     type="radio"
                                                     name="paymentMode"
@@ -529,7 +531,7 @@ const BookOnewayCab = () => {
                                                     onChange={handleChange}
                                                     className="hidden mr-2 peer"
                                                 />
-                                                <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
+                                                <span className="flex items-center  justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
                                                 10%  <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{price10}
 
                                                 </span>
@@ -538,7 +540,7 @@ const BookOnewayCab = () => {
                                                 </span>
                                             </label>
 
-                                            <label className="flex items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
+                                            <label className="flex sm:text-[1.05rem] items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
                                                 <input
                                                     type="radio"
                                                     name="paymentMode"

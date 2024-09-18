@@ -196,6 +196,19 @@ export const downloadInvoice = createAsyncThunk('/user/invoice', async (data) =>
 });
 
 
+export const verifyVoucher = createAsyncThunk('/user/cancel-bookings', async (data) => {
+    try {
+        console.log(data)
+        let res = axiosInstance.post(`/discount/valid`, data);
+
+        res = await res;
+        return res.data;
+    } catch (e) {
+        toast.error(e?.response?.data?.message);
+    }
+});
+
+
 
 
 const authSlice = createSlice({
