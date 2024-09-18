@@ -14,6 +14,7 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
 import { SiToll } from 'react-icons/si'
 import { sendOnewayTripData, sendRoundTripData } from '../Redux/Slices/outstationSlice'
+import { verifyVoucher } from '../Redux/Slices/authSlice'
 
 const BookOnewayCab = () => {
     const navigate = useNavigate()
@@ -23,8 +24,14 @@ const BookOnewayCab = () => {
     const dispatch = useDispatch()
     const location = useLocation()
     const { cabData, tcData, pickupDate, distance, pickupCity, dropCity, totalPrice, pickupTime, selectedType, returnDate, tripType } = location.state
-    const [price10, setPrice10] = useState(Number(totalPrice) * 10 / 100)
-    console.log(tcData)
+
+    const [finalPrice, setFinalPrice] = useState(Number(totalPrice))
+    const [price10, setPrice10] = useState(Number(finalPrice) * 10 / 100)
+    const [discountPrice, setDiscountPrice] = useState(0)
+    const [voucherLoading, setVoucherLoading] = useState(false)
+    const [gstActive, setGstActive] = useState(false)
+
+
     const userData = useSelector((state) => state?.auth)
 
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
@@ -52,6 +59,32 @@ const BookOnewayCab = () => {
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
 
+    const handleVoucher = async () => {
+        setVoucherLoading(true)
+        const res = await dispatch(verifyVoucher({
+            voucherCode: formData?.voucherCode,
+            tripType: "Local Trip"
+        }))
+
+        const discount = res?.payload?.discount
+
+        if (res?.payload?.dataType === 1) {
+
+            const discountPrice = Number(discount) * finalPrice / 100
+            setDiscountPrice(Number(discountPrice))
+            setFinalPrice(Number(finalPrice) - Number(discountPrice))
+            setVoucherLoading(false)
+        }
+
+        if (res?.payload?.dataType === 2) {
+            setDiscountPrice(Number(discount))
+            setFinalPrice(Number(finalPrice) - Number(discount))
+            setVoucherLoading(false)
+        }
+
+        setVoucherLoading(false)
+        console.log(res?.payload)
+    }
 
     const [formData, setFormData] = useState({
         fromLocation: pickupCity,
@@ -69,11 +102,16 @@ const BookOnewayCab = () => {
         voucherCode: "",
         paymentMode: '10',
         declaration: false,
+        gst: false
+
     })
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === "checkbox" ? checked : value, // Handle checkbox separately
+        });
     };
 
     const paymentDetails = {
@@ -82,9 +120,23 @@ const BookOnewayCab = () => {
         razorpay_signature: ""
     };
 
-    const fetchOrderId = async () => {
-        await dispatch(order({ amount: actualPrice, forName: "Local" }));
-    };
+    const handleGst = () => {
+        const gst = totalPrice * 5 / 100
+        if (formData.gst) {
+            setFinalPrice((Number(gst) + Number(finalPrice)))
+            setGstActive(true)
+        }
+
+        if (gstActive) {
+            setFinalPrice((Number(finalPrice) - Number(gst)))
+            setGstActive(false)
+        }
+    }
+
+    useEffect(() => {
+        handleGst()
+    }, [formData?.gst])
+
 
 
     const checkPickupTime = (pickupDate, pickupTime) => {
@@ -144,20 +196,27 @@ const BookOnewayCab = () => {
     console.log(pickupDate, pickupTime)
 
     useEffect(() => {
-        setPrice10(Number(totalPrice) * 10 / 100)
-    }, [])
+        setPrice10(Number(finalPrice) * 10 / 100)
+    }, [finalPrice])
 
     useEffect(() => {
 
         const paymentMode = Number(formData?.paymentMode);
-        setActualPrice(paymentMode === 10 ? price10 : totalPrice)
-    }, [formData.paymentMode, price10, totalPrice])
+        setActualPrice(paymentMode === 10 ? price10 : finalPrice)
+    }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice, formData?.gst, gstActive])
+
+    const fetchOrderId = async () => {
+        const res = await dispatch(order({ amount: actualPrice, forName: "Airport" }));
+        console.log(res)
+    };
 
     useEffect(() => {
+        console.log(actualPrice)
         if (actualPrice > 0) {
-            fetchOrderId();
+            fetchOrderId()
         }
     }, [actualPrice]);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -188,7 +247,7 @@ const BookOnewayCab = () => {
 
         const options = {
             key: razorpayKey,
-            amount: formData?.totalPrice * 100,
+            amount: finalPrice * 100,
             currency: "INR",
             name: "UCS",
             description: "",
@@ -285,7 +344,8 @@ text-[0.78rem] sm:text-[0.82rem] font-semibold text-[#1c1c1c]'>
                             </div>
                             <div className='flex items-center px-2 text-[0.95rem] sm:text-[1rem] gap-1'>
                                 <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.95rem] mt-[0.08rem] font-semibold'>
-                                    &#8377; {totalPrice}
+                                    &#8377; {Math.ceil(finalPrice)}
+
                                 </span>
                             </div>
                         </div>
@@ -507,14 +567,32 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Have a Coupon Code?</label>
                                                 placeholder="Enter coupon code"
                                                 value={formData.voucherCode}
                                                 onChange={handleChange}
-                                                className="w-full pl-2 font-semibold tracking-wider outline-none sm:text-[1.05rem]"
+                                                className="w-full pl-2 font-semibold tracking-wider outline-none"
                                             />
-                                            <div
-                                                // onClick={handleApplyCoupon}
-                                                className="px-5 py-[0.4rem] bg-main text-white font-semibold rounded hover:bg-blue-600 transition-colors text-[0.85rem] sm:text-[1.05rem]"
-                                            >
-                                                Apply
-                                            </div>
+
+                                            {discountPrice > 0 ?
+                                                <p className='font-semibold bg-green-600 text-white p-2 px-4 rounded-r text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied  </p>
+                                                :
+                                                <div
+
+                                                    onClick={(discountPrice > 0 || voucherLoading) ? undefined : handleVoucher}
+                                                    className="px-5 py-[0.4rem] bg-main  text-white font-semibold rounded-r hover:bg-blue-600 transition-colors text-[0.85rem]"
+                                                >
+                                                    {voucherLoading && /* From Uiverse.io by abrahamcalsin */
+                                                        <div className="dot-spinner">
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                        </div>}
+                                                    {!voucherLoading && discountPrice === 0 && /* From Uiverse.io by abrahamcalsin */
+                                                        'Apply'}
+
+                                                </div>}
                                         </div>
                                     </div>
                                     <div className="relative flex-col items-center w-full p-1 px-0 mt-2 mb-1 fle3">
@@ -550,11 +628,25 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Payment Details</label>
                                                     className="hidden mr-2 peer"
                                                 />
                                                 <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
-                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{totalPrice}</span>
+                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{finalPrice}</span>
                                                 <span className='ml-1'> now</span>
                                             </label>
                                         </div>
                                     </div>
+                                    {discountPrice > 0 &&
+                                        <p className='font-semibold text-green-600 text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied {discountPrice} off </p>
+                                    }
+
+                                    <label className="flex items-center p-1 px-4 mt-3 text-black border border-gray-400 rounded bg-blue-50">
+                                        <input
+                                            type="checkbox"
+                                            name="gst"
+                                            checked={formData.gst || false}  // Handle the checked state for GST
+                                            onChange={handleChange}          // Handle the change
+                                            className="mt-1 mr-2"
+                                        />
+                                        Need a invoice with GST?
+                                    </label>
                                     <button className='w-full p-2 py-[0.4rem] mt-3 rounded text-white  bg-main' type='submit'>Proceed</button>
                                 </div>
                             </>}

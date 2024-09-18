@@ -124,12 +124,12 @@ const BookCab = () => {
     const handleGst = () => {
         const gst = totalPrice * 5 / 100
         if (formData.gst) {
-            setFinalPrice(Math.ceil(Number(gst) + Number(finalPrice)))
+            setFinalPrice((Number(gst) + Number(finalPrice)))
             setGstActive(true)
         }
 
         if (gstActive) {
-            setFinalPrice(Math.ceil(Number(finalPrice) - Number(gst)))
+            setFinalPrice((Number(finalPrice) - Number(gst)))
             setGstActive(false)
         }
     }
@@ -205,7 +205,7 @@ const BookCab = () => {
 
         const paymentMode = Number(formData?.paymentMode);
         setActualPrice(paymentMode === 10 ? price10 : finalPrice)
-    }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice, formData?.gst])
+    }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice, formData?.gst, gstActive])
 
     const fetchOrderId = async () => {
         const res = await dispatch(order({ amount: actualPrice, forName: "Airport" }));
@@ -249,7 +249,7 @@ const BookCab = () => {
 
         const options = {
             key: razorpayKey,
-            amount: formData?.totalPrice * 100,
+            amount: finalPrice * 100,
             currency: "INR",
             name: "UCS",
             description: "",
