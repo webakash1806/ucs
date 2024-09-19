@@ -63,7 +63,7 @@ const BookOnewayCab = () => {
         setVoucherLoading(true)
         const res = await dispatch(verifyVoucher({
             voucherCode: formData?.voucherCode,
-            tripType: "Local Trip"
+            tripType: "One-Way Trip"
         }))
 
         const discount = res?.payload?.discount
@@ -289,194 +289,158 @@ const BookOnewayCab = () => {
             <div className='flex flex-col items-center justify-center gap-2'>
                 <div className='mb-6'>
                     <h1 className='text-[1.7rem] mb-2 leading-8  font-bold'>Book your journey</h1>
-                    <div className='flex items-center gap-1 ml-9'>
-                        <div className='w-[5rem] h-[0.35rem] rounded bg-main'>
+                    <div className='flex items-center gap-1'>
+                        <div className='w-[6rem] h-[0.32rem] rounded bg-main'>
 
                         </div>
-                        <div className='w-[3rem] h-[0.35rem] rounded bg-main'>
+                        <div className='w-[4rem] h-[0.32rem] rounded bg-main'>
 
                         </div>
-                        <div className='w-[1rem] h-[0.35rem] rounded bg-main'>
+                        <div className='w-[1rem] h-[0.32rem] rounded bg-main'>
 
                         </div>
-                        <div className='w-[0.35rem] h-[0.35rem] rounded bg-main'>
+                        <div className='w-[0.35rem] h-[0.32rem] rounded bg-main'>
 
                         </div>
                     </div>
                 </div>
                 <div className='flex flex-row-reverse flex-wrap items-start justify-center gap-4 md:gap-6 flex-wrap- '>
-                    <div
-                        className='bg-white  flex flex-col h-full   min-w-[19.5rem] text-black max-w-[35rem] w-[90vw] hover:from-[#f3fbff] cursor-pointer transition-all duration-500 border border-main hover:bg-gradient-to-b hover:to-[#f8fafc] rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'
-                    >
-
-                        <div className='flex items-center gap-2 p-2 h-full rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
-                            <div className='p-[8px] border-[0.1px] border-black rounded-full size-fit'>
-                                <FaCar />
+                    <div className="bg-white flex flex-col min-w-[19.5rem] max-w-[33rem] w-[90vw] text-black hover:bg-gradient-to-b hover:from-[#f3fbff] hover:to-[#f8fafc] cursor-pointer transition-all duration-500 border border-gray-300 hover:border-blue-400 rounded-lg shadow-md overflow-hidden">
+                        {/* Header Section */}
+                        <div className="flex items-center gap-3 p-4 bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff] rounded-t-lg">
+                            <div className="p-2 border border-gray-400 rounded-full">
+                                <FaCar className="text-xl" />
                             </div>
                             <div>
-                                <div className='flex items-center text-[0.95rem] sm:text-[1.15rem]'>
-                                    <h2 className='font-semibold tracking-wide'>{pickupCity.split(',')[0]}</h2>
-                                    <MdKeyboardArrowRight className='text-[1.2rem] mt-[0.05rem]' />
-                                    <h2 className='font-semibold tracking-wide'> {dropCity.split(',')[0]}
-                                    </h2>
+                                <div className="flex items-center text-lg sm:text-[1.3rem] font-semibold">
+                                    <h2>{pickupCity.split(",")[0]}</h2>
+                                    <MdKeyboardArrowRight className="mx-1 text-2xl" />
+                                    <h2>{dropCity.split(",")[0]}</h2>
                                 </div>
-                                <p className='text-[0.8rem] sm:text-[0.9rem] font-[400]'>{formatPickupDate(pickupDate)}
-                                    <span> {pickupTime}</span>
-                                </p>
+                                <p className="text-sm font-semibold text-gray-600">{formatPickupDate(pickupDate)} <span>{pickupTime}</span></p>
                             </div>
                         </div>
-                        <div className='flex gap-2'>
+
+                        {/* Cab Information */}
+                        <div className="flex gap-3 p-4">
+                            <img src={cabData?.category?.photo?.secure_url || car1} className="min-w-[7.1rem] object-cover h-[5rem] rounded-md" alt="" />
                             <div>
-                                <img src={cabData?.category?.photo?.secure_url || car1} className='min-w-[8rem] h-[5rem] object-cover' alt="" />
-                            </div>
-                            <div className=''>
-
-
-                                <h2 className='font-semibold text-[0.98rem] sm:text-[1.4rem]'>{cabData?.category?.name}</h2>
-
-                                <div className='flex flex-wrap '>
-                                    <div className='flex items-center mr-4 justify-center gap-[0.15rem]                                                     
-text-[0.85rem] sm:text-[0.95rem] font-semibold text-[#1c1c1c]'>
-                                        <MdLuggage className='' />
-                                        {cabData?.category?.numberOfBags} luggage
+                                <h2 className="text-lg font-semibold sm:text-[1.3rem]">{cabData?.category?.name}</h2>
+                                <div className="flex flex-wrap gap-3 mt-2 text-sm sm:text-[0.95rem] sm:text-[1.07rem] text-gray-700">
+                                    <div className="flex items-center gap-1">
+                                        <MdLuggage />
+                                        <p>{cabData?.category?.numberOfBags} luggage</p>
                                     </div>
-
-                                    <div className='flex items-center mr-4  justify-center gap-[0.15rem]                                                     
-text-[0.85rem] sm:text-[0.95rem] font-semibold text-[#1c1c1c]'>
-                                        <MdAirlineSeatReclineExtra className='' />
+                                    <div className="flex items-center gap-1">
+                                        <MdAirlineSeatReclineExtra />
                                         <p>{cabData?.category?.numberOfSeats} seats</p>
                                     </div>
-                                    <div className='flex items-center mr-4  justify-center gap-[0.15rem] text-[0.85rem] sm:text-[0.95rem] font-semibold text-[#1c1c1c]'>
-                                        <TbAirConditioning className='' />
+                                    <div className="flex items-center gap-1">
+                                        <TbAirConditioning />
                                         <p>{cabData?.category?.acAvailable ? "AC" : "NON AC"}</p>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
-                        <div className='py-1 space-y-1 border-t sm:space-y-2'>
-                            <div className='flex items-center px-2 text-[0.9rem] sm:text-[0.98rem] gap-1'>
-                                <h3 className='font-semibold'>Trip Type :</h3><span className='mt-[0.08rem]'>
-                                    {tripType}
-                                </span>
-                            </div>
-                            <div className='flex items-center px-2 text-[0.95rem] sm:text-[1.1rem] gap-1'>
-                                <h3 className='font-semibold'>Total Fare :</h3><span className='text-[0.95rem] mt-[0.08rem] sm:text-[1.1rem] font-semibold'>
-                                    &#8377; {Math.ceil(finalPrice)}
 
-                                </span>
+                        {/* Trip Information */}
+                        <div className="px-4 py-2 text-sm sm:text-[0.98rem] space-y-2">
+                            <div className="flex items-center">
+                                <h3 className="font-semibold">Trip Type:</h3>
+                                <span className="ml-2">{tripType}</span>
+                            </div>
+                            <div className="flex items-center mt-1">
+                                <h3 className="font-semibold">Total Fare:</h3>
+                                <p className="ml-2">&#8377;{Math.ceil(finalPrice)}</p>
                             </div>
                         </div>
-                        <div>
-                            <div className='flex text-[0.8rem] mt-1 sm:text-[0.9rem] items-center justify-between rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
-                                <button
-                                    onClick={() => setDetailsActive(1)}
-                                    className={`flex items-center gap-1 w-full p-2   justify-center  font-semibold ${detailsActive === 1 ? 'bg-main text-white' : 'bg-transparent'}`}
-                                >
-                                    {detailsActive === 1 ? <IoIosArrowUp /> : <IoIosArrowDown />}
-                                    Inclusive
-                                </button>
 
-                                <button
-                                    onClick={() => setDetailsActive(2)}
-                                    className={`flex items-center gap-1 p-2  w-full justify-center font-semibold ${detailsActive === 2 ? 'bg-main text-white' : 'bg-transparent'}`}
-                                >
-                                    {detailsActive === 2 ? <IoIosArrowUp /> : <IoIosArrowDown />}
-                                    Exclusive
-                                </button>
+                        {/* Footer with Tabs */}
+                        <div className="flex text-[0.8rem] mt-1 sm:text-[0.9rem] items-center justify-between rounded-b-lg bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]">
+                            <button
+                                onClick={() => setDetailsActive(1)}
+                                className={`flex items-center gap-1 w-full p-2 justify-center font-semibold ${detailsActive === 1 ? 'bg-main text-white' : 'bg-transparent'}`}
+                            >
+                                {detailsActive === 1 ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                Inclusive
+                            </button>
 
-                                <button
-                                    onClick={() => setDetailsActive(3)}
-                                    className={`flex items-center gap-1 p-2  justify-center w-full font-semibold ${detailsActive === 3 ? 'bg-main text-white' : 'bg-transparent'}`}
-                                >
-                                    {detailsActive === 3 ? <IoIosArrowUp /> : <IoIosArrowDown />}
-                                    T&C
-                                </button>
+                            <button
+                                onClick={() => setDetailsActive(2)}
+                                className={`flex items-center gap-1 w-full p-2 justify-center font-semibold ${detailsActive === 2 ? 'bg-main text-white' : 'bg-transparent'}`}
+                            >
+                                {detailsActive === 2 ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                Exclusive
+                            </button>
 
-                            </div>
-                            <div className=' text-[#0f0f0f] '>
-                                {detailsActive === 3 &&
-                                    <div className='text-[0.8rem] p-2 py-4 relative'>
+                            <button
+                                onClick={() => setDetailsActive(3)}
+                                className={`flex items-center gap-1 w-full p-2 justify-center font-semibold ${detailsActive === 3 ? 'bg-main text-white' : 'bg-transparent'}`}
+                            >
+                                {detailsActive === 3 ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                T&C
+                            </button>
+                        </div>
 
-                                        <h3 className='text-[0.9rem] font-semibold '>Terms and Conditions</h3>
-                                        {
-                                            tcData?.map((data, index) => (
-                                                <li className='pl-2 mt-1 leading-4 list-disc' key={index}>{data}</li>
-                                            ))
-                                        }
+                        {/* Tab Content */}
+                        <div className='text-[#0f0f0f]'>
+                            {detailsActive === 1 && (
+                                <div className="text-[0.8rem] sm:text-[0.95rem] p-2 py-4 flex flex-col gap-3">
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-[6px] border-[0.1px] border-black rounded-full">
+                                            <IoDocumentText className="text-[1.1rem]" />
+                                        </div>
+                                        <p>GST charges (5%)</p>
                                     </div>
-                                }
-                                {detailsActive === 2 &&
-                                    <div className='text-[0.8rem] p-2 py-4 flex items-start justify-center w-full flex-col gap-3
-                                                 relative'>
-
-
-                                        {/* <div className='flex items-center gap-2'>
-                                            <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
-                                                <GiTakeMyMoney className='text-[1.1rem]' />
-                                            </div>
-                                            <p>Pay &#8377; {cabData?.data?.perKm}/km after 80 km</p>
-                                        </div> */}
-                                        <div className='flex items-center gap-2'>
-                                            <div className='p-[5.5px] border-[0.1px] border-black rounded-full size-fit'>
-                                                <MdLocalParking className='text-[1.15rem]' />
-
-                                            </div>
-                                            <p>Parking</p>
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-[6px] border-[0.1px] border-black rounded-full">
+                                            <GiGasPump className="text-[1.1rem]" />
                                         </div>
-                                        {/* <div className='flex items-center gap-2'>
-                                            <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
-                                                <GiTakeMyMoney className='text-[1.1rem]' />
+                                        <p>Base Fare</p>
+                                    </div>
+                                </div>
+                            )}
 
-                                            </div>
-
-                                            <p>Pay &#8377; {cabData?.data?.perHour}/hr after 8 hr</p>
-                                        </div> */}
-                                        <div className='flex items-center gap-2'>
-                                            <div className='p-[3px] border-[0.1px] border-black rounded-full size-fit'>
-                                                <SiToll className='text-[1.4rem]' />
-
-                                            </div>
-
-                                            <p>Toll/State tax</p>
+                            {detailsActive === 2 && (
+                                <div className="text-[0.8rem] sm:text-[0.95rem] p-2 py-4 flex flex-col gap-3">
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-[5.5px] border-[0.1px] border-black rounded-full">
+                                            <MdLocalParking className="text-[1.15rem]" />
                                         </div>
-
-                                    </div>}
-                                {detailsActive === 1 &&
-                                    <div className='text-[0.8rem] p-2 py-4 flex flex-col items-start justify-center gap-3 relative'>
-                                        <div className='flex items-center gap-2'>
-                                            <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
-                                                <IoDocumentText className='text-[1.1rem]' />
-                                            </div>
-                                            <p>GST charges (5%)</p>
+                                        <p>Parking</p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-[3px] border-[0.1px] border-black rounded-full">
+                                            <SiToll className="text-[1.4rem]" />
                                         </div>
-                                        <div className='flex items-center gap-2'>
-                                            <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
-                                                <GiGasPump className='text-[1.1rem]' />
-                                            </div>
-                                            <p>Base Fare</p>
-                                        </div>
-                                        {/* <div className='flex items-center gap-2'>
-                                                        <div className='p-[3px] border-[0.1px] border-black rounded-full size-fit'>
-                                                            <SiToll className='text-[1.4rem]' />
+                                        <p>Toll/State tax</p>
+                                    </div>
+                                </div>
+                            )}
 
-                                                        </div>
-
-                                                        <p>Toll/State tax</p>
-                                                    </div> */}
-
-                                    </div>}
-                            </div>
+                            {detailsActive === 3 && (
+                                <div className="text-[0.8rem] sm:text-[0.9rem] p-2 py-4">
+                                    <h3 className="text-[0.9rem] font-semibold">Terms and Conditions</h3>
+                                    {tcData?.map((data, index) => (
+                                        <li className="pl-2 mt-1 list-disc" key={index}>
+                                            {data}
+                                        </li>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} noValidate className='bg-white   flex flex-col  border border-main  min-w-[19.5rem] text-black max-w-[35rem] w-[90vw]  cursor-pointer transition-all duration-500 hover:bg-gradient-to-b  rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'>
+
+                    <form onSubmit={handleSubmit} noValidate className='bg-white   flex flex-col  border border-main  min-w-[19.5rem] text-black max-w-[33rem] w-[90vw]  cursor-pointer transition-all duration-500 hover:bg-gradient-to-b  rounded-lg shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'>
                         {currentStep === 1 &&
                             <>
-                                <div className='flex items-center gap-2 p-2 rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
+                                <div className='flex items-center gap-2 p-3 py-4 rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
                                     <div className='p-[5px] border-[0.1px] border-black rounded-full size-fit'>
                                         <PiUsersThreeFill className='text-[1.3rem]' />
                                     </div>
-                                    <h2 className='font-semibold tracking-wide sm:text-[1.2rem]'>Travelers </h2>
+                                    <h2 className='font-semibold tracking-wide sm:text-[1.3rem]'>Travelers </h2>
 
                                 </div>
                                 <div className='p-2 pb-6 space-y-2'>
@@ -532,7 +496,7 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Pickup address</label>
                                             required
                                         />
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
+                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-10 border-b border-main">
                                         <label className="w-full text-blue-800                                                     
 text-[0.79rem] sm:text-[0.88rem] font-semibold">Drop address</label>
                                         <input
@@ -552,14 +516,14 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Drop address</label>
 
 
 
-                                    <button className='w-full p-2  py-[0.4rem] mt-4 rounded text-white  bg-main' type='submit'>Proceed</button>
+                                    <button className='w-full p-2  py-[0.4rem] mt-6 rounded text-white  bg-main' type='submit'>Proceed</button>
                                 </div>
                             </>}
 
 
                         {currentStep === 2 &&
                             <>
-                                <div className='flex items-center gap-2 p-2 rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff] relative'>
+                                <div className='flex items-center gap-2 p-3 py-5 rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff] relative'>
                                     <div className='p-[5px] border-[0.1px] border-black rounded-full size-fit'>
                                         <PiUsersThreeFill className='text-[1.3rem]' />
                                     </div>
@@ -593,7 +557,7 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Have a Coupon Code?</label>
                                                 <div
 
                                                     onClick={(discountPrice > 0 || voucherLoading) ? undefined : handleVoucher}
-                                                    className="px-5 py-[0.4rem] bg-main  text-white font-semibold rounded-r hover:bg-blue-600 transition-colors text-[0.85rem]"
+                                                    className="px-5 py-[0.6rem] bg-main  text-white font-semibold rounded-r hover:bg-blue-600 transition-colors text-[0.85rem]"
                                                 >
                                                     {voucherLoading && /* From Uiverse.io by abrahamcalsin */
                                                         <div className="dot-spinner">
