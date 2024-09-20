@@ -6,13 +6,13 @@ import { SiToll } from 'react-icons/si'
 import { TbAirConditioning } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../assets/car1.jpg'
+import car1 from '../../assets/car1.jpg'
 import { toast } from 'react-toastify'
-import { getTCDetails } from '../Redux/Slices/localTripSlice'
+import { getTCDetails } from '../../Redux/Slices/localTripSlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { FaLocationDot, FaXmark } from 'react-icons/fa6'
-import { getDistance } from '../Redux/Slices/airportSlice'
-import MainForm from '../Components/MainForm'
+import { getAirportCityData, getDistance } from '../../Redux/Slices/airportSlice'
+import MainForm from '../../Components/MainForm'
 import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
 import { MdCarRental, MdContactSupport } from 'react-icons/md'
@@ -29,28 +29,40 @@ const CarDropList = () => {
     const [detailsActive, setDetailsActive] = useState()
     const navigate = useNavigate()
     const location = useLocation()
+    const [cabData, setCabData] = useState([])
     const [distance, setDistance] = useState(0)
     const [filteredData, setFilteredData] = useState([])
     const data = location.state
 
-    const { cabData, drop, pickup, pickupDate, pickupTime, tripType } = data
+    const { drop, pickup, pickupDate, pickupTime, tripType } = data
 
-    console.log(data)
+    console.log(tripType)
+
+    const loadData = async () => {
+        const res = await dispatch(getAirportCityData({ cityName: tripType === 1 ? drop.replace(/,/g, "") : pickup.replace(/,/g, "") }))
+        setCabData(res?.payload?.data?.rates)
+    }
+
+    console.log(cabData)
+
+    useEffect(() => {
+        loadData()
+    }, [drop, pickup, tripType])
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
-    console.log(tcData)
+
     const tc = tcData?.tC?.map(data => data?.text)
-    console.log(cabData)
-    console.log(filteredData)
+
+
     useEffect(() => {
         if (cabData) {
             const newFilteredData = cabData.map((car) => {
                 const filteredRates = car.rates.filter((rate) => {
                     if (distance <= 30) {
                         return rate.kilometer === '30';
-                    } else if (distance > 30 && distance <= 40) {
-                        return rate.kilometer === '40';
-                    } else if (distance > 40 && distance <= 55) {
+                    } else if (distance > 30 && distance <= 45) {
+                        return rate.kilometer === '45';
+                    } else if (distance > 45 && distance <= 55) {
                         return rate.kilometer === '55';
                     } else if (distance > 55 && distance <= 70) {
                         return rate.kilometer === '70';
@@ -64,10 +76,10 @@ const CarDropList = () => {
             });
 
             // Handle case where no data is found for distances beyond 45 km
-            const noDataFound = distance > 45;
-            console.log(distance)
+            const noDataFound = distance > 70;
+
             if (noDataFound) {
-                console.log(true)
+
                 setFilteredData([]); // Or handle it based on your requirements
             } else {
                 setFilteredData(newFilteredData);
@@ -104,7 +116,7 @@ const CarDropList = () => {
 
     const handleBook = (data) => {
 
-        console.log(data)
+
 
         if (!pickupDate) {
             return toast.error("Pickup date is required")
@@ -152,7 +164,7 @@ const CarDropList = () => {
     };
 
 
-    console.log(data)
+
     return (
         <div className=' bg-lightSky min-h-[90vh]'>
             <div className='flex flex-row items-center bg-[#dfdfdf] py-4 justify-between px-[0.4rem] pl-6 sm:flex-row sm:px-10 gap-4'>
@@ -195,7 +207,7 @@ const CarDropList = () => {
                 </div>
             </div>
             {modifyActive &&
-                <div className='fixed top-0 left-0 z-10 flex flex-col items-center justify-center w-full h-screen bg-dark bg-opacity-70'>
+                <div className='fixed left-0 z-10 flex flex-col items-center justify-center w-full h-screen top-10 bg-dark bg-opacity-70'>
 
                     <div className='w-fit h-fit'>
                         <MainForm mainActive={3} inner={tripType === 1 ? 3.1 : 3.2} mainDate={pickupDate} mainTime={pickupTime} pickupData={tripType === 1 ? pickup : drop} dropData={tripType === 1 ? drop : pickup} />

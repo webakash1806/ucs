@@ -4,7 +4,6 @@ import axiosInstance from '../../Helper/axiosInstance';
 
 // Initial state setup
 const initialState = {
-    roundTripData: localStorage.getItem('roundTripData') !== "undefined" ? JSON.parse(localStorage.getItem('roundTripData')) : {},
     onewayTripData: localStorage.getItem('onewayTripData') !== "undefined" ? JSON.parse(localStorage.getItem('onewayTripData')) : {},
     roundCityData: localStorage.getItem('roundCityData') !== "undefined" ? JSON.parse(localStorage.getItem('roundCityData')) : {},
     onewayCityData: localStorage.getItem('onewayCityData') !== "undefined" ? JSON.parse(localStorage.getItem('onewayCityData')) : {},
@@ -24,14 +23,16 @@ export const getRoundCityData = createAsyncThunk('/outstation/roundCityData', as
 });
 
 
-export const getRoundTripData = createAsyncThunk('/outstation/roundTripData', async () => {
+export const getRoundTripData = createAsyncThunk('/outstation/roundTripData', async (data) => {
     try {
-        let res = axiosInstance.get('round');
+        console.log(data)
+        let res = axiosInstance.post('round/city/rate/list', data);
         res = await res;
+        console.log(res)
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        // toast.error(e?.response?.data?.message);
+        return e;
     }
 });
 
@@ -48,7 +49,7 @@ export const sendRoundTripData = createAsyncThunk('/outstation/roundTripData', a
 
 export const getTCDetails = createAsyncThunk('/tc/byTrip', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post('tc/trip', data);
         res = await res;
         return res.data;
@@ -60,7 +61,7 @@ export const getTCDetails = createAsyncThunk('/tc/byTrip', async (data) => {
 
 export const getDistance = createAsyncThunk('/outstation/distance', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post('distance', data);
         res = await res;
         return res.data;
@@ -110,23 +111,19 @@ const outstationTripSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(getRoundTripData.fulfilled, (state, action) => {
-                console.log(action)
-                localStorage.setItem('roundTripData', JSON.stringify(action.payload.data));
-                state.roundTripData = action.payload.data;
-            })
+
             .addCase(getOnewayCabData.fulfilled, (state, action) => {
-                console.log(action)
+
                 localStorage.setItem('onewayTripData', JSON.stringify(action.payload.data));
                 state.onewayTripData = action.payload.data;
             })
             .addCase(getRoundCityData.fulfilled, (state, action) => {
-                console.log(action)
+
                 localStorage.setItem('roundCityData', JSON.stringify(action.payload.data));
                 state.roundCityData = action.payload.data;
             })
             .addCase(getOnewayCityData.fulfilled, (state, action) => {
-                console.log(action)
+
                 localStorage.setItem('onewayCityData', JSON.stringify(action.payload.data));
                 state.onewayCityData = action.payload.data;
             })

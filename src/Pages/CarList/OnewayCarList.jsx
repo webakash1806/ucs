@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../assets/car1.jpg'
-import { MdAirlineSeatReclineExtra, MdArrowLeft, MdArrowRight, MdArrowRightAlt, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md';
-import { TbAirConditioning } from 'react-icons/tb';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import car1 from '../../assets/car1.jpg'
+import { MdArrowLeft, MdKeyboardArrowRight, MdLocalParking } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTCDetails } from '../Redux/Slices/localTripSlice';
-import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi';
+import { getTCDetails } from '../../Redux/Slices/localTripSlice';
+import { GiGasPump } from 'react-icons/gi';
 import { SiToll } from 'react-icons/si';
 import { IoDocumentText } from 'react-icons/io5';
-import { FaArrowRightToCity, FaLocationDot, FaXmark } from 'react-icons/fa6';
-import { getDistance } from '../Redux/Slices/airportSlice';
-import { getOnewayCabData } from '../Redux/Slices/outstationSlice';
-import MainForm from '../Components/MainForm';
+import { FaLocationDot, FaXmark } from 'react-icons/fa6';
+import { getDistance } from '../../Redux/Slices/airportSlice';
+import { getOnewayCabData } from '../../Redux/Slices/outstationSlice';
+import MainForm from '../../Components/MainForm';
 import { FaArrowRight } from 'react-icons/fa';
 import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
@@ -30,10 +28,10 @@ const OnewayCarList = () => {
     const [filteredData, setFilteredData] = useState()
     const { pickupDate, tripType, pickupTime, pickup, drop } = location.state
 
-    console.log(location.state)
+
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
-    console.log(tcData)
+
     const tc = tcData?.tC?.map(data => data?.text)
 
     const fetchDistance = async () => {
@@ -59,7 +57,7 @@ const OnewayCarList = () => {
 
     const handleBook = (data) => {
 
-        console.log(data)
+
 
         if (!pickupDate) {
             return toast.error("Pickup date is required")
@@ -150,7 +148,7 @@ const OnewayCarList = () => {
                 </div>
             </div>
             {modifyActive &&
-                <div className='fixed top-0 left-0 z-10 flex flex-col items-center justify-center w-full h-screen bg-dark bg-opacity-70'>
+                <div className='fixed left-0 z-10 flex flex-col items-center justify-center w-full h-screen top-10 bg-dark bg-opacity-70'>
 
                     <div className='w-fit h-fit'>
                         <MainForm mainActive={1} inner={1.1} mainDate={pickupDate} mainTime={pickupTime} pickupData={pickup} dropData={drop} />

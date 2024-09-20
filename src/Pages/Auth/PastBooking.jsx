@@ -16,7 +16,7 @@ const PastBooking = () => {
     const [item, setItem] = useState(null);
     const [active, setActive] = useState(false)
     const dispatch = useDispatch()
-    console.log(item)
+
     const navigate = useNavigate()
     const { id } = useParams()
     const [bookingData, setBookingData] = useState()

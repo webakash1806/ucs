@@ -1,26 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { FaArrowRight, FaCar, FaHotel, FaLocationDot } from 'react-icons/fa6'
+import { FaArrowRight, FaCar, FaCreditCard, FaDownload, FaHotel, FaLocationDot, FaSpinner } from 'react-icons/fa6'
 import { IoBed, IoDocumentText } from 'react-icons/io5'
-import { useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../assets/car1.jpg'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import car1 from '../../assets/car1.jpg'
 import { MdAirlineSeatReclineExtra, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md'
 import { TbAirConditioning } from 'react-icons/tb'
 import { PiUsersThreeFill } from 'react-icons/pi'
 import { useDispatch, useSelector } from 'react-redux'
-import { sendBookingData } from '../Redux/Slices/localTripSlice'
+import { sendBookingData } from '../../Redux/Slices/localTripSlice'
 import { toast } from 'react-toastify'
-import { order, verifyPayment } from '../Redux/Slices/razorpaySlice'
+import { order, verifyPayment } from '../../Redux/Slices/razorpaySlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
 import { SiToll } from 'react-icons/si'
-import { sendOnewayTripData, sendRoundTripData } from '../Redux/Slices/outstationSlice'
-import { verifyVoucher } from '../Redux/Slices/authSlice'
+import { sendOnewayTripData, sendRoundTripData } from '../../Redux/Slices/outstationSlice'
+import { downloadInvoice, verifyVoucher } from '../../Redux/Slices/authSlice'
+import bookingDone from "../../assets/icons/bookingDone.gif"
+import bookingProgress from "../../assets/icons/bookProgress.gif"
+import failed from "../../assets/icons/failed.gif"
 
 const BookOnewayCab = () => {
     const navigate = useNavigate()
     const [currentStep, setCurrentStep] = useState(1);
     const [detailsActive, setDetailsActive] = useState(1)
     const [actualPrice, setActualPrice] = useState(0)
+    const [showBookingCard, setShowBookingCard] = useState(false)
+    const [bookingStatus, setBookingStatus] = useState(0)
+    const [successDetail, setSuccessDetail] = useState()
     const dispatch = useDispatch()
     const location = useLocation()
     const { cabData, tcData, pickupDate, distance, pickupCity, dropCity, totalPrice, pickupTime, selectedType, returnDate, tripType } = location.state
@@ -30,6 +36,11 @@ const BookOnewayCab = () => {
     const [discountPrice, setDiscountPrice] = useState(0)
     const [voucherLoading, setVoucherLoading] = useState(false)
     const [gstActive, setGstActive] = useState(false)
+
+    const download = async (invoiceId) => {
+        const res = await dispatch(downloadInvoice({ invoiceId }))
+        navigate('/')
+    }
 
 
     const userData = useSelector((state) => state?.auth)
@@ -83,7 +94,7 @@ const BookOnewayCab = () => {
         }
 
         setVoucherLoading(false)
-        console.log(res?.payload)
+
     }
 
     const [formData, setFormData] = useState({
@@ -148,7 +159,7 @@ const BookOnewayCab = () => {
 
         // Check if the pickup date is today
         const isToday = pickupDateTime.toDateString() === currentTime.toDateString();
-        console.log(isToday)
+
         // Parse pickup time in 12-hour format
         const [time, period] = pickupTime.split(' ');
         const [hours, minutes] = time.split(':').map(Number);
@@ -157,8 +168,8 @@ const BookOnewayCab = () => {
         // Set the pickup time on the pickup date
         pickupDateTime.setHours(adjustedHours, minutes, 0, 0);
 
-        console.log(pickupDateTime)
-        console.log(currentTime)
+
+
 
         // If the pickup date is today, compare the time
         if (isToday) {
@@ -193,36 +204,35 @@ const BookOnewayCab = () => {
 
 
 
-    console.log(pickupDate, pickupTime)
+
 
     useEffect(() => {
         setPrice10(Number(finalPrice) * 10 / 100)
-    }, [finalPrice])
+        console.log("object")
+    }, [finalPrice, discountPrice, gstActive, formData.paymentMode])
 
     useEffect(() => {
-
+        console.log(price10)
         const paymentMode = Number(formData?.paymentMode);
         setActualPrice(paymentMode === 10 ? price10 : finalPrice)
     }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice, formData?.gst, gstActive])
 
-    const fetchOrderId = async () => {
-        const res = await dispatch(order({ amount: actualPrice, forName: "Airport" }));
-        console.log(res)
-    };
+
 
     useEffect(() => {
-        console.log(actualPrice)
+
         if (actualPrice > 0) {
-            fetchOrderId()
+            console.log(actualPrice)
+            dispatch(order({ amount: actualPrice, forName: "Airport" }));
         }
-    }, [actualPrice]);
+    }, [actualPrice, dispatch]);
 
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         const { fromLocation, tripType, toLocation, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, paymentMode, dropAddress } = formData
-        console.log(formData)
+
         if (currentStep === 1) {
             if (!fromLocation || !dropAddress || !tripType || !toLocation || !category || !pickupAddress || !pickupDate || !pickupTime || !name || !email || !phoneNumber) {
                 return toast.error("All fields are required!")
@@ -257,14 +267,19 @@ const BookOnewayCab = () => {
                 paymentDetails.razorpay_payment_id = res.razorpay_payment_id;
                 paymentDetails.razorpay_order_id = res.razorpay_order_id;
                 paymentDetails.razorpay_signature = res.razorpay_signature;
+                setShowBookingCard(true)
+                setBookingStatus(0)
                 const response = await dispatch(verifyPayment(paymentDetails));
                 if (response?.payload?.success) {
                     const res = await dispatch(sendOnewayTripData(formData))
-
                     if (res?.payload?.success) {
-                        return toast.success("Booking confirmed")
+                        setBookingStatus(1)
+                        setSuccessDetail(res?.payload?.data)
+                    } else {
+                        setBookingStatus(2)
                     }
-
+                } else {
+                    setBookingStatus(3)
                 }
             },
             prefill: {
@@ -634,6 +649,137 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Payment Details</label>
                     </form>
                 </div>
             </div>
+            {showBookingCard &&
+                <div className='fixed top-0 w-full'>
+                    {bookingStatus === 0 &&
+                        <div className="flex items-center justify-center min-h-screen p-2 bg-gradient-to-br from-blue-100 to-blue-300">
+                            <div className="flex flex-col items-center w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
+                                {/* Header */}
+                                <div className="flex flex-col items-center mb-4">
+                                    <img src={bookingProgress} className='w-[5.5rem]' alt="" />
+
+                                    <h2 className="text-[1.3rem] font-semibold text-gray-900">Booking In Progress</h2>
+                                    <p className="text-sm text-gray-500">Please wait while we confirm your booking</p>
+                                </div>
+
+                                {/* Progress Indicator */}
+                                <div className="w-full h-2 mb-4 bg-gray-200 rounded-full">
+                                    <div className="w-2/3 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                </div>
+
+                                {/* Loading Spinner */}
+                                <div className="flex items-center gap-2 text-blue-500">
+                                    <FaSpinner className="text-2xl animate-spin" />
+                                    <span className="text-gray-600">Processing...</span>
+                                </div>
+                            </div>
+                        </div>}
+                    {bookingStatus === 1 &&
+                        <div className="flex items-center justify-center min-h-screen p-2 bg-gradient-to-br from-green-100 to-green-300">
+                            <div className="flex flex-col items-center w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
+                                {/* Header */}
+                                <div className="flex flex-col items-center mb-4 text-center">
+                                    <img src={bookingDone} className='w-[4.5rem]' alt="" />
+                                    <h2 className="text-[1.3rem] font-semibold text-gray-900">Booking Completed</h2>
+                                    <p className="text-sm text-gray-500">Your booking has been successfully processed.</p>
+                                </div>
+
+                                <div className='font-semibold'>
+                                    <p><span className='font-normal text-[0.95rem] mr-[0.55rem]'>Booking id </span>: {successDetail?.bookingId}</p>
+                                    <p><span className='font-normal text-[0.95rem] mr-[0.05rem]'>Pickup Date </span> : {successDetail?.pickupDate.split('T')[0]}</p>
+                                    <p><span className='font-normal text-[0.95rem]'>Pickup Time </span> : {successDetail?.pickupTime}</p>
+                                </div>
+
+                                <button onClick={() => download(successDetail?._id)} className='flex items-center gap-2 p-2 py-[0.4rem] my-3 text-black transition-all duration-300 bg-blue-100 border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover'>
+                                    <FaDownload />
+                                    Download Invoice
+                                </button>
+
+
+                                {/* Confirmation Message */}
+                                <div className="flex items-center gap-2 text-green-500">
+                                    <span className="text-gray-600">Thank you for booking with us!</span>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    }
+                    {bookingStatus === 2 &&
+                        <div className="flex items-center justify-center min-h-screen p-2 bg-gradient-to-br from-red-100 to-red-300">
+                            <div className="flex flex-col items-center w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
+                                {/* Header */}
+                                <div className="flex flex-col items-center mb-4">
+                                    <img src={failed} className='w-[4.5rem]' alt="" />
+
+                                    <h2 className="text-xl font-semibold text-gray-700">Booking Failed</h2>
+                                    <p className="text-sm text-gray-500">Something went wrong with your booking.</p>
+                                </div>
+
+                                {/* Failure Message */}
+                                <div className="w-full h-2 mb-4 bg-red-200 rounded-full">
+                                    <div className="w-full h-2 bg-red-500 rounded-full"></div>
+                                </div>
+
+                                {/* Instructions */}
+                                <div className="flex flex-col items-center gap-2 mb-4">
+                                    <p className="text-center text-gray-600">
+                                        Please try again or contact support if the payment has been deducted.
+                                    </p>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className='flex flex-row items-center justify-center gap-2'>
+                                        <button onClick={() => setShowBookingCard(false)} className="px-4 py-2 text-white transition bg-red-500 rounded-md hover:bg-red-600">
+                                            Retry
+                                        </button>
+                                        <button onClick={() => navigate('/')} className="px-4 py-2 text-white transition bg-red-500 rounded-md hover:bg-red-600">
+                                            Home
+                                        </button>
+                                    </div>
+                                    <Link to={'/contact'}
+                                        className="mt-2 text-red-500 hover:underline"
+                                    >
+                                        Contact Support
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>}
+
+                    {bookingStatus === 3 &&
+                        <div className="flex items-center justify-center min-h-screen p-2 bg-gradient-to-br from-gray-100 to-gray-300">
+                            <div className="flex flex-col items-center w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
+                                {/* Header */}
+                                <div className="flex flex-col items-center mb-4">
+                                    <img src={failed} className='w-[4.5rem]' alt="" />
+
+                                    <h2 className="text-xl font-semibold text-gray-700">Payment Failed</h2>
+                                    <p className="text-sm text-gray-500">There was an issue processing your payment.</p>
+                                </div>
+
+                                {/* Icon and Message */}
+                                <div className="flex flex-col items-center gap-4 mb-4">
+                                    <FaCreditCard className="text-3xl text-gray-600" />
+                                    <p className="text-center text-gray-600">
+                                        We couldn’t process your payment. Please check your payment details or try again.
+                                    </p>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex flex-col items-center gap-4 mb-4">
+                                    <button onClick={() => setShowBookingCard(false)} className="px-4 py-2 text-white transition bg-yellow-500 rounded-md hover:bg-yellow-600">
+                                        Retry Payment
+                                    </button>
+                                    <Link to={'/contact'}
+                                        className="mt-2 text-yellow-500 hover:underline"
+                                    >
+                                        Contact Support
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>}
+                </div>}
         </div >
     )
 }

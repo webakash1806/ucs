@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../assets/car1.jpg'
+import car1 from '../../assets/car1.jpg'
 import { MdAirlineSeatReclineExtra, MdArrowLeft, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md';
 import { TbAirConditioning } from 'react-icons/tb';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTCDetails } from '../Redux/Slices/localTripSlice';
+import { getTCDetails } from '../../Redux/Slices/localTripSlice';
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi';
 import { SiToll } from 'react-icons/si';
 import { IoDocumentText } from 'react-icons/io5';
 import { FaLocationDot, FaXmark } from 'react-icons/fa6';
-import MainForm from '../Components/MainForm';
+import MainForm from '../../Components/MainForm';
 import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
 import { MdCarRental, MdContactSupport } from 'react-icons/md'
@@ -30,14 +30,14 @@ const CarList = () => {
     const data = location.state
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
-    console.log(tcData)
+
     const tc = tcData?.tC?.map(data => data?.text)
 
-    console.log(tc)
 
-    console.log(data)
-    console.log(active)
-    console.log(filteredData?.rates)
+
+
+
+
 
     const pickupDate = data?.pickupDate
     const pickupTime = data?.pickupTime
@@ -61,7 +61,7 @@ const CarList = () => {
 
     const handleBook = (data) => {
 
-        console.log(data)
+
 
         if (!pickupDate) {
             return toast.error("Pickup date is required")
@@ -152,7 +152,7 @@ const CarList = () => {
                 </div>
             </div >
             {modifyActive &&
-                <div className='fixed top-0 left-0 z-10 flex flex-col items-center justify-center w-full h-screen bg-dark bg-opacity-70'>
+                <div className='fixed left-0 z-10 flex flex-col items-center justify-center w-full h-screen top-10 bg-dark bg-opacity-70'>
 
                     <div className='w-fit h-fit'>
                         <MainForm mainActive={2} mainDate={pickupDate} mainTime={pickupTime} pickupData={pickupCity} />

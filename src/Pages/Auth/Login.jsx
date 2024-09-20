@@ -25,7 +25,7 @@ const LoginPage = () => {
         newPassword: ""
     });
 
-    console.log(loading)
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;

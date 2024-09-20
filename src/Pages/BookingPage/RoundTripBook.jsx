@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { FaArrowRight, FaCar, FaClock, FaCreditCard, FaDownload, FaHotel, FaLocationDot, FaSpinner } from 'react-icons/fa6'
+import { FaArrowRight, FaCar, FaCreditCard, FaDownload, FaHotel, FaLocationDot, FaSpinner } from 'react-icons/fa6'
 import { IoBed, IoDocumentText } from 'react-icons/io5'
-import { useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../assets/car1.jpg'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import car1 from '../../assets/car1.jpg'
 import { MdAirlineSeatReclineExtra, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md'
 import { TbAirConditioning } from 'react-icons/tb'
 import { PiUsersThreeFill } from 'react-icons/pi'
 import { useDispatch, useSelector } from 'react-redux'
-import { sendBookingData } from '../Redux/Slices/localTripSlice'
 import { toast } from 'react-toastify'
-import { order, verifyPayment } from '../Redux/Slices/razorpaySlice'
+import { order, verifyPayment } from '../../Redux/Slices/razorpaySlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
 import { SiToll } from 'react-icons/si'
-import { downloadInvoice, verifyVoucher } from '../Redux/Slices/authSlice'
-import { FaCheckCircle, FaExclamationTriangle, FaRegCheckCircle, FaTimesCircle } from 'react-icons/fa'
-import bookingDone from "../assets/icons/bookingDone.gif"
-import bookingProgress from "../assets/icons/bookProgress.gif"
-import failed from "../assets/icons/failed.gif"
-
-const BookCab = () => {
+import { sendRoundTripData } from '../../Redux/Slices/outstationSlice'
+import { downloadInvoice, verifyVoucher } from '../../Redux/Slices/authSlice'
+import { FaRegCheckCircle } from 'react-icons/fa'
+import bookingDone from "../../assets/icons/bookingDone.gif"
+import bookingProgress from "../../assets/icons/bookProgress.gif"
+import failed from "../../assets/icons/failed.gif"
+const RoundTripBook = () => {
     const navigate = useNavigate()
     const [currentStep, setCurrentStep] = useState(1);
     const [detailsActive, setDetailsActive] = useState(1)
@@ -29,21 +28,30 @@ const BookCab = () => {
     const [successDetail, setSuccessDetail] = useState()
     const dispatch = useDispatch()
     const location = useLocation()
-    const { cabData, tcData, pickupDate, pickupCity, totalPrice, pickupTime, selectedType, tripType } = location.state
+    const { cabData, tcData, pickupDate, distance, pickupCity, dropCity, totalPrice, pickupTime, selectedType, returnDate, tripType } = location.state
     const [finalPrice, setFinalPrice] = useState(Number(totalPrice))
     const [price10, setPrice10] = useState(Number(finalPrice) * 10 / 100)
     const [discountPrice, setDiscountPrice] = useState(0)
     const [voucherLoading, setVoucherLoading] = useState(false)
     const [gstActive, setGstActive] = useState(false)
-    console.log(successDetail)
+    console.log(cabData)
+
+    const [errorMessage, setErrorMessage] = useState({
+        nameMsg: false,
+        phoneNumber: false,
+        email: false,
+        pickup: false,
+        voucher: ""
+    })
+
     const userData = useSelector((state) => state?.auth)
 
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
     const order_id = useSelector((state) => state?.razorpay?.orderId);
 
     const download = async (invoiceId) => {
-        navigate('/')
         const res = await dispatch(downloadInvoice({ invoiceId }))
+        navigate('/')
     }
 
     const formatPickupDate = (dateString) => {
@@ -68,12 +76,11 @@ const BookCab = () => {
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
 
-
     const handleVoucher = async () => {
         setVoucherLoading(true)
         const res = await dispatch(verifyVoucher({
             voucherCode: formData?.voucherCode,
-            tripType: "Local Trip"
+            tripType: "Round Trip"
         }))
 
         const discount = res?.payload?.discount
@@ -93,27 +100,29 @@ const BookCab = () => {
         }
 
         setVoucherLoading(false)
-        console.log(res?.payload)
+
     }
 
 
     const [formData, setFormData] = useState({
-        cityName: pickupCity,
+        fromLocation: pickupCity,
+        pickupAddress: "",
+        toLocation: dropCity,
         tripType: tripType,
         category: cabData?.category?.name,
         pickupDate: pickupDate,
+        returnDate: returnDate,
         pickupTime: pickupTime,
         name: userData?.data?.name || "",
         email: userData?.data?.email || "",
         phoneNumber: userData?.data?.phoneNumber || "",
         voucherCode: "",
-        pickupAddress: "",
-        dropAddress: "",
-        distance: selectedType === "8 hrs | 80 km" ? 80 : 120,
+        distance: distance,
         paymentMode: '10',
         declaration: false,
-        gst: false
-
+        gst: false,
+        extraPerKm: cabData?.extraKm,
+        perKm: cabData?.perKm
     })
 
     const handleChange = (e) => {
@@ -148,9 +157,6 @@ const BookCab = () => {
         handleGst()
     }, [formData?.gst])
 
-
-
-
     const checkPickupTime = (pickupDate, pickupTime) => {
         const currentTime = new Date();
 
@@ -160,7 +166,7 @@ const BookCab = () => {
 
         // Check if the pickup date is today
         const isToday = pickupDateTime.toDateString() === currentTime.toDateString();
-        console.log(isToday)
+
         // Parse pickup time in 12-hour format
         const [time, period] = pickupTime.split(' ');
         const [hours, minutes] = time.split(':').map(Number);
@@ -169,8 +175,8 @@ const BookCab = () => {
         // Set the pickup time on the pickup date
         pickupDateTime.setHours(adjustedHours, minutes, 0, 0);
 
-        console.log(pickupDateTime)
-        console.log(currentTime)
+
+
 
         // If the pickup date is today, compare the time
         if (isToday) {
@@ -203,47 +209,69 @@ const BookCab = () => {
         return null; // No error
     };
 
-
-
-    console.log(pickupDate, pickupTime)
-
     useEffect(() => {
         setPrice10(Number(finalPrice) * 10 / 100)
-    }, [finalPrice])
+        console.log("object")
+    }, [finalPrice, discountPrice, gstActive, formData.paymentMode])
 
     useEffect(() => {
-
+        console.log(price10)
         const paymentMode = Number(formData?.paymentMode);
         setActualPrice(paymentMode === 10 ? price10 : finalPrice)
     }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice, formData?.gst, gstActive])
 
-    const fetchOrderId = async () => {
-        const res = await dispatch(order({ amount: actualPrice, forName: "Airport" }));
-        console.log(res)
-    };
+
 
     useEffect(() => {
-        console.log(actualPrice)
-        if (actualPrice > 0) {
-            fetchOrderId()
-        }
-    }, [actualPrice]);
 
+        if (actualPrice > 0) {
+            console.log(actualPrice)
+            dispatch(order({ amount: actualPrice, forName: "Airport" }));
+        }
+    }, [actualPrice, dispatch]);
+
+
+    console.log(errorMessage)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const { cityName, tripType, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, dropAddress, paymentMode, distance } = formData
+        const { fromLocation, tripType, toLocation, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, paymentMode, distance } = formData
 
         if (currentStep === 1) {
-            if (!cityName || !tripType || !category || !pickupAddress || !pickupDate || !pickupTime || !name || !email || !phoneNumber || !dropAddress || !distance) {
-                return toast.error("All fields are required!")
+            let hasError = false;
+
+            if (!name) {
+                setErrorMessage((prev) => ({ ...prev, nameMsg: true }));
+                hasError = true;
+            }
+
+            if (!email) {
+                setErrorMessage((prev) => ({ ...prev, email: true }));
+                hasError = true;
+            }
+
+            if (!phoneNumber) {
+                setErrorMessage((prev) => ({ ...prev, phoneNumber: true }));
+                hasError = true;
+            }
+
+            if (!pickupAddress) {
+                setErrorMessage((prev) => ({ ...prev, pickup: true }));
+                hasError = true;
+            }
+
+            // Return early if there are errors
+            if (hasError) return;
+
+            if (!fromLocation || !tripType || !toLocation || !category || !pickupDate || !pickupTime || !distance) {
+                navigate('/home')
             }
 
             checkPickupDate(pickupDate)
 
             if (checkPickupTime(pickupDate, pickupTime)) {
-                navigate('/')
+
                 return toast.error("Pickup time is expired!")
             }
 
@@ -273,12 +301,11 @@ const BookCab = () => {
                 setBookingStatus(0)
                 const response = await dispatch(verifyPayment(paymentDetails));
                 if (response?.payload?.success) {
-                    const res = await dispatch(sendBookingData(formData))
+                    const res = await dispatch(sendRoundTripData(formData))
 
                     if (res?.payload?.success) {
                         setBookingStatus(1)
                         setSuccessDetail(res?.payload?.data)
-                        return toast.success("Booking confirmed")
                     } else {
                         setBookingStatus(2)
                     }
@@ -299,16 +326,17 @@ const BookCab = () => {
             }
         };
         const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
 
-
+        setTimeout(() => {
+            paymentObject.open();
+        }, 5000);
 
 
     }
 
 
     return (
-        <div className='flex flex-wrap  items-start justify-center min-h-[90vh] p-4 py-8 bg-gray-100'>
+        <div className='flex flex-wrap pb-20 items-start justify-center min-h-[90vh] p-4 py-8 bg-gray-100'>
             <div className='flex flex-col items-center justify-center gap-2'>
                 <div className='mb-6'>
                     <h1 className='text-[1.7rem] mb-2 leading-8  font-bold'>Book your journey</h1>
@@ -329,58 +357,61 @@ const BookCab = () => {
                 </div>
                 <div className='flex flex-row-reverse flex-wrap items-start justify-center gap-4'>
                     <div className="bg-white flex flex-col min-w-[19.5rem] max-w-[33rem] w-[90vw] text-black hover:bg-gradient-to-b hover:from-[#f3fbff] hover:to-[#f8fafc] cursor-pointer transition-all duration-500 border border-gray-300 hover:border-blue-400 rounded-lg shadow-md overflow-hidden">
+
                         {/* Header Section */}
                         <div className="flex items-center gap-3 p-4 bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff] rounded-t-lg">
                             <div className="p-2 border border-gray-400 rounded-full">
-                                <FaCar className="text-xl" />
+                                <FaCar className="text-xl " />
                             </div>
                             <div>
                                 <div className="flex items-center text-lg sm:text-[1.3rem] font-semibold">
                                     <h2>{pickupCity}</h2>
                                     <MdKeyboardArrowRight className="mx-1 text-2xl" />
-                                    <h2>{pickupCity}</h2>
+                                    <h2>{dropCity.split(',')[0]}</h2>
                                 </div>
-                                <p className="text-sm font-semibold text-gray-600">
-                                    {formatPickupDate(pickupDate)} <span>{pickupTime}</span>
-                                </p>
+                                <p className="text-sm font-semibold text-gray-600">{formatPickupDate(pickupDate)} <span>{pickupTime}</span></p>
                             </div>
                         </div>
 
-                        {/* Car Details */}
+                        {/* Cab Information */}
                         <div className="flex gap-3 p-4">
-                            <img
-                                src={cabData?.category?.photo?.secure_url || car1}
-                                className="min-w-[7.1rem] object-cover h-[5rem] rounded-md"
-                                alt="Car"
-                            />
+                            <img src={cabData?.category?.photo?.secure_url || car1} className="min-w-[7.1rem] object-cover h-[5rem] rounded-md" alt="" />
                             <div>
                                 <h2 className="text-lg font-semibold sm:text-[1.3rem]">{cabData?.category?.name}</h2>
-                                <div className="flex flex-wrap gap-3 mt-2 text-sm sm:text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem] text-gray-700">
-                                    <div className="flex items-center gap-1">
+                                <div className="flex flex-wrap gap-2 text-sm sm:text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem] sm:text-[1.07rem] text-gray-700">
+                                    <div className="flex items-center gap-1 mr-2">
                                         <MdLuggage />
-                                        <p>{cabData?.category?.numberOfBags} luggage</p>
+                                        <p>{cabData?.numberOfBags} luggage</p>
                                     </div>
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-1 mr-2">
                                         <MdAirlineSeatReclineExtra />
-                                        <p>{cabData?.category?.numberOfSeats} seats</p>
+                                        <p>{cabData?.numberOfSeats} seats</p>
                                     </div>
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-1 mr-2">
                                         <TbAirConditioning />
-                                        <p>{cabData?.category?.acAvailable ? "AC" : "NON AC"}</p>
+                                        <p>{cabData?.acAvailable ? "AC" : "NON AC"}</p>
+                                    </div>
+                                    <div className="flex items-center gap-1 font-medium text-gray-600">
+                                        <GiTakeMyMoney />
+                                        <p>&#8377; {finalPrice} for {distance} km</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Trip Info and Fare */}
+                        {/* Trip Information */}
                         <div className="px-4 py-2 text-sm sm:text-[0.98rem] space-y-2">
                             <div className="flex items-center">
                                 <h3 className="font-semibold">Trip Type:</h3>
-                                <span className="ml-2">{tripType} ({selectedType})</span>
+                                <span className="ml-2">{tripType} trip</span>
                             </div>
                             <div className="flex items-center mt-1">
                                 <h3 className="font-semibold">Total Fare:</h3>
-                                <p className="ml-2">&#8377; {Math.ceil(finalPrice)}</p>
+                                <p className="ml-2">&#8377; {finalPrice} upto {distance} km</p>
+                            </div>
+                            <div className="flex items-center mt-1">
+                                <h3 className="font-semibold">Return date:</h3>
+                                <p className="ml-2">{returnDate}</p>
                             </div>
                             {discountPrice > 0 && (
                                 <p className="flex items-center gap-2 mt-1 font-semibold text-green-600">
@@ -389,95 +420,76 @@ const BookCab = () => {
                             )}
                         </div>
 
-                        {/* Section Tabs */}
-                        <div className="flex items-center justify-between mt-2 bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff] rounded-b-lg">
-                            <button
-                                onClick={() => setDetailsActive(1)}
-                                className={`flex items-center gap-2 w-full justify-center py-2 text-sm font-semibold ${detailsActive === 1 ? 'bg-main text-white' : 'bg-transparent'}`}
-                            >
-                                {detailsActive === 1 ? <IoIosArrowUp /> : <IoIosArrowDown />} Inclusive
-                            </button>
-                            <button
-                                onClick={() => setDetailsActive(2)}
-                                className={`flex items-center gap-2 w-full justify-center py-2 text-sm font-semibold ${detailsActive === 2 ? 'bg-main text-white' : 'bg-transparent'}`}
-                            >
-                                {detailsActive === 2 ? <IoIosArrowUp /> : <IoIosArrowDown />} Exclusive
-                            </button>
-                            <button
-                                onClick={() => setDetailsActive(3)}
-                                className={`flex items-center gap-2 w-full justify-center py-2 text-sm font-semibold ${detailsActive === 3 ? 'bg-main text-white' : 'bg-transparent'}`}
-                            >
-                                {detailsActive === 3 ? <IoIosArrowUp /> : <IoIosArrowDown />} T&C
-                            </button>
-                        </div>
+                        {/* Details Section */}
+                        <div>
+                            <div className="flex mt-2 items-center justify-between bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]">
+                                <button
+                                    onClick={() => setDetailsActive(1)}
+                                    className={`flex items-center gap-1 w-full p-3 text-[0.8rem] sm:text-[0.9rem] justify-center font-semibold ${detailsActive === 1 ? 'bg-main text-white' : 'bg-transparent'}`}
+                                >
+                                    {detailsActive === 1 ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                    Inclusive
+                                </button>
+                                <button
+                                    onClick={() => setDetailsActive(2)}
+                                    className={`flex items-center gap-1 w-full p-3 text-[0.8rem] sm:text-[0.9rem] justify-center font-semibold ${detailsActive === 2 ? 'bg-main text-white' : 'bg-transparent'}`}
+                                >
+                                    {detailsActive === 2 ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                    Exclusive
+                                </button>
+                                <button
+                                    onClick={() => setDetailsActive(3)}
+                                    className={`flex items-center gap-1 w-full p-3 text-[0.8rem] sm:text-[0.9rem] justify-center font-semibold ${detailsActive === 3 ? 'bg-main text-white' : 'bg-transparent'}`}
+                                >
+                                    {detailsActive === 3 ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                    T&C
+                                </button>
+                            </div>
 
-                        <div className="text-[#0f0f0f] px-4 py-2">
-                            {detailsActive === 1 && (
-                                <div className="text-[0.8rem] flex flex-col items-start gap-2">
-                                    <div className="flex items-center gap-2">
-                                        <div className="p-[6px] border-[0.1px] border-black rounded-full">
+                            <div className='text-[#0f0f0f]'>
+                                {detailsActive === 3 && (
+                                    <div className="text-[0.8rem] sm:text-[0.89rem] p-2 py-4">
+                                        <h3 className="text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem] font-semibold">Terms and Conditions</h3>
+                                        {tcData?.map((data, index) => (
+                                            <li key={index} className="py-1 pl-2 mt-1 leading-4 list-disc">{data}</li>
+                                        ))}
+                                    </div>
+                                )}
+                                {detailsActive === 2 && (
+                                    <div className="text-[0.8rem] sm:text-[0.9rem] p-2 py-4 space-y-3">
+                                        <div className="flex items-center gap-2">
+                                            <GiTakeMyMoney className="text-[1.1rem]" />
+                                            <p>Pay &#8377; {cabData?.extraKm}/km after {distance} km</p>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <MdLocalParking className="text-[1.15rem]" />
+                                            <p>Parking</p>
+                                        </div>
+
+                                        <div className="flex items-center gap-2">
+                                            <SiToll className="text-[1.4rem]" />
+                                            <p>Toll/State tax</p>
+                                        </div>
+                                    </div>
+                                )}
+                                {detailsActive === 1 && (
+                                    <div className="text-[0.8rem] sm:text-[0.9rem] p-2 py-4 space-y-4">
+                                        <div className="flex items-center gap-2">
                                             <IoDocumentText className="text-[1.1rem]" />
+                                            <p>GST charges (5%)</p>
                                         </div>
-                                        <p>GST charges (5%)</p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="p-[6px] border-[0.1px] border-black rounded-full">
+                                        <div className="flex items-center gap-2">
                                             <GiGasPump className="text-[1.1rem]" />
+                                            <p>Base Fare</p>
                                         </div>
-                                        <p>Base Fare</p>
                                     </div>
-                                </div>
-                            )}
-
-                            {detailsActive === 2 && (
-                                <div className="text-[0.8rem] flex flex-col items-start gap-3">
-                                    <div className='flex items-center gap-2'>
-                                        <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
-                                            <GiTakeMyMoney className='text-[1.1rem]' />
-                                        </div>
-                                        <p>Pay &#8377; {cabData?.perKm}/km after 80 km</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='p-[5.5px] border-[0.1px] border-black rounded-full size-fit'>
-                                            <MdLocalParking className='text-[1.15rem]' />
-
-                                        </div>
-                                        <p>Parking</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='p-[6px] border-[0.1px] border-black rounded-full size-fit'>
-                                            <GiTakeMyMoney className='text-[1.1rem]' />
-
-                                        </div>
-
-                                        <p>Pay &#8377; {cabData?.perHour}/hr after 8 hr</p>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <div className='p-[3px] border-[0.1px] border-black rounded-full size-fit'>
-                                            <SiToll className='text-[1.4rem]' />
-
-                                        </div>
-
-                                        <p>Toll/State tax</p>
-                                    </div>
-
-                                </div>
-                            )}
-
-                            {detailsActive === 3 && (
-                                <div className="text-[0.8rem]">
-                                    <h3 className="text-[0.9rem] font-semibold">Terms and Conditions</h3>
-                                    {tcData?.map((data, index) => (
-                                        <li className="pl-2 mt-1 leading-4 list-disc" key={index}>{data}</li>
-                                    ))}
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
 
 
-
-                    <form onSubmit={handleSubmit} noValidate className='bg-white  pb-6 flex flex-col  border border-main  min-w-[19.5rem] text-black max-w-[33rem] w-[90vw]  cursor-pointer transition-all duration-500 hover:bg-gradient-to-b  rounded shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'>
+                    <form onSubmit={handleSubmit} noValidate className='bg-white pb-6  flex flex-col  border border-main  min-w-[19.5rem] text-black max-w-[33rem] w-[90vw]  cursor-pointer transition-all duration-500 hover:bg-gradient-to-b  rounded-lg shadow-[0px_5px_10px_-6px_#808080] overflow-hidden'>
                         {currentStep === 1 &&
                             <>
                                 <div className='flex items-center gap-2 p-3 py-5 rounded rounded-b-none bg-gradient-to-tr from-blue-200 via-blue-100 to-[#e6f7ff]'>
@@ -487,57 +499,79 @@ const BookCab = () => {
                                     <h2 className='font-semibold tracking-wide sm:text-[1.3rem]'>Travelers </h2>
 
                                 </div>
-                                <div className='p-2'>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.9rem] font-semibold">Full name</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            placeholder="Enter full name..."
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
-                                            required
-                                        />
+                                <div className='p-2 space-y-2'>
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${errorMessage?.nameMsg ? 'border-red-500' : 'border-main'}`}>
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Full name</label>
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                placeholder="Enter full name..."
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {errorMessage?.nameMsg &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Full name is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.9rem] font-semibold">Email</label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            placeholder="Enter email..."
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${errorMessage?.email ? 'border-red-500' : 'border-main'}`}>
+
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Email</label>
+
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                placeholder="Enter email..."
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {errorMessage?.email &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Email is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.9rem] font-semibold">Phone number</label>
-                                        <input
-                                            type="number"
-                                            name="phoneNumber"
-                                            placeholder="Enter phone number..."
-                                            value={formData.phoneNumber}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${errorMessage?.phoneNumber ? 'border-red-500' : 'border-main'}`}>
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Phone number</label>
+                                            <input
+                                                type="number"
+                                                name="phoneNumber"
+                                                placeholder="Enter phone number..."
+                                                value={formData.phoneNumber}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {errorMessage?.phoneNumber &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Phone number is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.9rem] font-semibold">Pickup address</label>
-                                        <input
-                                            type="text"
-                                            name="pickupAddress"
-                                            placeholder="Enter pickup address..."
-                                            value={formData.pickupAddress}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${errorMessage?.pickup ? 'border-red-500' : 'border-main'}`}>
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Pickup address</label>
+                                            <input
+                                                type="text"
+                                                name="pickupAddress"
+                                                placeholder="Enter pickup address..."
+                                                value={formData.pickupAddress}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {errorMessage?.pickup &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Pickup address is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.9rem] font-semibold">Drop address</label>
+                                    {/* <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
+                                        <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Drop address</label>
                                         <input
                                             type="text"
                                             name="dropAddress"
@@ -547,7 +581,7 @@ const BookCab = () => {
                                             className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
                                             required
                                         />
-                                    </div>
+                                    </div> */}
                                     {/* <div className='flex gap-1'>
                                 <input type="checkbox" onClick={() => setFormData(...formData, declaration = true)} name="" id="" />
                                 I accept the terms and conditions
@@ -566,7 +600,7 @@ const BookCab = () => {
                                     <div className='p-[5px] border-[0.1px] border-black rounded-full size-fit'>
                                         <PiUsersThreeFill className='text-[1.3rem]' />
                                     </div>
-                                    <h2 className='font-semibold tracking-wide sm:text-[1.3rem]'>Payment Details </h2>
+                                    <h2 className='font-semibold tracking-wide'>Payment Details </h2>
                                     <button className='absolute px-3 py-[0.2rem] text-white rounded right-2 bg-main' onClick={() => setCurrentStep(1)}>Back</button>
                                 </div>
                                 <div className='p-2'>
@@ -578,7 +612,7 @@ const BookCab = () => {
 
 
                                     <div className="mt-1">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.9rem] font-semibold">Have a Coupon Code?</label>
+                                        <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Have a Coupon Code?</label>
                                         <div className="flex items-center gap-2 mt-1 tracking-wide border border-gray-300 rounded bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]">
                                             <input
                                                 type="text"
@@ -615,7 +649,7 @@ const BookCab = () => {
                                         </div>
                                     </div>
                                     <div className="relative flex-col items-center w-full p-1 px-0 mt-2 mb-1 fle3">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.9rem] font-semibold">Payment Details</label>
+                                        <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Payment Details</label>
 
                                         <div className="flex flex-col w-full gap-2 mt-2">
                                             <label className="flex items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
@@ -665,6 +699,7 @@ const BookCab = () => {
                                         />
                                         Need a invoice with GST?
                                     </label>
+
                                     <button className='w-full p-2 py-[0.4rem] mt-3 rounded text-white  bg-main' type='submit'>Proceed</button>
                                 </div>
                             </>}
@@ -712,7 +747,7 @@ const BookCab = () => {
                                     <p><span className='font-normal text-[0.95rem]'>Pickup Time </span> : {successDetail?.pickupTime}</p>
                                 </div>
 
-                                <button onClick={download(successDetail?._id)} className='flex items-center gap-2 p-2 py-[0.4rem] my-3 text-black transition-all duration-300 bg-blue-100 border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover'>
+                                <button onClick={() => download(successDetail?._id)} className='flex items-center gap-2 p-2 py-[0.4rem] my-3 text-black transition-all duration-300 bg-blue-100 border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover'>
                                     <FaDownload />
                                     Download Invoice
                                 </button>
@@ -753,19 +788,18 @@ const BookCab = () => {
                                 {/* Action Buttons */}
                                 <div className="flex flex-col items-center gap-2">
                                     <div className='flex flex-row items-center justify-center gap-2'>
-                                        <button onClick={() => setBookingStatus(false)} className="px-4 py-2 text-white transition bg-red-500 rounded-md hover:bg-red-600">
+                                        <button onClick={() => setShowBookingCard(false)} className="px-4 py-2 text-white transition bg-red-500 rounded-md hover:bg-red-600">
                                             Retry
                                         </button>
                                         <button onClick={() => navigate('/')} className="px-4 py-2 text-white transition bg-red-500 rounded-md hover:bg-red-600">
                                             Home
                                         </button>
                                     </div>
-                                    <a
-                                        href="mailto:support@example.com"
+                                    <Link to={'/contact'}
                                         className="mt-2 text-red-500 hover:underline"
                                     >
                                         Contact Support
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>}
@@ -794,12 +828,11 @@ const BookCab = () => {
                                     <button onClick={() => setShowBookingCard(false)} className="px-4 py-2 text-white transition bg-yellow-500 rounded-md hover:bg-yellow-600">
                                         Retry Payment
                                     </button>
-                                    <a
-                                        href="mailto:support@example.com"
+                                    <Link to={'/contact'}
                                         className="mt-2 text-yellow-500 hover:underline"
                                     >
                                         Contact Support
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>}
@@ -808,4 +841,4 @@ const BookCab = () => {
     )
 }
 
-export default BookCab
+export default RoundTripBook

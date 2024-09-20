@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../assets/car1.jpg'
+import car1 from '../../assets/car1.jpg'
 import { MdAirlineSeatReclineExtra, MdArrowLeft, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md';
 import { TbAirConditioning } from 'react-icons/tb';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTCDetails } from '../Redux/Slices/localTripSlice';
+import { getTCDetails } from '../../Redux/Slices/localTripSlice';
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi';
 import { SiToll } from 'react-icons/si';
 import { IoDocumentText } from 'react-icons/io5';
 import { FaLocationDot, FaXmark } from 'react-icons/fa6';
-import { getDistance } from '../Redux/Slices/airportSlice';
-import MainForm from '../Components/MainForm';
+import { getDistance } from '../../Redux/Slices/airportSlice';
+import MainForm from '../../Components/MainForm';
 import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
 import { MdCarRental, MdContactSupport } from 'react-icons/md'
 import { FaIndianRupeeSign, FaTriangleExclamation } from 'react-icons/fa6'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
+import { getRoundTripData } from '../../Redux/Slices/outstationSlice';
 
 const RoundCarList = () => {
     const [modifyActive, setModifyActive] = useState(false)
@@ -26,8 +27,8 @@ const RoundCarList = () => {
     const [detailsActive, setDetailsActive] = useState()
     const navigate = useNavigate()
     const location = useLocation()
-
-    const { cabData, pickupDate, returnDate, tripType, pickupTime, pickup, drop } = location.state
+    const [cabData, setCabData] = useState([])
+    const { pickupDate, returnDate, tripType, pickupTime, pickup, drop } = location.state
     const [distance, setDistance] = useState()
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
@@ -35,6 +36,16 @@ const RoundCarList = () => {
 
 
 
+    const loadData = async () => {
+        const res = await dispatch(getRoundTripData({ cityName: pickup }))
+        setCabData(res?.payload?.data)
+    }
+
+    console.log(cabData)
+
+    useEffect(() => {
+        loadData()
+    }, [drop, pickup, tripType])
 
     const calculateTotalDays = (pickupDate, returnDate) => {
         // Convert the date strings to Date objects
@@ -59,7 +70,7 @@ const RoundCarList = () => {
         if (daysDistance > distance) {
             return daysDistance
         } else {
-            return Math.ceil(distance)
+            return Math.ceil(Number(distance))
         }
     }
 
@@ -195,7 +206,7 @@ const RoundCarList = () => {
                         distance === 0 ? <p>Please select valid location</p> :
                             cabData && cabData?.rates?.length === 0 ?
                                 <p>No Cabs available to this city right now</p> :
-                                cabData?.map((data, index) => {
+                                cabData?.rates?.map((data, index) => {
                                     return <div key={index} className="flex flex-col max-w-[27rem] sm:max-w-[55rem]  hover:shadow-none transition-all duration-300 w-full overflow-hidden border-main border rounded-lg shadow-lg">
                                         <div className='flex flex-col items-center justify-between w-full mx-auto bg-white border-b sm:flex-row'>
                                             {/* Left section */}
@@ -204,7 +215,7 @@ const RoundCarList = () => {
 
                                                 {/* Car image and details */}
 
-                                                <img src={data?.photo?.secure_url || car1} alt={`car ${index + 1}`}
+                                                <img src={data?.category?.photo?.secure_url || car1} alt={`car ${index + 1}`}
                                                     className='max-w-[7.8rem] min-w-[7.8rem] min-h-[5.3rem] max-h-[5.3rem] object-cover sm:max-h-[6rem] sm:min-h-[6rem] sm:min-w-[9.9rem] sm:max-w-[9.8rem]'
 
                                                 />
@@ -212,13 +223,13 @@ const RoundCarList = () => {
 
                                                 <div className="w-full ml-2 sm:hidden">
                                                     <div className="block sm:text-left">
-                                                        <h2 className="mb-1 text-[1.4rem] font-semibold line-clamp-1">{data?.name}</h2>
+                                                        <h2 className="mb-1 text-[1.4rem] font-semibold line-clamp-1">{data?.category?.name}</h2>
 
                                                     </div>
                                                     <div className="flex justify-between sm:flex-col sm:w-[13rem] max-w-[14.5rem] items-center gap-3">
                                                         <div className='flex flex-col items-center'>
                                                             <div className="flex items-center mr-2 text-[1.1rem] font-bold text-gray-800">
-                                                                <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " /> {(totalFare()) * (data?.perKm)}
+                                                                <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " /> {(totalFare()) * Number(data?.perKm)}
                                                             </div>
                                                             <p className='text-[0.78rem] font-semibold'>Upto {totalFare()} km</p>
                                                         </div>
@@ -233,7 +244,7 @@ const RoundCarList = () => {
                                             {/* Right section */}
                                             <div className='w-full sm:max-w-[70%] pl-2'>
                                                 <div className="hidden text-center sm:block sm:text-left">
-                                                    <h2 className="mb-2 text-2xl font-semibold">{data?.name}</h2>
+                                                    <h2 className="mb-2 text-2xl font-semibold">{data?.category?.name}</h2>
 
                                                 </div>
 
@@ -241,15 +252,15 @@ const RoundCarList = () => {
                                                     {/* Info */}
                                                     <div className="flex items-center gap-1 mb-1 mr-4 sm:mr-6">
                                                         <MdCarRental className="w-4 h-4 mb-[0.12rem]" /> {/* Heroicons TruckIcon */}
-                                                        <span>{data?.acAvailable ? "AC" : "NON AC"}</span>
+                                                        <span>{data?.category?.acAvailable ? "AC" : "NON AC"}</span>
                                                     </div>
                                                     <div className="flex items-center gap-1 mb-1 mr-4 sm:mr-6">
                                                         <UserGroupIcon className="w-4 h-4 mb-[0.12rem]" /> {/* Heroicons UserGroupIcon */}
-                                                        <span>{data?.numberOfSeats} seats</span>
+                                                        <span>{data?.category?.numberOfSeats} seats</span>
                                                     </div>
                                                     <div className="flex items-center gap-1 mb-1 mr-4 sm:mr-6">
                                                         <LuLuggage className="w-4 h-4 mb-[0.12rem]" /> {/* Heroicons BriefcaseIcon */}
-                                                        <span>{data?.numberOfBags} luggage</span>
+                                                        <span>{data?.category?.numberOfBags} luggage</span>
                                                     </div>
                                                     <div className="flex items-center gap-1 mr-4 sm:mr-6">
                                                         <BoltIcon className="w-4 h-4 mb-[0.12rem]" /> {/* Heroicons LightningBoltIcon */}

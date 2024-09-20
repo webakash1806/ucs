@@ -4,15 +4,16 @@ import axiosInstance from '../../Helper/axiosInstance';
 
 // Initial state setup
 const initialState = {
-    airportData: localStorage.getItem('airportData') !== "undefined" ? JSON.parse(localStorage.getItem('airportData')) : {},
     tcData: localStorage.getItem('tcData') !== "undefined" ? JSON.parse(localStorage.getItem('tcData')) : {},
 };
 
 // Thunks for different actions
-export const getAirportCityData = createAsyncThunk('/airpot/airportData', async () => {
+export const getAirportCityData = createAsyncThunk('/airpot/airportData', async (data) => {
     try {
-        let res = axiosInstance.get('airpot');
+        console.log(data)
+        let res = axiosInstance.post('airpot/rate/list', data);
         res = await res;
+        console.log(res)
         return res.data;
     } catch (e) {
         toast.error(e?.response?.data?.message);
@@ -33,7 +34,7 @@ export const sendAirportBookingData = createAsyncThunk('/airpot/airportData', as
 
 export const getTCDetails = createAsyncThunk('/tc/byTrip', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post('tc/trip', data);
         res = await res;
         return res.data;
@@ -45,7 +46,7 @@ export const getTCDetails = createAsyncThunk('/tc/byTrip', async (data) => {
 
 export const getDistance = createAsyncThunk('/airport/distance', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post('distance', data);
         res = await res;
         return res.data;
@@ -62,11 +63,7 @@ const airportTripSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(getAirportCityData.fulfilled, (state, action) => {
-                console.log(action)
-                localStorage.setItem('airportData', JSON.stringify(action.payload.data));
-                state.airportData = action.payload.data;
-            })
+
             .addCase(getTCDetails.fulfilled, (state, action) => {
                 localStorage.setItem('tcData', JSON.stringify(action.payload.data));
                 state.tcData = action.payload.data;

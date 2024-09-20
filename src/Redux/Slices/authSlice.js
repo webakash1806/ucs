@@ -115,7 +115,7 @@ export const changePassword = createAsyncThunk('user/update-password', async (da
 
 export const forgotPassword = createAsyncThunk('user/forgot-password', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post('user/forget', data);
         // toast.promise(res, {
         //     loading: "Sending password reset link to registered mail!",
@@ -132,7 +132,7 @@ export const forgotPassword = createAsyncThunk('user/forgot-password', async (da
 
 export const resetPasswords = createAsyncThunk('user/reset-password', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post(`user/verifyPassword`, data);
         // toast.promise(res, {
         //     loading: "Resetting Password!",
@@ -161,7 +161,7 @@ export const allBookings = createAsyncThunk('/user/bookings', async (data) => {
 
 export const cancelBooking = createAsyncThunk('/user/cancel-bookings', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post(`/oneway/booking/cancel/${data?.cancelId}`);
 
         res = await res;
@@ -198,7 +198,7 @@ export const downloadInvoice = createAsyncThunk('/user/invoice', async (data) =>
 
 export const verifyVoucher = createAsyncThunk('/user/cancel-bookings', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post(`/discount/valid`, data);
 
         res = await res;

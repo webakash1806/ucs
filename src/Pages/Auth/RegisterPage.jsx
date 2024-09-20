@@ -26,7 +26,7 @@ const RegisterPage = () => {
     };
 
 
-    console.log(verifyActive)
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();

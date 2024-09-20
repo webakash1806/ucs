@@ -20,6 +20,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [airportActive, setAirportActive] = useState(3.1);
     const [startDate, setStartDate] = useState(new Date());
     const [returnDate, setReturnDate] = useState(new Date());
+    const [minSelectableDate, setMinSelectableDate] = useState(new Date());
     const [startTime, setStartTime] = useState(() => {
         const now = new Date();
         now.setHours(now.getHours() + 3);
@@ -120,14 +121,14 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
 
 
     const handleAirportDropChange = async (event) => {
-        console.log(airportDropValue)
+
 
         const value = event.target.value;
         setAirportDropValue(value);
         setIsAirportDropVisible(true);
-        console.log(1)
+
         if (value) {
-            console.log(value)
+
             const autocompleteService = new window.google.maps.places.AutocompleteService();
             autocompleteService.getPlacePredictions({
                 input: value,
@@ -136,15 +137,15 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
                 language: 'en'
             }, (predictions, status) => {
                 if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
-                    console.log(2)
-                    console.log(predictions)
+
+
                     const transformedSuggestions = predictions.map(prediction => ({
                         airportName: prediction.description,
                         placeId: prediction.place_id
                     }));
-                    console.log(transformedSuggestions)
+
                     setValidAirportSuggestions(transformedSuggestions); // Update valid suggestions
-                    console.log(validAirportSuggestions)
+
                     if (value === dropData) {
                         setIsAirportDropVisible(false);
                     }
@@ -260,13 +261,15 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [roundPickupSuggestions, setRoundPickupSuggestions] = useState([]);
     const [roundPickupError, setRoundPickupError] = useState('')
     const roundPickupCity = useSelector((state) => state?.outstation?.roundCityData)
-    const roundTripData = useSelector((state) => state?.outstation?.roundTripData)
+    // const roundTripData = useSelector((state) => state?.outstation?.roundTripData)
+    console.log(roundPickupCity)
 
-    const allRoundPickupCityNames = roundPickupCity && roundPickupCity?.map((data) => data?.roundCityName);
+    const allRoundPickupCityNames = roundPickupCity && roundPickupCity?.map((data) => data?.cityName);
 
+    // console.log(allRoundPickupCityNames)
 
     const fetchRoundTripData = async () => {
-        await dispatch(getRoundTripData())
+        // await dispatch(getRoundTripData())
         await dispatch(getRoundCityData())
         await dispatch(getOnewayCityData())
     }
@@ -274,8 +277,8 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     useEffect(() => {
         if (outstationActive === 1.2 && roundPickupValue && roundPickupCity?.length > 0) {
             const filtered = roundPickupCity
-                .filter((data) => data.roundCityName.toLowerCase().startsWith(roundPickupValue.toLowerCase()))
-                .map((data) => data.roundCityName);
+                ?.filter((data) => data.cityName?.toLowerCase().startsWith(roundPickupValue?.toLowerCase()))
+                .map((data) => data.cityName);
             setRoundPickupSuggestions(filtered); // Use roundPickupSuggestions instead of filteredCities
         }
     }, [roundPickupValue, roundPickupCity, outstationActive]);
@@ -374,7 +377,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
 
     useEffect(() => {
         if (active === 1 && outstationActive === 1.1 && onewayPickupValue && oneWayPickup.length > 0) {
-            console.log(1)
+
             const filtered = oneWayPickup
                 ?.filter((data) => data.toLowerCase().startsWith(onewayPickupValue.toLowerCase()))
                 .map((data) => data);
@@ -413,11 +416,11 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const oneWayDrop = onewayCityData?.toCities
 
     useEffect(() => {
-        if (active === 1 && outstationActive === 1.1 && onewayDropValue && oneWayDrop.length > 0) {
-            console.log(1)
+        if (active === 1 && outstationActive === 1.1 && onewayDropValue && oneWayDrop?.length > 0) {
+
             const filtered = oneWayDrop
                 ?.filter((data) => data.toLowerCase().startsWith(onewayDropValue.toLowerCase()))
-                .map((data) => data);
+                ?.map((data) => data);
             setOnewayDropSuggestions(filtered); // Use roundDropSuggestions instead of filteredCities
         }
     }, [onewayDropValue, onewayCityData, outstationActive]);
@@ -452,13 +455,10 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [tripType, setTripType] = useState('One-Way Trip')
 
     const localCityData = useSelector((state) => state?.localTrip?.cityData);
-    const airportCityData = useSelector((state) => state?.airportTrip?.airportData);
 
     const inputRef = useRef(null);
     const dropdownRef = useRef(null);
 
-
-    console.log(airportCityData)
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -477,7 +477,6 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
 
     const fetchLocalCityData = async () => {
         await dispatch(getLocalCityData());
-        await dispatch(getAirportCityData())
     };
 
     useEffect(() => {
@@ -505,8 +504,8 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     };
 
     const formatDateToISO = (date) => {
-        console.log(12)
-        console.log(date)
+
+
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so add 1
         const day = String(date.getDate()).padStart(2, '0');
@@ -520,6 +519,23 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
             date.getMonth() === today.getMonth() &&
             date.getFullYear() === today.getFullYear();
     };
+
+    useEffect(() => {
+        const currentTime = new Date();
+        const endOfDay = new Date();
+        endOfDay.setHours(24, 0, 0, 0); // End of today's date
+
+        const hoursUntilTomorrow = (endOfDay - currentTime) / (1000 * 60 * 60); // Calculate remaining hours
+
+        if (hoursUntilTomorrow < 3) {
+            // If less than 3 hours are left until tomorrow, set minimum selectable date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            setMinSelectableDate(tomorrow);
+            setStartDate(tomorrow);
+        }
+    }, []);
+
 
     useEffect(() => {
         const date = startDate
@@ -663,13 +679,22 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
         if (active === 1 && outstationActive === 1.2) {
             const retDate = formatDateToISO(returnDate);
 
-            navigate(`/cars/round/${roundPickupValue}`, { state: { tripType: "Round", pickupTime: time, pickupDate: date, returnDate: retDate, pickup: roundPickupValue, drop: roundDropValue, cabData: roundTripData } })
+            navigate(`/cars/round/${roundPickupValue}`, {
+                state: {
+                    tripType: "Round",
+                    pickupTime: time,
+                    pickupDate: date,
+                    returnDate: retDate,
+                    pickup: roundPickupValue,
+                    drop: roundDropValue
+                }
+            })
         }
         if (active === 2) {
             navigate(`/cars/${searchInput}`, { state: { tripType: tripType, pickupTime: time, pickupDate: date, city: searchInput, cabData: localCityData } })
         }
         if (active === 3) {
-            navigate(`/cars/from/${airportDropValue}`, { state: { tripType: airportActive === 3.1 ? 1 : 2, pickupTime: time, pickupDate: date, pickup: airportActive === 3.1 ? inputValue : airportDropValue, drop: airportActive === 3.1 ? airportDropValue : inputValue, cabData: airportCityData } })
+            navigate(`/cars/from/${airportDropValue}`, { state: { tripType: airportActive === 3.1 ? 1 : 2, pickupTime: time, pickupDate: date, pickup: airportActive === 3.1 ? inputValue : airportDropValue, drop: airportActive === 3.1 ? airportDropValue : inputValue } })
         }
     };
 
@@ -750,7 +775,7 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
                                         value={onewayPickupValue}
                                         onChange={handleOnewayPickupInputChange}
                                         placeholder="Enter Pickup Location"
-                                        className="w-full pt-0 pb-3 md:text-[1.2rem] sm:text-[1.1rem] font-semibold text-black bg-transparent outline-none placeholder:text-black "
+                                        className="w-full pt-0 pb-3 md:text-[1.2rem] sm:text-[1.1rem] font-semibold text-black bg-transparent outline-none  "
                                     />
                                     {onewayPickupError && <p className="absolute bottom-0 text-xs text-red-500">{onewayPickupError}</p>}
 
@@ -790,7 +815,7 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
                                         value={onewayDropValue}
                                         onChange={handleOnewayDropInputChange}
                                         placeholder="Enter Drop Location"
-                                        className="w-full pb-3 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black outline-none placeholder:text-black"
+                                        className="w-full pb-3 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black outline-none "
                                     />
                                     {onewayDropError && <p className="absolute bottom-0 text-xs text-red-500">{onewayDropError}</p>}
                                     {showOnewayDrop && (
@@ -836,7 +861,7 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
                                         value={roundPickupValue}
                                         onChange={handleRoundPickupInputChange}
                                         placeholder="Enter Pickup Location"
-                                        className="w-full pt-0 pb-4 md:text-[1.2rem] sm:text-[1.1rem] font-semibold text-black bg-transparent outline-none placeholder:text-black "
+                                        className="w-full pt-0 pb-4 md:text-[1.2rem] sm:text-[1.1rem] font-semibold text-black bg-transparent outline-none  "
                                     />
                                     {roundPickupError && <p className="absolute bottom-0 text-xs text-red-500">{roundPickupError}</p>}
 
@@ -875,7 +900,7 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
                                         value={roundDropValue}
                                         onChange={handleRoundDropInputChange}
                                         placeholder="Enter Drop Location"
-                                        className="w-full pb-3 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black outline-none placeholder:text-black"
+                                        className="w-full pb-3 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black outline-none "
                                     />
                                     {roundDropError && <p className="absolute bottom-0 text-xs text-red-500">{roundDropError}</p>}
                                     {showRoundDrop && (
@@ -943,7 +968,7 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                                         value={inputValue}
                                         onChange={handleInputChange}
                                         placeholder="Enter Pickup Location"
-                                        className="w-full pb-4 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black bg-transparent outline-none placeholder:text-black"
+                                        className="w-full pb-4 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black bg-transparent outline-none "
                                     />
                                     {inputError && <p className="absolute bottom-0 text-xs text-red-500">{inputError}</p>}
                                     {showSuggestions && (
@@ -974,15 +999,15 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                                 <div
 
                                     className='relative w-full mt-[0.52rem]'>
-                                    <label className='w-full  text-light py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop Location</label>
+                                    <label className='w-full  text-light py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop to airport</label>
                                     <input
 
 
                                         type="text"
                                         value={airportDropValue}
                                         onChange={handleAirportDropChange}
-                                        placeholder="Enter Drop Location"
-                                        className="w-full pb-3 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black outline-none placeholder:text-black"
+                                        placeholder="Enter airport"
+                                        className="w-full pb-3 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black outline-none "
                                     />
                                     {airportError && <p className="absolute bottom-0 text-xs text-red-500 ">{airportError}</p>}
                                     {isAirportDropVisible && (
@@ -1019,19 +1044,19 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                                 </div>
                                 <div
                                     className='relative w-full' >
-                                    <label className='w-full text-light text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Location</label>
+                                    <label className='w-full text-light text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up from airport</label>
                                     <input
                                         type="text"
                                         value={airportDropValue}
                                         onChange={handleAirportDropChange}
-                                        placeholder="Enter Pickup Location"
-                                        className="w-full pb-4 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black bg-transparent outline-none placeholder:text-black"
+                                        placeholder="Enter airport..."
+                                        className="w-full pb-4 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black bg-transparent outline-none "
                                     />
 
                                     {airportError && <p className="absolute bottom-0 text-xs text-red-500 ">{airportError}</p>}
                                     {isAirportDropVisible && (
                                         <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
-                                            {airportDropSuggestions.length > 0 ? (
+                                            {airportDropSuggestions?.length > 0 ? (
                                                 airportDropSuggestions.map((suggestion, index) => (
                                                     <li
                                                         key={index}
@@ -1066,13 +1091,13 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                                         type="text"
                                         value={inputValue}
                                         onChange={handleInputChange}
-                                        placeholder="Enter Drop Location"
-                                        className="w-full pb-3 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black outline-none placeholder:text-black"
+                                        placeholder="Enter Drop off Location"
+                                        className="w-full pb-3 md:text-[1.2rem] sm:text-[1.1rem] pt-0 mt-[0.2rem] font-semibold text-black outline-none "
                                     />
                                     {inputError && <p className="absolute bottom-0 text-xs text-red-500 ">{inputError}</p>}
                                     {showSuggestions && (
                                         <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-200 rounded-md shadow-md max-h-60">
-                                            {suggestions.length > 0 ? (
+                                            {suggestions?.length > 0 ? (
                                                 suggestions.map((suggestion, index) => (
                                                     <li
                                                         key={index}
@@ -1109,11 +1134,11 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                             onFocus={() => setFocus(true)}
                             ref={inputRef}
                             placeholder="Enter Pickup Location"
-                            className="w-full pb-1 font-semibold md:text-[1.2rem] sm:text-[1.1rem] text-black bg-transparent outline-none placeholder:text-black "
+                            className="w-full pb-1 font-semibold md:text-[1.2rem] sm:text-[1.1rem] text-black bg-transparent outline-none  "
                         />
                         <p className='text-red-500 text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem] text-left w-full'>{tripCityError}</p>
                         {/* Suggestions */}
-                        {focus && searchInput && filteredCities.length > 0 && (
+                        {focus && searchInput && filteredCities?.length > 0 && (
                             <div
                                 ref={dropdownRef}
                                 className="absolute left-0 z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg top-full"
@@ -1140,7 +1165,7 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                         <DatePicker
                             selected={startDate}
                             onChange={(date) => setStartDate(date)}
-                            minDate={new Date()}
+                            minDate={minSelectableDate}
                             dateFormat="yyyy-MM-dd"
                             className="w-full pl-7 md:text-[1.2rem] sm:text-[1.1rem] font-semibold tracking-wide bg-transparent outline-none caret-transparent"
                             placeholderText="Select Date..."
@@ -1155,7 +1180,7 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                             <DatePicker
                                 selected={returnDate}
                                 onChange={(date) => setReturnDate(date)}
-                                minDate={new Date()}
+                                minDate={minSelectableDate}
                                 dateFormat="yyyy-MM-dd"
                                 className="w-full pl-7 md:text-[1.2rem] sm:text-[1.1rem] font-semibold tracking-wide bg-transparent outline-none caret-transparent"
 

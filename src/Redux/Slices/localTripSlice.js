@@ -33,7 +33,7 @@ export const sendBookingData = createAsyncThunk('/local/cityData', async (data) 
 
 export const getTCDetails = createAsyncThunk('/tc/byTrip', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post('tc/trip', data);
         res = await res;
         return res.data;

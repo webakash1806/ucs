@@ -1,7 +1,7 @@
 import React from 'react'
 
 const TermsConditionsComponent = ({ data }) => {
-    console.log(data)
+
     return (
         <div>
             {data?.map((item) => (

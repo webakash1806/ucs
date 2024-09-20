@@ -11,7 +11,7 @@ export default {
       },
       colors: {
         main: '#08828E',
-        light: '#908C8C',
+        light: '#656262',
         lightSky: '#F7FBFF',
         dark: '#001E3A',
         white: '#ffffff',  // Standard white color

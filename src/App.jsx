@@ -1,55 +1,62 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import RegisterPage from './Pages/Auth/RegisterPage';
-import carIcon from './assets/icons/carTrip.gif'
-import LoginPage from './Pages/Auth/Login';
-import PrivacyPolicy from './Pages/PrivacyPolicy';
-import TermsAndConditions from './Pages/TermsAndConditions';
-import FAQPage from './Pages/FAQPage';
-import CarList from './Pages/CarList';
-import BookCab from './Pages/BookCab';
-import CarDropList from './Pages/CarDropList';
-import BookAirportCab from './Pages/BookAirportCab';
-import RoundCarList from './Pages/RoundCarList';
-import LocalCarRentals from './Pages/ServicePage/LocalCarRentals';
-import RoundTripBook from './Pages/RoundTripBook';
-import OnewayCarList from './Pages/OnewayCarList';
-import BookOnewayCab from './Pages/BookOnewayCab';
-import PastBooking from './Pages/Auth/PastBooking';
-import Profile from './Pages/Auth/Profile';
-import RequireAuth from './Components/Auth/RequireAuth';
-import RoundTripService from './Pages/ServicePage/RoundTripService';
-import AirportCabService from './Pages/ServicePage/AirportCabService';
-import OneWayService from './Pages/ServicePage/OneWayService';
-import ForgotPassword from './Pages/Auth/ForgotPassword';
+import carIcon from './assets/icons/carTrip.gif';
+import { useEffectOnce } from './hooks/useEffectOnce'; // Custom hook for useEffect once
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
 const Contact = lazy(() => import('./Pages/Contact'));
 const About = lazy(() => import('./Pages/About'));
+const RegisterPage = lazy(() => import('./Pages/Auth/RegisterPage'));
+const LoginPage = lazy(() => import('./Pages/Auth/Login'));
+const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy'));
+const TermsAndConditions = lazy(() => import('./Pages/TermsAndConditions'));
+const FAQPage = lazy(() => import('./Pages/FAQPage'));
+const CarList = lazy(() => import('./Pages/CarList/CarList'));
+const BookCab = lazy(() => import('./Pages/BookingPage/BookCab'));
+const CarDropList = lazy(() => import('./Pages/CarList/CarDropList'));
+const BookAirportCab = lazy(() => import('./Pages/BookingPage/BookAirportCab'));
+const RoundCarList = lazy(() => import('./Pages/CarList/RoundCarList'));
+const LocalCarRentals = lazy(() => import('./Pages/ServicePage/LocalCarRentals'));
+const RoundTripBook = lazy(() => import('./Pages/BookingPage/RoundTripBook'));
+const OnewayCarList = lazy(() => import('./Pages/CarList/OnewayCarList'));
+const BookOnewayCab = lazy(() => import('./Pages/BookingPage/BookOnewayCab'));
+const PastBooking = lazy(() => import('./Pages/Auth/PastBooking'));
+const Profile = lazy(() => import('./Pages/Auth/Profile'));
+const RequireAuth = lazy(() => import('./Components/Auth/RequireAuth'));
+const RoundTripService = lazy(() => import('./Pages/ServicePage/RoundTripService'));
+const AirportCabService = lazy(() => import('./Pages/ServicePage/AirportCabService'));
+const OneWayService = lazy(() => import('./Pages/ServicePage/OneWayService'));
+const ForgotPassword = lazy(() => import('./Pages/Auth/ForgotPassword'));
 
 const App = () => {
+  const location = useLocation();
+
   useEffect(() => {
     AOS.init();
   }, []);
 
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  useEffectOnce(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
     document.body.appendChild(script);
-  }, []);
+  });
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
 
   return (
     <>
       <Header />
-      <Suspense fallback={<div className="flex items-center justify-center h-screen"><img className='w-[6rem]' src={carIcon} /></div>}>
+      <Suspense fallback={<div className="flex items-center justify-center h-screen"><img className='w-[6rem]' src={carIcon} alt="Loading..." /></div>}>
         <Routes>
-
           <Route path='/' element={<Home />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/about' element={<About />} />

@@ -21,7 +21,7 @@ const ForgotPassword = () => {
         password: "",
     });
 
-    console.log(loading)
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
