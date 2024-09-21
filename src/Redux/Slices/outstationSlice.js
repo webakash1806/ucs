@@ -113,17 +113,14 @@ const outstationTripSlice = createSlice({
         builder
 
             .addCase(getOnewayCabData.fulfilled, (state, action) => {
-
                 localStorage.setItem('onewayTripData', JSON.stringify(action.payload.data));
                 state.onewayTripData = action.payload.data;
             })
             .addCase(getRoundCityData.fulfilled, (state, action) => {
-
                 localStorage.setItem('roundCityData', JSON.stringify(action.payload.data));
                 state.roundCityData = action.payload.data;
             })
             .addCase(getOnewayCityData.fulfilled, (state, action) => {
-
                 localStorage.setItem('onewayCityData', JSON.stringify(action.payload.data));
                 state.onewayCityData = action.payload.data;
             })

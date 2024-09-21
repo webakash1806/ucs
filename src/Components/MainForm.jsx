@@ -533,6 +533,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
             tomorrow.setDate(tomorrow.getDate() + 1);
             setMinSelectableDate(tomorrow);
             setStartDate(tomorrow);
+            setReturnDate(tomorrow);
         }
     }, []);
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FaArrowRight, FaCar, FaCreditCard, FaDownload, FaHotel, FaLocationDot, FaSpinner } from 'react-icons/fa6'
+import { FaArrowRight, FaCar, FaCreditCard, FaDownload, FaHotel, FaLocationDot, FaSpinner, FaXmark } from 'react-icons/fa6'
 import { IoBed, IoDocumentText } from 'react-icons/io5'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../../assets/car1.jpg'
@@ -18,6 +18,7 @@ import { downloadInvoice, verifyVoucher } from '../../Redux/Slices/authSlice'
 import bookingDone from "../../assets/icons/bookingDone.gif"
 import bookingProgress from "../../assets/icons/bookProgress.gif"
 import failed from "../../assets/icons/failed.gif"
+import { FaRegCheckCircle } from 'react-icons/fa'
 
 const BookOnewayCab = () => {
     const navigate = useNavigate()
@@ -37,16 +38,41 @@ const BookOnewayCab = () => {
     const [voucherLoading, setVoucherLoading] = useState(false)
     const [gstActive, setGstActive] = useState(false)
 
-    const download = async (invoiceId) => {
-        const res = await dispatch(downloadInvoice({ invoiceId }))
-        navigate('/')
-    }
-
-
     const userData = useSelector((state) => state?.auth)
 
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
     const order_id = useSelector((state) => state?.razorpay?.orderId);
+
+    const [submitLoading, setSubmitLoading] = useState(false)
+    const [errorMessage, setErrorMessage] = useState({
+        nameMsg: false,
+        phoneNumber: false,
+        email: false,
+        pickup: false,
+        drop: false,
+
+        voucher: ""
+    })
+
+    const [formData, setFormData] = useState({
+        fromLocation: pickupCity,
+        pickupAddress: "",
+        dropAddress: "",
+        toLocation: dropCity,
+        tripType: tripType,
+        category: cabData?.category?.name,
+        pickupDate: pickupDate,
+        returnDate: returnDate,
+        pickupTime: pickupTime,
+        name: userData?.data?.name || "",
+        email: userData?.data?.email || "",
+        phoneNumber: userData?.data?.phoneNumber || "",
+        voucherCode: "",
+        paymentMode: '10',
+        declaration: false,
+        gst: false
+
+    })
 
     const formatPickupDate = (dateString) => {
         // Create a new Date object directly from the "yyyy-mm-dd" string
@@ -71,51 +97,63 @@ const BookOnewayCab = () => {
     };
 
     const handleVoucher = async () => {
-        setVoucherLoading(true)
-        const res = await dispatch(verifyVoucher({
-            voucherCode: formData?.voucherCode,
-            tripType: "One-Way Trip"
-        }))
+        if (formData?.paymentMode === '100') {
+            setErrorMessage((prev) => ({ ...prev, voucher: "" }))
 
-        const discount = res?.payload?.discount
+            setVoucherLoading(true)
+            const res = await dispatch(verifyVoucher({
+                voucherCode: formData?.voucherCode,
+                tripType: "One-Way Trip"
+            }))
 
-        if (res?.payload?.dataType === 1) {
+            const discount = res?.payload?.discount
 
-            const discountPrice = Number(discount) * finalPrice / 100
-            setDiscountPrice(Number(discountPrice))
-            setFinalPrice(Number(finalPrice) - Number(discountPrice))
+            if (!discount) {
+                setVoucherLoading(false)
+                return setErrorMessage((prev) => ({ ...prev, voucher: "Invalid Coupon code!" }))
+            }
+
+            if (res?.payload?.dataType === 1) {
+
+                const discountPrice = Number(discount) * finalPrice / 100
+                setDiscountPrice(Number(discountPrice))
+                setFinalPrice(Number(finalPrice) - Number(discountPrice))
+                setVoucherLoading(false)
+            }
+
+            if (res?.payload?.dataType === 2) {
+                setDiscountPrice(Number(discount))
+                setFinalPrice(Number(finalPrice) - Number(discount))
+                setVoucherLoading(false)
+            }
+
             setVoucherLoading(false)
+
+
+        } else {
+            return setErrorMessage((prev) => ({ ...prev, voucher: "Voucher is available for 100% payment!" }))
         }
-
-        if (res?.payload?.dataType === 2) {
-            setDiscountPrice(Number(discount))
-            setFinalPrice(Number(finalPrice) - Number(discount))
-            setVoucherLoading(false)
-        }
-
-        setVoucherLoading(false)
-
     }
 
-    const [formData, setFormData] = useState({
-        fromLocation: pickupCity,
-        pickupAddress: "",
-        dropAddress: "",
-        toLocation: dropCity,
-        tripType: tripType,
-        category: cabData?.category?.name,
-        pickupDate: pickupDate,
-        returnDate: returnDate,
-        pickupTime: pickupTime,
-        name: userData?.data?.name || "",
-        email: userData?.data?.email || "",
-        phoneNumber: userData?.data?.phoneNumber || "",
-        voucherCode: "",
-        paymentMode: '10',
-        declaration: false,
-        gst: false
+    useEffect(() => {
+        setErrorMessage((prev) => ({ ...prev, voucher: "" }))
+        if (discountPrice > 0) {
 
-    })
+            setFinalPrice(Number(finalPrice) + Number(discountPrice))
+            setDiscountPrice(0)
+        }
+    }, [formData?.voucherCode])
+
+    const handleVoucherCut = () => {
+        setFormData((prev) => ({ ...prev, voucherCode: "" }))
+        setErrorMessage((prev) => ({ ...prev, voucher: "" }))
+
+        if (discountPrice > 0) {
+            setFinalPrice(Number(finalPrice) + Number(discountPrice))
+            setDiscountPrice(0)
+        }
+    }
+
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -231,9 +269,41 @@ const BookOnewayCab = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+
         const { fromLocation, tripType, toLocation, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, paymentMode, dropAddress } = formData
 
         if (currentStep === 1) {
+            let hasError = false;
+
+            if (!name) {
+                setErrorMessage((prev) => ({ ...prev, nameMsg: true }));
+                hasError = true;
+            }
+
+            if (!email) {
+                setErrorMessage((prev) => ({ ...prev, email: true }));
+                hasError = true;
+            }
+
+            if (!phoneNumber) {
+                setErrorMessage((prev) => ({ ...prev, phoneNumber: true }));
+                hasError = true;
+            }
+
+            if (!pickupAddress) {
+                setErrorMessage((prev) => ({ ...prev, pickup: true }));
+                hasError = true;
+            }
+
+            if (!dropAddress) {
+                setErrorMessage((prev) => ({ ...prev, drop: true }));
+                hasError = true;
+            }
+
+            // Return early if there are errors
+            if (hasError) return;
+
+
             if (!fromLocation || !dropAddress || !tripType || !toLocation || !category || !pickupAddress || !pickupDate || !pickupTime || !name || !email || !phoneNumber) {
                 return toast.error("All fields are required!")
             }
@@ -248,9 +318,13 @@ const BookOnewayCab = () => {
             return setCurrentStep(2)
         }
 
+        setSubmitLoading(true)
+
         checkPickupDate(pickupDate)
 
         if (checkPickupTime(pickupDate, pickupTime)) {
+            setSubmitLoading(false)
+
             navigate('/')
             return toast.error("Pickup time is expired!")
         }
@@ -295,7 +369,11 @@ const BookOnewayCab = () => {
             }
         };
         const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
+        setTimeout(() => {
+            setSubmitLoading(false)
+            paymentObject.open();
+        }, 4000);
+
 
     }
 
@@ -459,70 +537,92 @@ const BookOnewayCab = () => {
 
                                 </div>
                                 <div className='p-2 pb-6 space-y-2'>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800                                                     
-text-[0.79rem] sm:text-[0.88rem] font-semibold">Full name</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            placeholder="Enter full name..."
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${!formData?.name && errorMessage?.nameMsg ? 'border-red-500' : 'border-main'}`}>
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Full name</label>
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                placeholder="Enter full name..."
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {!formData?.name && errorMessage?.nameMsg &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Full name is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800                                                     
-text-[0.79rem] sm:text-[0.88rem] font-semibold">Email</label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            placeholder="Enter email..."
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${!formData?.email && errorMessage?.email ? 'border-red-500' : 'border-main'}`}>
+
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Email</label>
+
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                placeholder="Enter email..."
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {!formData?.email && errorMessage?.email &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Email is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800                                                     
-text-[0.79rem] sm:text-[0.88rem] font-semibold">Phone number</label>
-                                        <input
-                                            type="number"
-                                            name="phoneNumber"
-                                            placeholder="Enter phone number..."
-                                            value={formData.phoneNumber}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${!formData?.phoneNumber && errorMessage?.phoneNumber ? 'border-red-500' : 'border-main'}`}>
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Phone number</label>
+                                            <input
+                                                type="number"
+                                                name="phoneNumber"
+                                                placeholder="Enter phone number..."
+                                                value={formData.phoneNumber}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {!formData?.phoneNumber && errorMessage?.phoneNumber &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Phone number is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800                                                     
-text-[0.79rem] sm:text-[0.88rem] font-semibold">Pickup address</label>
-                                        <input
-                                            type="text"
-                                            name="pickupAddress"
-                                            placeholder="Enter pickup address..."
-                                            value={formData.pickupAddress}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${!formData?.pickupAddress && errorMessage?.pickup ? 'border-red-500' : 'border-main'}`}>
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Pickup address</label>
+                                            <input
+                                                type="text"
+                                                name="pickupAddress"
+                                                placeholder="Enter pickup address..."
+                                                value={formData.pickupAddress}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {!formData?.pickupAddress && errorMessage?.pickup &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Pickup address is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-10 border-b border-main">
-                                        <label className="w-full text-blue-800                                                     
-text-[0.79rem] sm:text-[0.88rem] font-semibold">Drop address</label>
-                                        <input
-                                            type="text"
-                                            name="dropAddress"
-                                            placeholder="Enter drop address..."
-                                            value={formData.dropAddress}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.05rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${!formData?.dropAddress && errorMessage?.drop ? 'border-red-500' : 'border-main'}`}>
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Drop address</label>
+                                            <input
+                                                type="text"
+                                                name="dropAddress"
+                                                placeholder="Enter drop address..."
+                                                value={formData.dropAddress}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {!formData?.dropAddress && errorMessage?.drop &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Drop address is required!</p>}
+
                                     </div>
                                     {/* <div className='flex gap-1'>
                                 <input type="checkbox" onClick={() => setFormData(...formData, declaration = true)} name="" id="" />
@@ -553,10 +653,46 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Drop address</label>
                             </div> */}
 
 
-                                    <div className="mt-1">
-                                        <label className="w-full text-blue-800                                                     
-text-[0.79rem] sm:text-[0.88rem] font-semibold">Have a Coupon Code?</label>
-                                        <div className="flex items-center gap-2 mt-1 tracking-wide border border-gray-300 rounded bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem]">
+                                    <div className="relative flex-col items-center w-full p-1 px-0 mt-2 mb-1 fle3">
+                                        <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Payment Details</label>
+
+                                        <div className="flex flex-col w-full gap-2 mt-2">
+                                            <label className="flex items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
+                                                <input
+                                                    type="radio"
+                                                    name="paymentMode"
+                                                    value="10"
+                                                    checked={formData.paymentMode === '10'}
+                                                    onChange={handleChange}
+                                                    className="hidden mr-2 peer"
+                                                />
+                                                <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
+                                                10%  <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{price10}
+
+                                                </span>
+                                                <span className="ml-1">
+                                                    for now
+                                                </span>
+                                            </label>
+
+                                            <label className="flex items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
+                                                <input
+                                                    type="radio"
+                                                    name="paymentMode"
+                                                    value="100"
+                                                    checked={formData.paymentMode === '100'}
+                                                    onChange={handleChange}
+                                                    className="hidden mr-2 peer"
+                                                />
+                                                <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
+                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{finalPrice}</span>
+                                                <span className='ml-1'> now</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className="mt-3">
+                                        <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Have a Coupon Code?</label>
+                                        <div className="flex items-center gap-2 mt-1 tracking-wide border border-gray-300 rounded bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]">
                                             <input
                                                 type="text"
                                                 name="voucherCode"
@@ -566,6 +702,11 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Have a Coupon Code?</label>
                                                 className="w-full pl-2 font-semibold tracking-wider outline-none"
                                             />
 
+                                            {formData?.voucherCode &&
+                                                <div onClick={handleVoucherCut} className='p-[0.15rem] border border-red-500 rounded-full text-[0.7rem]'>
+                                                    <FaXmark />
+                                                </div>
+                                            }
                                             {discountPrice > 0 ?
                                                 <p className='font-semibold bg-green-600 text-white p-2 px-4 rounded-r text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied  </p>
                                                 :
@@ -591,46 +732,12 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Have a Coupon Code?</label>
                                                 </div>}
                                         </div>
                                     </div>
-                                    <div className="relative flex-col items-center w-full p-1 px-0 mt-2 mb-1 fle3">
-                                        <label className="w-full text-blue-800                                                     
-text-[0.79rem] sm:text-[0.88rem] font-semibold">Payment Details</label>
 
-                                        <div className="flex flex-col w-full gap-2 mt-2">
-                                            <label className="flex sm:text-[1.05rem] items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMode"
-                                                    value="10"
-                                                    checked={formData.paymentMode === '10'}
-                                                    onChange={handleChange}
-                                                    className="hidden mr-2 peer"
-                                                />
-                                                <span className="flex items-center  justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
-                                                10%  <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{price10}
-
-                                                </span>
-                                                <span className="ml-1">
-                                                    for now
-                                                </span>
-                                            </label>
-
-                                            <label className="flex sm:text-[1.05rem] items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
-                                                <input
-                                                    type="radio"
-                                                    name="paymentMode"
-                                                    value="100"
-                                                    checked={formData.paymentMode === '100'}
-                                                    onChange={handleChange}
-                                                    className="hidden mr-2 peer"
-                                                />
-                                                <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
-                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{finalPrice}</span>
-                                                <span className='ml-1'> now</span>
-                                            </label>
-                                        </div>
-                                    </div>
                                     {discountPrice > 0 &&
                                         <p className='font-semibold text-green-600 text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied {discountPrice} off </p>
+                                    }
+                                    {errorMessage?.voucher &&
+                                        <p className=' text-red-600 text-[0.8rem] flex items-center gap-2'>{errorMessage?.voucher}</p>
                                     }
 
                                     <label className="flex items-center p-1 px-4 mt-3 text-black border border-gray-400 rounded bg-blue-50">
@@ -643,7 +750,10 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Payment Details</label>
                                         />
                                         Need a invoice with GST?
                                     </label>
-                                    <button className='w-full p-2 py-[0.4rem] mt-3 rounded text-white  bg-main' type='submit'>Proceed</button>
+                                    <button disabled={submitLoading} className='w-full p-2 py-[0.4rem] mt-5  rounded text-white  bg-main' type='submit'>{submitLoading ?
+                                        <FaSpinner className="mx-auto text-2xl w-fit animate-spin" /> :
+                                        "Proceed"
+                                    }</button>
                                 </div>
                             </>}
                     </form>
@@ -690,17 +800,16 @@ text-[0.79rem] sm:text-[0.88rem] font-semibold">Payment Details</label>
                                     <p><span className='font-normal text-[0.95rem]'>Pickup Time </span> : {successDetail?.pickupTime}</p>
                                 </div>
 
-                                <button onClick={() => download(successDetail?._id)} className='flex items-center gap-2 p-2 py-[0.4rem] my-3 text-black transition-all duration-300 bg-blue-100 border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover'>
-                                    <FaDownload />
-                                    Download Invoice
-                                </button>
-
-
                                 {/* Confirmation Message */}
-                                <div className="flex items-center gap-2 text-green-500">
+                                <div className="flex items-center gap-2 pt-2 text-green-500">
                                     <span className="text-gray-600">Thank you for booking with us!</span>
                                 </div>
-
+                                {userData?.data?._id ?
+                                    <button className='px-5 py-[0.25rem] rounded mt-2 text-green-700 bg-green-100 border border-green-700' onClick={() => navigate(`/booking/${userData?.data?._id}`)}>View bookings</button>
+                                    :
+                                    <p className='pt-1 text-center'>
+                                        Please Login to your account to download invoice and track your booking
+                                    </p>}
 
                             </div>
                         </div>

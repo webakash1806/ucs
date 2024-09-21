@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FaAnchorCircleExclamation, FaArrowRight, FaCar, FaCreditCard, FaDownload, FaHotel, FaLocationDot, FaSpinner } from 'react-icons/fa6'
+import { FaAnchorCircleExclamation, FaArrowRight, FaCar, FaCreditCard, FaDownload, FaHotel, FaLocationDot, FaSpinner, FaXmark } from 'react-icons/fa6'
 import { IoBed, IoDocumentText } from 'react-icons/io5'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../../assets/car1.jpg'
@@ -20,6 +20,7 @@ import bookingDone from "../../assets/icons/bookingDone.gif"
 import bookingProgress from "../../assets/icons/bookProgress.gif"
 import failed from "../../assets/icons/failed.gif"
 const BookAirportCab = () => {
+
     const navigate = useNavigate()
     const [currentStep, setCurrentStep] = useState(1);
     const [detailsActive, setDetailsActive] = useState(1)
@@ -42,13 +43,35 @@ const BookAirportCab = () => {
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
     const order_id = useSelector((state) => state?.razorpay?.orderId);
 
-    console.log(cabData)
+    const [submitLoading, setSubmitLoading] = useState(false)
 
-    const download = async (invoiceId) => {
-        const res = await dispatch(downloadInvoice({ invoiceId }))
-        navigate('/')
-    }
+    const [errorMessage, setErrorMessage] = useState({
+        nameMsg: false,
+        phoneNumber: false,
+        email: false,
+        pickup: false,
+        voucher: ""
+    })
 
+
+    const [formData, setFormData] = useState({
+        fromLocation: airpotValue === 1 ? pickup : drop,
+        airpotAddress: airpotValue === 1 ? drop : pickup,
+        tripType: tripType,
+        category: cabData?.name,
+        pickupDate: pickupDate,
+        pickupTime: pickupTime,
+        name: userData?.data?.name || "",
+        email: userData?.data?.email || "",
+        phoneNumber: userData?.data?.phoneNumber || "",
+        voucherCode: "",
+        distance: cabData?.rates[0]?.kilometer,
+        paymentMode: '10',
+        declaration: false,
+        airpotValue: airpotValue,
+        gst: false,
+        rate: cabData?.rates[0]?.rate
+    })
 
     const formatPickupDate = (dateString) => {
         // Create a new Date object directly from the "yyyy-mm-dd" string
@@ -72,55 +95,65 @@ const BookAirportCab = () => {
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
 
-
-
     const handleVoucher = async () => {
-        setVoucherLoading(true)
-        const res = await dispatch(verifyVoucher({
-            voucherCode: formData?.voucherCode,
-            tripType: "Airport Trip"
-        }))
+        if (formData?.paymentMode === '100') {
+            setErrorMessage((prev) => ({ ...prev, voucher: "" }))
 
-        const discount = res?.payload?.discount
+            setVoucherLoading(true)
+            const res = await dispatch(verifyVoucher({
+                voucherCode: formData?.voucherCode,
+                tripType: "Airport Trip"
+            }))
 
-        if (res?.payload?.dataType === 1) {
+            const discount = res?.payload?.discount
 
-            const discountPrice = Number(discount) * finalPrice / 100
-            setDiscountPrice(Number(discountPrice))
-            setFinalPrice(Number(finalPrice) - Number(discountPrice))
+            if (!discount) {
+                setVoucherLoading(false)
+                return setErrorMessage((prev) => ({ ...prev, voucher: "Invalid Coupon code!" }))
+            }
+
+            if (res?.payload?.dataType === 1) {
+
+                const discountPrice = Number(discount) * finalPrice / 100
+                setDiscountPrice(Number(discountPrice))
+                setFinalPrice(Number(finalPrice) - Number(discountPrice))
+                setVoucherLoading(false)
+            }
+
+            if (res?.payload?.dataType === 2) {
+                setDiscountPrice(Number(discount))
+                setFinalPrice(Number(finalPrice) - Number(discount))
+                setVoucherLoading(false)
+            }
+
             setVoucherLoading(false)
+
+
+        } else {
+            return setErrorMessage((prev) => ({ ...prev, voucher: "Voucher is available for 100% payment!" }))
         }
+    }
 
-        if (res?.payload?.dataType === 2) {
-            setDiscountPrice(Number(discount))
-            setFinalPrice(Number(finalPrice) - Number(discount))
-            setVoucherLoading(false)
+    useEffect(() => {
+        setErrorMessage((prev) => ({ ...prev, voucher: "" }))
+        if (discountPrice > 0) {
+
+            setFinalPrice(Number(finalPrice) + Number(discountPrice))
+            setDiscountPrice(0)
         }
+    }, [formData?.voucherCode])
 
-        setVoucherLoading(false)
+    const handleVoucherCut = () => {
+        setFormData((prev) => ({ ...prev, voucherCode: "" }))
+        setErrorMessage((prev) => ({ ...prev, voucher: "" }))
 
+        if (discountPrice > 0) {
+            setFinalPrice(Number(finalPrice) + Number(discountPrice))
+            setDiscountPrice(0)
+        }
     }
 
 
-
-    const [formData, setFormData] = useState({
-        fromLocation: airpotValue === 1 ? pickup : drop,
-        airpotAddress: airpotValue === 1 ? drop : pickup,
-        tripType: tripType,
-        category: cabData?.name,
-        pickupDate: pickupDate,
-        pickupTime: pickupTime,
-        name: userData?.data?.name || "",
-        email: userData?.data?.email || "",
-        phoneNumber: userData?.data?.phoneNumber || "",
-        voucherCode: "",
-        distance: cabData?.rates[0]?.kilometer,
-        paymentMode: '10',
-        declaration: false,
-        airpotValue: airpotValue,
-        gst: false,
-        rate: cabData?.rates[0]?.rate
-    })
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -237,8 +270,28 @@ const BookAirportCab = () => {
         const { fromLocation, tripType, category, airpotValue, pickupDate, pickupTime, name, email, phoneNumber, airpotAddress, paymentMode, distance } = formData
 
         if (currentStep === 1) {
-            if (!fromLocation || !tripType || !category || !airpotValue || !airpotAddress || !pickupDate || !pickupTime || !name || !email || !phoneNumber || !distance) {
-                return toast.error("All fields are required!")
+            let hasError = false;
+
+            if (!name) {
+                setErrorMessage((prev) => ({ ...prev, nameMsg: true }));
+                hasError = true;
+            }
+
+            if (!email) {
+                setErrorMessage((prev) => ({ ...prev, email: true }));
+                hasError = true;
+            }
+
+            if (!phoneNumber) {
+                setErrorMessage((prev) => ({ ...prev, phoneNumber: true }));
+                hasError = true;
+            }
+
+            // Return early if there are errors
+            if (hasError) return;
+
+            if (!fromLocation || !tripType || !category || !airpotValue || !airpotAddress || !pickupDate || !pickupTime || !distance) {
+                return navigate('/home')
             }
 
             checkPickupDate(pickupDate)
@@ -251,9 +304,13 @@ const BookAirportCab = () => {
             return setCurrentStep(2)
         }
 
+        setSubmitLoading(true)
+
         checkPickupDate(pickupDate)
 
         if (checkPickupTime(pickupDate, pickupTime)) {
+            setSubmitLoading(false)
+
             navigate('/')
             return toast.error("Pickup time is expired!")
         }
@@ -298,7 +355,11 @@ const BookAirportCab = () => {
             }
         };
         const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
+        setTimeout(() => {
+            setSubmitLoading(false)
+
+            paymentObject.open();
+        }, 4000);
 
     }
 
@@ -463,42 +524,59 @@ const BookAirportCab = () => {
                                     <h2 className='font-semibold tracking-wide text-[0.875rem] sm:text-[1.3rem]'>Travelers </h2>
 
                                 </div>
-                                <div className='p-2'>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.87rem] font-semibold">Full name</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            placeholder="Enter full name..."
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem]"
-                                            required
-                                        />
+                                <div className='p-2 space-y-2'>
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${!formData?.name && errorMessage?.nameMsg ? 'border-red-500' : 'border-main'}`}>
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Full name</label>
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                placeholder="Enter full name..."
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {!formData?.name && errorMessage?.nameMsg &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Full name is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.87rem] font-semibold">Email</label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            placeholder="Enter email..."
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${!formData?.email && errorMessage?.email ? 'border-red-500' : 'border-main'}`}>
+
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Email</label>
+
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                placeholder="Enter email..."
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {!formData?.email && errorMessage?.email &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Email is required!</p>}
+
                                     </div>
-                                    <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.87rem] font-semibold">Phone number</label>
-                                        <input
-                                            type="number"
-                                            name="phoneNumber"
-                                            placeholder="Enter phone number..."
-                                            value={formData.phoneNumber}
-                                            onChange={handleChange}
-                                            className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem]"
-                                            required
-                                        />
+                                    <div>
+                                        <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${!formData?.phoneNumber && errorMessage?.phoneNumber ? 'border-red-500' : 'border-main'}`}>
+                                            <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Phone number</label>
+                                            <input
+                                                type="number"
+                                                name="phoneNumber"
+                                                placeholder="Enter phone number..."
+                                                value={formData.phoneNumber}
+                                                onChange={handleChange}
+                                                className="w-full px-0 tracking-wide bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]"
+                                                required
+                                            />
+                                        </div>
+                                        {!formData?.phoneNumber && errorMessage?.phoneNumber &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Phone number is required!</p>}
+
                                     </div>
                                     <div className="relative flex flex-col items-center w-full p-1 px-0 mb-1 border-b border-main">
                                         <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.87rem] font-semibold">Pickup address</label>
@@ -556,47 +634,8 @@ const BookAirportCab = () => {
                             </div> */}
 
 
-                                    <div className="mt-1">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.87rem] font-semibold">Have a Coupon Code?</label>
-                                        <div className="flex items-center gap-2 mt-1 tracking-wide border border-gray-300 rounded bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem]">
-                                            <input
-                                                type="text"
-                                                name="voucherCode"
-                                                placeholder="Enter coupon code"
-                                                value={formData.voucherCode}
-                                                onChange={handleChange}
-                                                className="w-full pl-2 font-semibold tracking-wider outline-none"
-                                            />
-
-                                            {discountPrice > 0 ?
-                                                <p className='font-semibold bg-green-600 text-white p-2 px-4 rounded-r text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied  </p>
-                                                :
-                                                <div
-
-                                                    onClick={(discountPrice > 0 || voucherLoading) ? undefined : handleVoucher}
-                                                    className="px-5 py-[0.4rem] bg-main  text-white font-semibold rounded-r hover:bg-blue-600 transition-colors text-[0.85rem]"
-                                                >
-                                                    {voucherLoading && /* From Uiverse.io by abrahamcalsin */
-                                                        <div className="dot-spinner">
-                                                            <div className="dot-spinner__dot"></div>
-                                                            <div className="dot-spinner__dot"></div>
-                                                            <div className="dot-spinner__dot"></div>
-                                                            <div className="dot-spinner__dot"></div>
-                                                            <div className="dot-spinner__dot"></div>
-                                                            <div className="dot-spinner__dot"></div>
-                                                            <div className="dot-spinner__dot"></div>
-                                                            <div className="dot-spinner__dot"></div>
-                                                        </div>}
-                                                    {!voucherLoading && discountPrice === 0 && /* From Uiverse.io by abrahamcalsin */
-                                                        'Apply'}
-
-                                                </div>}
-                                        </div>
-                                    </div>
-
-
                                     <div className="relative flex-col items-center w-full p-1 px-0 mt-2 mb-1 fle3">
-                                        <label className="w-full text-blue-800 text-[0.78rem] sm:text-[0.87rem] font-semibold">Payment Details</label>
+                                        <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Payment Details</label>
 
                                         <div className="flex flex-col w-full gap-2 mt-2">
                                             <label className="flex items-center p-2 px-4 text-black border border-gray-400 rounded bg-blue-50">
@@ -632,9 +671,54 @@ const BookAirportCab = () => {
                                             </label>
                                         </div>
                                     </div>
+                                    <div className="mt-3">
+                                        <label className="w-full text-blue-800 text-[0.8rem] sm:text-[0.95rem] font-semibold">Have a Coupon Code?</label>
+                                        <div className="flex items-center gap-2 mt-1 tracking-wide border border-gray-300 rounded bg-transparent outline-none placeholder:text-[#808080] text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem]">
+                                            <input
+                                                type="text"
+                                                name="voucherCode"
+                                                placeholder="Enter coupon code"
+                                                value={formData.voucherCode}
+                                                onChange={handleChange}
+                                                className="w-full pl-2 font-semibold tracking-wider outline-none"
+                                            />
+
+                                            {formData?.voucherCode &&
+                                                <div onClick={handleVoucherCut} className='p-[0.15rem] border border-red-500 rounded-full text-[0.7rem]'>
+                                                    <FaXmark />
+                                                </div>
+                                            }
+                                            {discountPrice > 0 ?
+                                                <p className='font-semibold bg-green-600 text-white p-2 px-4 rounded-r text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied  </p>
+                                                :
+                                                <div
+
+                                                    onClick={(discountPrice > 0 || voucherLoading) ? undefined : handleVoucher}
+                                                    className="px-5 py-[0.6rem] bg-main  text-white font-semibold rounded-r hover:bg-blue-600 transition-colors text-[0.85rem]"
+                                                >
+                                                    {voucherLoading && /* From Uiverse.io by abrahamcalsin */
+                                                        <div className="dot-spinner">
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                            <div className="dot-spinner__dot"></div>
+                                                        </div>}
+                                                    {!voucherLoading && discountPrice === 0 && /* From Uiverse.io by abrahamcalsin */
+                                                        'Apply'}
+
+                                                </div>}
+                                        </div>
+                                    </div>
 
                                     {discountPrice > 0 &&
                                         <p className='font-semibold text-green-600 text-[0.85rem] flex items-center gap-2'><FaRegCheckCircle /> Applied {discountPrice} off </p>
+                                    }
+                                    {errorMessage?.voucher &&
+                                        <p className=' text-red-600 text-[0.8rem] flex items-center gap-2'>{errorMessage?.voucher}</p>
                                     }
 
                                     <label className="flex items-center p-1 px-4 mt-3 text-black border border-gray-400 rounded bg-blue-50">
@@ -647,8 +731,10 @@ const BookAirportCab = () => {
                                         />
                                         Need a invoice with GST?
                                     </label>
-
-                                    <button className='w-full p-2 py-[0.4rem] mt-3 rounded text-white  bg-main' type='submit'>Proceed</button>
+                                    <button disabled={submitLoading} className='w-full p-2 py-[0.4rem] mt-5  rounded text-white  bg-main' type='submit'>{submitLoading ?
+                                        <FaSpinner className="mx-auto text-2xl w-fit animate-spin" /> :
+                                        "Proceed"
+                                    }</button>
                                 </div>
                             </>}
                     </form>
@@ -695,17 +781,16 @@ const BookAirportCab = () => {
                                     <p><span className='font-normal text-[0.95rem]'>Pickup Time </span> : {successDetail?.pickupTime}</p>
                                 </div>
 
-                                <button onClick={() => download(successDetail?._id)} className='flex items-center gap-2 p-2 py-[0.4rem] my-3 text-black transition-all duration-300 bg-blue-100 border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover'>
-                                    <FaDownload />
-                                    Download Invoice
-                                </button>
-
-
                                 {/* Confirmation Message */}
-                                <div className="flex items-center gap-2 text-green-500">
+                                <div className="flex items-center gap-2 pt-2 text-green-500">
                                     <span className="text-gray-600">Thank you for booking with us!</span>
                                 </div>
-
+                                {userData?.data?._id ?
+                                    <button className='px-5 py-[0.25rem] rounded mt-2 text-green-700 bg-green-100 border border-green-700' onClick={() => navigate(`/booking/${userData?.data?._id}`)}>View bookings</button>
+                                    :
+                                    <p className='pt-1 text-center'>
+                                        Please Login to your account to download invoice and track your booking
+                                    </p>}
 
                             </div>
                         </div>
