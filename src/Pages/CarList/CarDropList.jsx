@@ -18,6 +18,7 @@ import { LuLuggage } from 'react-icons/lu'
 import { MdCarRental, MdContactSupport } from 'react-icons/md'
 import { FaIndianRupeeSign, FaTriangleExclamation } from 'react-icons/fa6'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
+import { FaSignOutAlt } from 'react-icons/fa'
 
 const CarDropList = () => {
 
@@ -303,11 +304,11 @@ const CarDropList = () => {
                                     <div className='flex items-center justify-between gap-2 p-3 pl-1 sm:pl-4 text-[0.85rem] sm:text-[0.95rem] font-semibold text-main'>
                                         {/* Safety icon */}
                                         <div className='flex gap-2'>
-                                            <div onClick={() => setDetailsActive(`2.${index}`)} className="flex cursor-pointer items-center p-[0.15rem] pr-1 sm:px-3 sm:pl-2 bg-red-100 border border-red-500 rounded">
+                                            <div onClick={() => setDetailsActive(`2.${index}`)} className="flex cursor-pointer items-center p-[0.15rem] pr-1 sm:px-3 sm:pl-2 bg-blue-100 border border-blue-500 rounded">
                                                 <div className="p-1 rounded-full">
-                                                    <FaTriangleExclamation className="w-4 h-4 text-red-600" />
+                                                    <FaSignOutAlt className="w-4 h-4 text-blue-600" />
                                                 </div>
-                                                <span className="text-gray-700 ">Exclusions</span>
+                                                <span className="text-blue-700 ">Exclusions</span>
                                             </div>
                                             <div onClick={() => setDetailsActive(`3.${index}`)} className="flex cursor-pointer items-center p-[0.15rem] px-[0.4rem] pl-[0.1rem] bg-green-100 border border-green-500 rounded">
                                                 <div className="p-1 rounded-full">

@@ -70,9 +70,12 @@ const BookOnewayCab = () => {
         voucherCode: "",
         paymentMode: '10',
         declaration: false,
-        gst: false
-
+        gst: false,
+        extraPerKm: cabData?.extraKm,
     })
+
+    console.log(cabData)
+    console.log(formData)
 
     const formatPickupDate = (dateString) => {
         // Create a new Date object directly from the "yyyy-mm-dd" string

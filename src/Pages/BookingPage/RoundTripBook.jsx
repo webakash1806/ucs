@@ -69,6 +69,7 @@ const RoundTripBook = () => {
         perKm: cabData?.perKm
     })
 
+    console.log(cabData)
 
     const formatPickupDate = (dateString) => {
         // Create a new Date object directly from the "yyyy-mm-dd" string

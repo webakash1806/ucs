@@ -12,9 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <BrowserRouter>
       <App />
-      <div className='relative bottom-0 right-0 z-[1556059550555]'>
+      {/* <div className='relative bottom-0 right-0 z-[1556059550555]'>
         <ToastContainer position='bottom-left' autoClose={1500} />
-      </div>
+      </div> */}
     </BrowserRouter>
   </Provider>
 )

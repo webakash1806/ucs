@@ -56,9 +56,12 @@ const BookCab = () => {
         distance: selectedType === "8 hrs | 80 km" ? 80 : 120,
         paymentMode: '10',
         declaration: false,
-        gst: false
-
+        gst: false,
+        extraPerKm: cabData?.perKm,
+        extraPerHr: cabData?.perHour,
     })
+
+    console.log(formData)
 
     const [submitLoading, setSubmitLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState({

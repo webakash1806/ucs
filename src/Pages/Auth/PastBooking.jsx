@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { allBookings, cancelBooking, downloadInvoice } from '../../Redux/Slices/authSlice'
+import { allBookings, allTC, cancelBooking, downloadInvoice } from '../../Redux/Slices/authSlice'
 import car1 from '../../assets/car1.jpg'
 import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
@@ -12,19 +12,67 @@ import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCl
 import { FaCar } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify'
+import { getTCDetails } from '../../Redux/Slices/localTripSlice'
 const PastBooking = () => {
     const [item, setItem] = useState(null);
     const [active, setActive] = useState(false)
     const dispatch = useDispatch()
+    const [localTC, setLocalTC] = useState([]);
+    const [airportTC, setAirportTC] = useState([]);
+    const [roundTC, setRoundTC] = useState([]);
+    const [onewayTC, setOnewayTC] = useState([]);
+
+    console.log(localTC)
+    console.log(airportTC)
+    console.log(roundTC)
+    console.log(localTC)
+
+
+
+
+    const setTripTypeData = (tripType, tC) => {
+        switch (tripType) {
+            case 'local':
+                setLocalTC(tC?.map(data => data?.text));
+                break;
+            case 'airpot':
+                setAirportTC(tC?.map(data => data?.text));
+                break;
+            case 'round':
+                setRoundTC(tC?.map(data => data?.text));
+                break;
+            case 'oneway':
+                setOnewayTC(tC?.map(data => data?.text));
+                break;
+            default:
+                break;
+        }
+    };
+
+    const fetchTcData = async () => {
+        const res = await dispatch(allTC())
+        console.log(res)
+        console.log(res?.payload?.data?.data)
+        if (res?.payload?.data?.data && res?.payload?.data?.data.length) {
+            res?.payload?.data?.data.forEach(trip => {
+                setTripTypeData(trip.tripType, trip.tC);
+            });
+        }
+    }
+
+    useEffect(() => {
+        fetchTcData()
+    }, [])
 
     const navigate = useNavigate()
     const { id } = useParams()
     const [bookingData, setBookingData] = useState()
 
+    console.log(bookingData)
 
     const fetchBookingDetails = async () => {
         const res = await dispatch(allBookings({ id }))
-        setBookingData(res?.payload?.bookingHistory)
+        setBookingData(res?.payload?.bookingHistory.reverse())
     }
 
     const cancel = async (cancelId) => {
@@ -47,13 +95,13 @@ const PastBooking = () => {
     }
 
     return (
-        <div className='flex flex-col items-center justify-start w-full min-h-screen gap-6 p-3 pt-6'>
+        <div className='flex flex-col items-center justify-start w-full min-h-screen gap-6 p-3 pt-6 overflow-hidden'>
             <p className='text-[1.6rem] font-bold underline'>My Bookings</p>
             {!bookingData ?
                 <p>Loading...</p> :
                 bookingData && bookingData?.length === 0 ?
                     <p>No booking till now</p> :
-                    bookingData?.reverse()?.map((item, index) => {
+                    bookingData?.map((item, index) => {
                         return <motion.div
                             key={index}
                             layoutId={item?._id}
@@ -210,13 +258,13 @@ const PastBooking = () => {
                         <motion.div
                             layoutId={item?._id}
                             key="modal"
-                            className="fixed inset-0 z-50 flex items-center justify-center p-4 "
+                            className="fixed inset-0 z-50 max-h-[40vh]  flex items-center justify-center p-4 top-60 "
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.8 }}
                         >
 
-                            <div className='relative border border-main mt-10 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md'>
+                            <div className='relative scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-200 border scroll-m-1 border-main top-2 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md max-h-[88vh] overflow-y-auto'>
                                 <motion.button
                                     onClick={() => setItem(null)}
                                     className="absolute  right-1 top-[-0.75rem]  mt-4 text-red-600 bg-red-50 border border-red-500 rounded-full p-1 rounded-tr-lg"
@@ -225,7 +273,7 @@ const PastBooking = () => {
                                 </motion.button>
                                 <div className="flex flex-col items-center justify-between w-full mx-auto border-b sm:flex-row">
                                     {/* Car image and details */}
-                                    <div className="flex items-start justify-between w-full pr-3 border-b sm:w-fit">
+                                    <div className="flex items-start justify-between w-full pr-3 sm:w-fit">
                                         <img
                                             src={item?.photo?.secure_url || car1}
                                             alt={`car ${item?.category}`}
@@ -257,10 +305,7 @@ const PastBooking = () => {
                                             <h2 className="mb-2 text-2xl font-semibold">{item?.category}</h2>
                                         </div>
 
-                                        <div className=' sm:p-0 py-2 text-[0.9rem] md:text-[0.95rem] font-semibold flex justify-between'>
-                                            <p>Pickup: {item?.pickupDate.split('T')[0]} at {item?.pickupTime}</p>
-                                            {item?.tripType === "Round" && <p>Return: {item?.returnDate?.split('T')[0]}</p>}
-                                        </div>
+
 
 
                                     </div>
@@ -281,9 +326,15 @@ const PastBooking = () => {
 
                                 {/* Status and Trip Type */}
                                 <div className='p-2 sm:p-3'>
-                                    <div onClick={() => download(item?._id)} className='p-2 flex items-center justify-center gap-2 cursor-pointer min-w-fit bg-blue-50 text-blue-600 border py-[0.42rem] border-blue-500 rounded'>
-                                        <FaDownload /> Download invoice
+                                    <div className='  py-2 text-[0.9rem] border-b md:text-[0.95rem] font-semibold flex flex-col justify-between'>
+                                        <p>Pickup: {item?.pickupDate.split('T')[0]} at {item?.pickupTime}</p>
+                                        {item?.tripType === "Round" && <p>Return: {item?.returnDate?.split('T')[0]}</p>}
                                     </div>
+                                    {item?.status === "completed" &&
+                                        <div onClick={() => download(item?._id)} className='p-2 flex items-center justify-center gap-2 cursor-pointer min-w-fit bg-blue-50 text-blue-600 border py-[0.42rem] border-blue-500 rounded'>
+                                            <FaDownload /> Download invoice
+                                        </div>
+                                    }
                                     <div className="flex relative  flex-col items-start mt-4 text-[0.9rem] gap-2 sm:mt-0 font-semibold font-sans mb-2">
 
                                         {item?.tripType === "Round" ? (
@@ -292,10 +343,10 @@ const PastBooking = () => {
                                                 <div className='flex items-start'>
                                                     <div className="rotate-[180deg] mr-2 mt-[0.34rem] size-[0.65rem] border-light border-[0.2rem] rounded-full"></div>
 
-                                                    <p className="">{item?.fromLocation}</p>
+                                                    <p className="">{item?.pickupAddress}</p>
                                                 </div>
                                                 <p className="flex items-center">
-                                                    <FaLocationDot className='text-[0.7rem] mt-[0.34rem] mr-[0.4rem]' />
+                                                    <FaLocationDot className='text-[0.7rem] mt-[0.05rem] mr-[0.4rem]' />
 
                                                     {item?.toLocation}</p>
                                             </>
@@ -307,7 +358,7 @@ const PastBooking = () => {
                                                     <p className="">{item?.pickupAddress}</p>
                                                 </div>
                                                 <p className="flex ">
-                                                    <FaLocationDot className='text-[0.7rem] mt-[0.34rem] ml-[0.06rem] mr-[0.5rem]' />
+                                                    <FaLocationDot className='text-[0.7rem] mt-[0.05rem] ml-[0.06rem] mr-[0.5rem]' />
 
                                                     {item?.dropAddress}</p>
                                             </>
@@ -316,34 +367,34 @@ const PastBooking = () => {
 
                                     {/* Driver details */}
                                     {/* {item?.driverDetails} */}
-                                    {item?.driverDetails?.filter(driver => driver.isActive).map((driver, index) => (
-                                        <div key={index} className="flex bg-sky-50 font-semibold flex-col text-[0.9rem] p-2  rounded border border-main mt-3 text-black">
-                                            <h3 className="flex items-center gap-2 mb-1 text-lg font-semibold"> <FaUserCheck /> Driver Details</h3>
-                                            <p className="">
-                                                <span className='font-semibold text-gray-700'>Driver Name:</span> {driver.name}
-                                            </p>
-                                            <p className="">
-                                                <span className='font-semibold text-gray-700'>Car Number:</span> {driver.carNumber}
-                                            </p>
-                                            <p className="">
-                                                <span className='font-semibold text-gray-700'>Driver Phone:</span> {driver.phoneNumber}
-                                            </p>
 
-                                        </div>
-                                    ))}
-                                    {item?.driverDetails?.filter(driver => driver.isActive).length === 0 && <div className="flex bg-sky-50 font-semibold flex-col text-[0.9rem] p-2 rounded border border-main mt-3 text-black">
-                                        <h3 className="flex items-center gap-2 mb-1 text-lg font-semibold"> <FaUserCheck /> Driver Details</h3>
-                                        <p className="">
-                                            <span className='font-semibold text-gray-700'>Driver Name:</span> N/A
-                                        </p>
-                                        <p className="">
-                                            <span className='font-semibold text-gray-700'>Car Number:</span>  N/A
-                                        </p>
-                                        <p className="">
-                                            <span className='font-semibold text-gray-700'>Driver Phone:</span>  N/A
-                                        </p>
+                                    {item?.status !== "cancelled" &&
+                                        <>
+                                            {item?.driverDetails?.filter(driver => driver.isActive).map((driver, index) => (
+                                                <div key={index} className="flex bg-sky-50 font-semibold flex-col text-[0.9rem] p-2  rounded border border-main mt-3 text-black">
+                                                    <h3 className="flex items-center gap-2 mb-1 text-lg font-semibold"> <FaUserCheck /> Driver Details</h3>
+                                                    <p className="">
+                                                        <span className='font-semibold text-gray-700'>Driver Name:</span> {driver.name}
+                                                    </p>
+                                                    <p className="">
+                                                        <span className='font-semibold text-gray-700'>Car Number:</span> {driver.carNumber}
+                                                    </p>
+                                                    <p className="">
+                                                        <span className='font-semibold text-gray-700'>Driver Phone:</span> {driver.phoneNumber}
+                                                    </p>
 
-                                    </div>}
+                                                </div>
+                                            ))}
+                                            {item?.driverDetails?.filter(driver => driver.isActive).length === 0 && <div className="flex bg-sky-50 font-semibold flex-col text-[0.9rem] p-2 rounded border border-main mt-3 text-black">
+                                                <h3 className="flex items-center gap-2 mb-1 text-lg font-semibold"> <FaUserCheck /> Driver Details</h3>
+                                                <p className="">
+                                                    <span className='font-semibold text-gray-700'>Assigning soon</span>
+                                                </p>
+                                            </div>}
+                                        </>
+
+                                    }
+
                                     <div className="flex flex-wrap items-center justify-between gap-2 py-2 mt-2 text-[0.85rem] sm:text-[0.95rem] font-semibold text-main">
                                         <div className="flex gap-2">
                                             <div
@@ -379,13 +430,68 @@ const PastBooking = () => {
                                             <span className="text-gray-700">{item?.tripType.split(' ')[0]} trip</span>
                                         </div>
                                         {(item?.status === "confirmed" || item?.status === "pending") &&
-                                            <div onClick={() => cancel(item?._id)} className="flex items-center p-[0.3rem] pr-1 gap-2 sm:px-3 sm:pl-2 cursor-pointer bg-red-500 border rounded">
+                                            <div
+                                                onClick={() => {
+                                                    if (window.confirm('Are you sure you want to cancel?')) {
+                                                        cancel(item?._id) // Call the logout function if confirmed
+                                                    }
+                                                    // If canceled, do nothing
+                                                }}
+                                                className="flex items-center p-[0.3rem] pr-1 gap-2 sm:px-3 sm:pl-2 cursor-pointer bg-red-500 border rounded">
                                                 {active &&
                                                     <div className='border-[3px] border-b-red-500 animate-spin rounded-full size-4'></div>
 
                                                 }
                                                 <span className="text-white">Cancel booking</span>
                                             </div>}
+                                    </div>
+                                    <div className='py-4 pt-2 border-t border-gray-400'>
+
+                                        <h3 className='mb-2 font-semibold'>Billing details :</h3>
+                                        <div className='text-[0.9rem] flex flex-col gap-2'>
+                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {Math.ceil(item?.totalPrice)}</span></div>
+                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>{Math.ceil(Number(10) * (Math.ceil(item?.totalPrice)) / 100)} paid at the time of booking</span></div>
+                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {Math.ceil(item?.totalPrice - (Number(10) * (Math.ceil(item?.totalPrice)) / 100))} to driver during the trip with extras (if applicable)</span></div>
+                                        </div>
+
+                                        <div className='mt-3 font-semibold text-[0.95rem]'>
+                                            *Extra charges if applicable (to be paid to the driver during the trip)
+                                            <ul className='ml-6 font-normal list-decimal text-[0.9rem]'>
+                                                <li>Distance travelled beyond {item?.distance} km will be charged at Rs. {item?.extraPerKm}/Km.</li>
+                                                <li>This fare not includes toll tax and parking.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div className='py-4 pt-2 border-gray-400 border-y'>
+                                        <h3 className='mb-2 font-semibold'>Important T&C!</h3>
+                                        <ul className='ml-6 list-disc'>
+                                            {item?.tripType === "Round" && roundTC?.map((data, index) => {
+                                                return (
+                                                    <li className='list-disc text-[0.8rem] font-semibold' key={index + 1}>{data}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                        <ul className='ml-6 list-disc'>
+                                            {item?.tripType === "Airport Trip" && roundTC?.map((data, index) => {
+                                                return (
+                                                    <li className='list-disc text-[0.8rem] font-semibold' key={index + 1}>{data}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                        <ul className='ml-6 list-disc'>
+                                            {item?.tripType === "Local" && localTC?.map((data, index) => {
+                                                return (
+                                                    <li className='list-disc text-[0.8rem] font-semibold' key={index + 1}>{data}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                        <ul className='ml-6 list-disc'>
+                                            {item?.tripType === "One-Way Trip" && onewayTC?.map((data, index) => {
+                                                return (
+                                                    <li className='list-disc text-[0.8rem] font-semibold' key={index + 1}>{data}</li>
+                                                )
+                                            })}
+                                        </ul>
                                     </div>
                                 </div>
                             </div>

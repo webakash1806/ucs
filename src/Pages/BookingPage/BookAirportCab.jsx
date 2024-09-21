@@ -70,8 +70,10 @@ const BookAirportCab = () => {
         declaration: false,
         airpotValue: airpotValue,
         gst: false,
-        rate: cabData?.rates[0]?.rate
+        rate: cabData?.rates[0]?.rate,
+        extraPerKm: cabData?.rates[0]?.extra,
     })
+
 
     const formatPickupDate = (dateString) => {
         // Create a new Date object directly from the "yyyy-mm-dd" string

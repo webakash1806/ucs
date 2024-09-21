@@ -6,6 +6,7 @@ import axiosInstance from '../../Helper/axiosInstance';
 const initialState = {
     isLoggedIn: localStorage.getItem('isLoggedIn') === 'true' || false,
     data: localStorage.getItem('data') !== "undefined" ? JSON.parse(localStorage.getItem('data')) : {},
+    tcData: localStorage.getItem('tcData') !== "undefined" ? JSON.parse(localStorage.getItem('tcData')) : {},
 };
 
 // Thunks for different actions
@@ -87,7 +88,7 @@ export const userProfile = createAsyncThunk('/user/details', async () => {
 
 export const editProfile = createAsyncThunk('user/update-profile', async (data) => {
     try {
-        let res = axiosInstance.put(`user/update-profile/${data[0]}`, data[1]);
+        let res = axiosInstance.put(`user/updateProfile/${data[0]}`, data[1]);
         toast.promise(res, {
             loading: "Updating Profile!",
             success: (data) => data?.data.message,
@@ -208,7 +209,16 @@ export const verifyVoucher = createAsyncThunk('/user/cancel-bookings', async (da
     }
 });
 
+export const allTC = createAsyncThunk('/user/bookings', async () => {
+    try {
+        let res = axiosInstance.get(`/tc`);
 
+        res = await res;
+        return res.data;
+    } catch (e) {
+        toast.error(e?.response?.data?.message);
+    }
+});
 
 
 const authSlice = createSlice({

@@ -12,7 +12,7 @@ import { FaLocationDot, FaXmark } from 'react-icons/fa6';
 import { getDistance } from '../../Redux/Slices/airportSlice';
 import { getOnewayCabData } from '../../Redux/Slices/outstationSlice';
 import MainForm from '../../Components/MainForm';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaSignOutAlt } from 'react-icons/fa';
 import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
 import { MdCarRental, MdContactSupport } from 'react-icons/md'
@@ -245,9 +245,9 @@ const OnewayCarList = () => {
                                     <div className='flex items-center justify-between gap-2 p-3 pl-1 sm:pl-4 text-[0.85rem] sm:text-[0.95rem] font-semibold text-main'>
                                         {/* Safety icon */}
                                         <div className='flex gap-2'>
-                                            <div onClick={() => setDetailsActive(`2.${index}`)} className="flex cursor-pointer items-center p-[0.15rem] pr-1 sm:px-3 sm:pl-2 bg-red-100 border border-red-500 rounded">
+                                            <div onClick={() => setDetailsActive(`2.${index}`)} className="flex cursor-pointer items-center p-[0.15rem] pr-1 sm:px-3 sm:pl-2 bg-blue-100 border border-blue-500 rounded">
                                                 <div className="p-1 rounded-full">
-                                                    <FaTriangleExclamation className="w-4 h-4 text-red-600" />
+                                                    <FaSignOutAlt className="w-4 h-4 text-blue-600" />
                                                 </div>
                                                 <span className="text-gray-700 ">Exclusions</span>
                                             </div>

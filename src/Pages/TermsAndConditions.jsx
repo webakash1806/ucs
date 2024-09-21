@@ -2,133 +2,84 @@ import React from 'react';
 
 const TermsAndConditions = () => {
     return (
-        <div className=" min-h-screen px-[4vw] sm:px-[7vw] md:px-[8vw] lg:px-[9vw] w-full py-10 bg-gray-50">
-
+        <div className="max-w-4xl p-6 mx-auto bg-white rounded-lg shadow-lg">
             <h1 className="mb-8 text-3xl font-semibold text-center">Terms and Conditions</h1>
 
             <p className="mb-4 text-gray-700">
-                **Effective Date**: [Insert Effective Date]
+                Effective Date: 21-09-2024
             </p>
 
             <p className="mb-4 text-gray-700">
-                Welcome to UCS, a cab booking platform. By accessing or using our website, mobile application, or services, you agree to comply with and be bound by the following Terms and Conditions. Please read these terms carefully, as they govern your use of our platform. If you do not agree with these terms, you may not access or use our services.
+                The following demonstrates terms and conditions (hereinafter referred to as an ‘Agreement’), applicable to the use of www.ucscab.com. Before subscribing to and/or beginning participation in the said ‘Website’, we believe that one has fully read, understood, and accepted this 'Agreement'. If anyone does not agree to or wish to be bound by the 'Agreement', he/she may not access or otherwise use the said ‘Website’. The Agreement comprises the binding obligation towards the said 'Website'. Registered Members (travel agents who would be assigned a User Identity and Password to access his/her account) and Users (travelers) should not use the information made available on and/or by the said ‘Website’ for any unlawful or prohibited purposes. The said ‘Website’ would not allow any access, monitor or copying of content using any robot, spider, scraper, or other automated means or any manual process for any purpose. Registered Members and Users’ access to the said ‘Website’ would be terminated immediately at its discretion, with or without notice in case either fails to comply with any of the below mentioned provisions of this Agreement.
             </p>
 
             {/* General Terms */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">1. General Terms</h2>
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">1. For Registered Members (Travel Agents)</h2>
             <p className="mb-4 text-gray-700">
-                UCS operates a cab booking platform that connects users with drivers for transportation services. By using the platform, you acknowledge and agree that UCS acts as an intermediary between users and drivers, and we do not provide transportation services ourselves. The following terms apply to all users of the platform, including passengers and drivers.
+                Registered Members should provide accurate, current, and complete information to the said 'Website'. If a Registered Member is an individual, it is deemed that the individual has entered into the Agreement, but if a Registered Member represents a company, it is deemed that the company has entered into an Agreement with the said 'Website’. The address provided on the online registration form should be of the head/registered office of such companies. Registered Members shall not sell, attempt to sell, offer to sell, give, assign or transfer his/her Account, User Identity, or Password to a Third Party. The said 'Website' holds the power and/or reserves the right to refuse any registration and deny the issuance of any such Master account and Sub User Account for whatever reasons. We also hold the right to seize an account without prior notice for any issue which is not in the interest of the said ‘Website’. Registered Member(s) should also agree to notify any unauthorized use of their account.
             </p>
 
-            {/* Account Registration */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">2. Account Registration</h2>
+            {/* Users (Travelers) */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">2. For Users (Travelers)</h2>
             <p className="mb-4 text-gray-700">
-                To use certain features of the UCS platform, you must create an account and provide accurate and up-to-date personal information. You are responsible for maintaining the confidentiality of your account details, including your username and password. You agree to notify UCS immediately if you suspect unauthorized access or misuse of your account. UCS is not liable for any losses or damages resulting from unauthorized use of your account.
+                Information provided by the 'Users' shall not be false, inaccurate, defamatory, threatening, or obscene. It shall not contain viruses or any other computer programs used for hacking.
             </p>
 
-            {/* User Responsibilities */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">3. User Responsibilities</h2>
+            {/* Transactions */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">3. Transactions Between Registered Members (Travel Agents) and Users (Travelers)</h2>
             <p className="mb-4 text-gray-700">
-                When using the UCS platform, you agree to:
-            </p>
-            <ul className="mb-4 text-gray-700 list-disc list-inside">
-                <li>Provide accurate, current, and complete information during the registration process and when using our services.</li>
-                <li>Use the platform only for lawful purposes and not for any illegal or unauthorized activity.</li>
-                <li>Respect and comply with all applicable traffic laws, regulations, and driver requirements while using our services.</li>
-                <li>Refrain from using abusive, offensive, or harmful language or behavior toward drivers, passengers, or UCS staff.</li>
-                <li>Not engage in any activity that interferes with or disrupts the platform or the services provided by UCS or its drivers.</li>
-                <li>Pay for all services used through the UCS platform, including ride fares, cancellation fees, and any applicable taxes.</li>
-            </ul>
-
-            {/* Booking and Cancellation */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">4. Booking and Cancellation Policy</h2>
-            <p className="mb-4 text-gray-700">
-                By booking a ride through UCS, you agree to the following terms:
-            </p>
-            <ul className="mb-4 text-gray-700 list-disc list-inside">
-                <li>Booking a ride is a binding agreement between you and the driver. Once the driver accepts the ride, you are obligated to honor the booking unless you cancel in accordance with our cancellation policy.</li>
-                <li>Cancellation fees may apply if you cancel a booking after a certain time frame or under certain conditions as specified in the app or website.</li>
-                <li>UCS reserves the right to cancel your ride in case of emergencies, safety concerns, or other factors beyond our control.</li>
-            </ul>
-
-            {/* Payment Terms */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">5. Payment Terms</h2>
-            <p className="mb-4 text-gray-700">
-                All payments for rides and services booked through UCS are processed via our payment partners. You agree to:
-            </p>
-            <ul className="mb-4 text-gray-700 list-disc list-inside">
-                <li>Pay the ride fare, applicable taxes, and any additional fees (e.g., waiting charges, cancellation fees) as displayed during the booking process.</li>
-                <li>Authorize UCS to charge your provided payment method for the total ride cost.</li>
-                <li>Ensure that your payment information is accurate and up to date. UCS is not responsible for any failed transactions due to insufficient funds or incorrect payment details.</li>
-                <li>Any disputes regarding payments must be raised within 30 days of the transaction.</li>
-            </ul>
-
-            {/* Driver Responsibilities */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">6. Driver Responsibilities</h2>
-            <p className="mb-4 text-gray-700">
-                If you are a driver using UCS, you agree to:
-            </p>
-            <ul className="mb-4 text-gray-700 list-disc list-inside">
-                <li>Provide accurate information about your vehicle, license, and insurance status.</li>
-                <li>Comply with all local traffic laws and regulations while providing transportation services.</li>
-                <li>Ensure the safety and comfort of passengers during the ride.</li>
-                <li>Maintain your vehicle in good working condition and ensure it meets all safety standards.</li>
-                <li>Respond to ride requests in a timely and professional manner.</li>
-            </ul>
-
-            {/* Limitation of Liability */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">7. Limitation of Liability</h2>
-            <p className="mb-4 text-gray-700">
-                UCS provides a platform for connecting passengers and drivers, but we do not guarantee the quality, safety, or reliability of the transportation services provided. You agree that UCS is not responsible for:
-            </p>
-            <ul className="mb-4 text-gray-700 list-disc list-inside">
-                <li>Any accidents, injuries, or damages that occur during the ride.</li>
-                <li>Delays, cancellations, or missed connections due to traffic, weather, or other unforeseen circumstances.</li>
-                <li>Any unauthorized access to your account or personal information caused by external factors beyond our control.</li>
-                <li>Actions or conduct of the drivers, passengers, or third-party service providers.</li>
-            </ul>
-
-            {/* User-Generated Content */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">8. User-Generated Content</h2>
-            <p className="mb-4 text-gray-700">
-                If you post reviews, feedback, or other content on the UCS platform, you grant UCS a non-exclusive, worldwide, royalty-free license to use, display, and distribute your content for promotional purposes. You are responsible for ensuring that your content does not violate any laws or infringe on the rights of third parties.
+                The said ‘Website’ is an online web-based platform for exchanging information and carrying out transactions between the Registered Members (Travel Agents) and Users (Travelers). The said ‘Website’ represents neither the Users nor Registered Members. The said ‘Website’ is not responsible for the quality, safety, or lawfulness of services offered by the Registered Members. Users and Registered Members are solely responsible for all the terms and conditions of the transactions conducted on, through, or as a result of use of the said ‘Website’. In case of a dispute due to a transaction, Registered Members as well as Users shall not hold the said Website responsible for it. The two parties agree to release the said ‘Website’ from all claims, demands, actions, proceedings, costs, expenses, and damages (including without limitation any actual, special, incidental, or consequential damages) arising out of or in connection with such transactions.
             </p>
 
-            {/* Intellectual Property */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">9. Intellectual Property</h2>
+            {/* Copyright */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">4. Copyright</h2>
             <p className="mb-4 text-gray-700">
-                All content, trademarks, logos, and intellectual property used on the UCS platform are the property of UCS or its licensors. You may not use, copy, or distribute any content from our platform without prior written consent from UCS.
+                All content on the said 'Website' is copyrighted except the third-party content and links to other websites. Content means text, images, HTML codes, graphs, and other data available on the said 'Website'.
             </p>
 
-            {/* Termination */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">10. Termination</h2>
+            {/* Privacy Policy */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">5. Privacy Policy</h2>
             <p className="mb-4 text-gray-700">
-                UCS reserves the right to suspend or terminate your account if you violate these Terms and Conditions, engage in illegal activities, or misuse the platform. Upon termination, you must cease all use of the platform, and any outstanding payments or obligations will remain due.
+                Personal information supplied by users during the use of the said 'Website' is governed by our privacy policy. Please visit our privacy policy.
             </p>
 
-            {/* Changes to Terms */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">11. Changes to Terms</h2>
+            {/* Links to Other Websites */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">6. Link To Other Websites and Products/Services</h2>
             <p className="mb-4 text-gray-700">
-                UCS reserves the right to update these Terms and Conditions from time to time. We will notify you of any material changes by posting the updated terms on our platform, and the new terms will take effect immediately upon posting. Your continued use of the platform after any changes signifies your acceptance of the updated terms.
+                The said ‘Website’ may allow access to third-party websites through hyperlinks (words/banners/channels/otherwise) but it does not have any control over the content, products, or services made available by such sites. The said ‘Website’ is not liable to and/or responsible for any type of issues concerned with outbound links and such issues would not be entertained.
             </p>
 
-            {/* Governing Law */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">12. Governing Law</h2>
+            {/* Modification/Termination */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">7. Modification/Termination of Usage</h2>
             <p className="mb-4 text-gray-700">
-                These Terms and Conditions are governed by and construed in accordance with the laws of [Insert Jurisdiction]. Any disputes arising out of or related to these terms shall be subject to the exclusive jurisdiction of the courts in [Insert Jurisdiction].
+                The said 'Website' may change, modify, amend, or update this Agreement from time to time without any prior notification to Registered Members and Users, and the amended and restated terms and conditions of use shall be effective immediately on posting. If Registered Members and Users do not adhere to the changes, they must stop using the services of the said 'Website'. Continuous use of the services will signify acceptance of the changed terms and conditions of use.
             </p>
 
-            {/* Contact Information */}
-            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">13. Contact Information</h2>
+            {/* Security */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">8. Security</h2>
             <p className="mb-4 text-gray-700">
-                If you have any questions or concerns regarding these Terms and Conditions, please contact us at:
+                Registered Members and Users are prohibited from violating or attempting to violate the security of the said 'Website'. The said 'Website' retains the right to take applicable legal action in the event of any such activity.
             </p>
-            <ul className="mb-4 text-gray-700 list-none">
-                <li><strong>Email:</strong> [Insert Company Email]</li>
-                <li><strong>Phone:</strong> [Insert Phone Number]</li>
-                <li><strong>Address:</strong> [Insert Company Address]</li>
-            </ul>
+
+            {/* Disclaimer */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">9. Disclaimer</h2>
+            <p className="mb-4 text-gray-700">
+                The said ‘Website’ takes no claims on the accuracy and adequacy of the available information on it. It holds no liability for the errors or any irrelevant information present on the said ‘Website’.
+            </p>
+
+            {/* Changes in Terms */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">10. Changes in Terms and Conditions of Use</h2>
+            <p className="mb-4 text-gray-700">
+                Terms and Conditions of Use may change from time to time, so please check periodically.
+            </p>
+
+            {/* Additional Clauses */}
+            <h2 className="mb-4 text-[1.3rem] font-semibold text-gray-800">11. All Bookings</h2>
+            <p className="mb-4 text-gray-700">
+                All bookings will be done by Travel Agents. Servicing will be part of Travel Agents. All bookings are subject to availability. ucscab.com will not be responsible for any booking and servicing. Booking amounts will be refunded to the customer's account within 30 days if the Travel Agent denies the booking for any reason.
+            </p>
         </div>
+
     );
 };
 
