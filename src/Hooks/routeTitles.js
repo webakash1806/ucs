@@ -1,0 +1,25 @@
+const routeTitles = [
+    { path: '/', title: 'Home | Explore Our Offerings and Services' },
+    { path: '/contact', title: 'Contact Us | Get in Touch' },
+    { path: '/about', title: 'About Us | Discover Our Mission' },
+    { path: '/privacy-policy', title: 'Privacy Policy | Your Privacy Matters' },
+    { path: '/terms-and-conditions', title: 'Terms and Conditions | Understand Our Policies' },
+    { path: '/cars/:cityName', title: 'Car List | Find the Best Cars in Your City' },
+    { path: '/cars/from/:pickupName', title: 'Car Drop List | Drop-off Options for Your Trip' },
+    { path: '/cars/round/:pickupName', title: 'Round Trip Car List | Plan Your Journey' },
+    { path: '/cars/oneway/:pickupName', title: 'One-Way Car List | Convenient Travel Solutions' },
+    { path: '/book-cab', title: 'Book a Cab | Quick and Easy Cab Booking' },
+    { path: '/book-airport-cab', title: 'Book Airport Cab | Hassle-Free Airport Transfers' },
+    { path: '/book-round-trip-cab', title: 'Book Round Trip Cab | Safe and Reliable Rides' },
+    { path: '/book-oneway-trip-cab', title: 'Book One-Way Trip Cab | Flexibility in Travel' },
+    { path: '/FAQ', title: 'FAQ | Your Questions Answered' },
+    { path: '/register', title: 'Register | Join Us Today' },
+    { path: '/login', title: 'Login | Access Your Account' },
+    { path: '/forgot-password', title: 'Forgot Password | Reset Your Password' },
+    { path: '/services/local-car-rentals', title: 'Local Car Rentals | Drive with Ease' },
+    { path: '/services/round-trip', title: 'Round Trip Services | Your Travel Companion' },
+    { path: '/services/airport-cabs', title: 'Airport Cabs | Reliable Airport Transportation' },
+    { path: '/services/one-way-cabs', title: 'One-Way Cabs | Direct to Your Destination' },
+];
+
+export default routeTitles;

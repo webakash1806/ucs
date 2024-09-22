@@ -46,7 +46,7 @@ export const loginAccount = createAsyncThunk('/user/login', async (data) => {
         // toast.success(res.data.message)
         return res.data;
     } catch (e) {
-        console.log(e)
+
         return e?.response?.data?.message;
     }
 });

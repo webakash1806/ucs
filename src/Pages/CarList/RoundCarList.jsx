@@ -54,7 +54,7 @@ const RoundCarList = () => {
         setCabData(res?.payload?.data)
     }
 
-    console.log(cabData)
+
 
     useEffect(() => {
         loadData()

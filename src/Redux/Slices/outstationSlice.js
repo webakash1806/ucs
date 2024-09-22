@@ -24,10 +24,10 @@ export const getRoundCityData = createAsyncThunk('/outstation/roundCityData', as
 
 export const getRoundTripData = createAsyncThunk('/outstation/roundTripData', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post('round/city/rate/list', data);
         res = await res;
-        console.log(res)
+
         return res.data;
     } catch (e) {
         return e?.response?.data?.message;

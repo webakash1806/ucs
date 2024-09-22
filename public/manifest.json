@@ -1,0 +1,22 @@
+{
+    "name": "UCS Cabs",
+    "short_name": "UCS",
+    "description": "Reliable cab services for all your travel needs.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#08828E",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/assets/ucs-icon192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/assets/ucs-icon512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

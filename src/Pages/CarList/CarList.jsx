@@ -49,7 +49,7 @@ const CarList = () => {
 
         const res = dispatch(getLocalCityData())
 
-        console.log(res)
+
 
         const filteredCityData = data?.cabData?.allCityRate?.filter(cityRate => cityRate?.cityName === pickupCity);
         if (!filteredCityData) return
@@ -66,7 +66,7 @@ const CarList = () => {
         setModifyActive(false)
     }, [location.state])
 
-    console.log(filteredData)
+
 
     const handleBook = (data) => {
 
@@ -98,7 +98,7 @@ const CarList = () => {
 
 
     const formatPickupDate = (dateString) => {
-        console.log(dateString)
+
         if (!dateString) return
         // Create a new Date object directly from the "yyyy-mm-dd" string
         const dateObject = new Date(dateString);

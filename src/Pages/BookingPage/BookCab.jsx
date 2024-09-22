@@ -81,7 +81,7 @@ const BookCab = () => {
         extraPerHr: cabData?.perHour,
     })
 
-    console.log(formData)
+
 
     const [submitLoading, setSubmitLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState({
@@ -271,11 +271,11 @@ const BookCab = () => {
 
     useEffect(() => {
         setPrice10(Number(finalPrice) * 10 / 100)
-        console.log("object")
+
     }, [finalPrice, discountPrice, gstActive, formData.paymentMode])
 
     useEffect(() => {
-        console.log(price10)
+
         const paymentMode = Number(formData?.paymentMode);
         setActualPrice(paymentMode === 10 ? price10 : finalPrice)
     }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice, formData?.gst, gstActive])
@@ -285,7 +285,7 @@ const BookCab = () => {
     useEffect(() => {
 
         if (actualPrice > 0) {
-            console.log(actualPrice)
+
             dispatch(order({ amount: actualPrice, forName: "Airport" }));
         }
     }, [actualPrice, dispatch]);

@@ -9,10 +9,10 @@ const initialState = {
 // Thunks for different actions
 export const getAirportCityData = createAsyncThunk('/airpot/airportData', async (data) => {
     try {
-        console.log(data)
+
         let res = axiosInstance.post('airpot/rate/list', data);
         res = await res;
-        console.log(res)
+
         return res.data;
     } catch (e) {
         return e?.response?.data?.message;

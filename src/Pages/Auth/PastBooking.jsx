@@ -21,10 +21,10 @@ const PastBooking = () => {
     const [roundTC, setRoundTC] = useState([]);
     const [onewayTC, setOnewayTC] = useState([]);
 
-    console.log(localTC)
-    console.log(airportTC)
-    console.log(roundTC)
-    console.log(localTC)
+
+
+
+
 
 
 
@@ -50,8 +50,8 @@ const PastBooking = () => {
 
     const fetchTcData = async () => {
         const res = await dispatch(allTC())
-        console.log(res)
-        console.log(res?.payload?.data?.data)
+
+
         if (res?.payload?.data?.data && res?.payload?.data?.data.length) {
             res?.payload?.data?.data.forEach(trip => {
                 setTripTypeData(trip.tripType, trip.tC);
@@ -67,7 +67,7 @@ const PastBooking = () => {
     const { id } = useParams()
     const [bookingData, setBookingData] = useState()
 
-    console.log(bookingData)
+
 
     const fetchBookingDetails = async () => {
         const res = await dispatch(allBookings({ id }))

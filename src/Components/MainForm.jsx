@@ -261,11 +261,11 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [roundPickupError, setRoundPickupError] = useState('')
     const roundPickupCity = useSelector((state) => state?.outstation?.roundCityData)
     // const roundTripData = useSelector((state) => state?.outstation?.roundTripData)
-    console.log(roundPickupCity)
+
 
     const allRoundPickupCityNames = roundPickupCity && roundPickupCity?.map((data) => data?.cityName);
 
-    // console.log(allRoundPickupCityNames)
+    // 
 
     const fetchRoundTripData = async () => {
         // await dispatch(getRoundTripData())

@@ -90,7 +90,7 @@ const RoundTripBook = () => {
         perKm: cabData?.perKm
     })
 
-    console.log(cabData)
+
 
     const formatPickupDate = (dateString) => {
 
@@ -264,11 +264,11 @@ const RoundTripBook = () => {
 
     useEffect(() => {
         setPrice10(Number(finalPrice) * 10 / 100)
-        console.log("object")
+
     }, [finalPrice, discountPrice, gstActive, formData.paymentMode])
 
     useEffect(() => {
-        console.log(price10)
+
         const paymentMode = Number(formData?.paymentMode);
         setActualPrice(paymentMode === 10 ? price10 : finalPrice)
     }, [formData.paymentMode, finalPrice, discountPrice, price10, actualPrice, formData?.gst, gstActive])
@@ -278,13 +278,13 @@ const RoundTripBook = () => {
     useEffect(() => {
 
         if (actualPrice > 0) {
-            console.log(actualPrice)
+
             dispatch(order({ amount: actualPrice, forName: "Round" }));
         }
     }, [actualPrice, dispatch]);
 
 
-    console.log(errorMessage)
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()

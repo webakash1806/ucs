@@ -47,14 +47,14 @@ const CarDropList = () => {
     const pickupTime = data?.pickupTime
     const tripType = data?.tripType
 
-    console.log(tripType)
+
 
     const loadData = async () => {
         const res = await dispatch(getAirportCityData({ cityName: tripType === 1 ? drop.replace(/,/g, "") : pickup.replace(/,/g, "") }))
         setCabData(res?.payload?.data)
     }
 
-    console.log(cabData)
+
 
     useEffect(() => {
         loadData()
@@ -106,9 +106,9 @@ const CarDropList = () => {
 
         const res = await dispatch(getDistance(distanceData))
         setDistance(res?.payload?.distance)
-        console.log(res?.payload?.distance)
+
     }
-    console.log(filteredData)
+
 
     useEffect(() => {
 

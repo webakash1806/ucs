@@ -53,7 +53,7 @@ const OnewayCarList = () => {
         }
 
         const res = await dispatch(getOnewayCabData(cityData))
-        console.log(res.payload.data)
+
         setFilteredData(res?.payload?.data)
     }
 

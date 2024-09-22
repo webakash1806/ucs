@@ -33,7 +33,7 @@ const LoginPage = () => {
         drop: false,
     })
 
-    console.log(errorMessage)
+
 
     useEffect(() => {
         setErrorMessage({
@@ -87,7 +87,7 @@ const LoginPage = () => {
             }
             // setVerifyActive(true)
         } else {
-            console.log(response?.payload)
+
             toast.error(response?.payload);
 
             setLoading(false)
@@ -155,7 +155,7 @@ const LoginPage = () => {
             setResetPasswordActive(true)
             setLoading(false)
         } else {
-            console.log(response?.payload)
+
             toast.error(response?.payload)
 
             setLoading(false)
