@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginAccount, resendOTP, verifyOTP } from "../../Redux/Slices/authSlice"; // Adjust the path according to your project structure
 import { toast } from "sonner";
-import loginIcon from '../../assets/icons/LoginPage.gif';
-import verify from '../../assets/icons/verify.gif';
+import loginIcon from '../../assets/icons/LoginPage.avif';
+import verify from '../../assets/icons/verify.avif';
 
 import { Link, useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
@@ -95,7 +95,7 @@ const ForgotPassword = () => {
                     className={`register-form w-full   max-w-[24rem] pt-0 p-3 py-1 pb-6 bg-white rounded-xl border-main border border-opacity-55 shadow-md ${verifyActive ? 'hidden' : 'block'}`}
 
                 >
-                    <img src={loginIcon} className="w-[4.8rem] mb-5 mt-1 mx-auto relative top-2" alt="" />
+                    <img src={loginIcon} className="w-[4.8rem] mb-5 mt-1 mx-auto relative top-2" alt="icon" />
                     {/* <h2 className="relative z-10 mb-6 text-2xl font-bold text-center">Register</h2> */}
 
 

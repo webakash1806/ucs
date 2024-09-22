@@ -1,6 +1,5 @@
-import React from 'react'
 import ReviewCard from './ReviewCard'
-import cardBgImg from '../assets/car1.jpg'
+import cardBgImg from '../assets/car1.avif'
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -20,7 +19,7 @@ const Testimonial = () => {
 
     return (
         <div className='relative flex flex-col items-center justify-between pb-[5rem] bg-black' >
-            <img src={cardBgImg} alt="" className='absolute top-0 left-0 w-full object-cover h-full' />
+            <img src={cardBgImg} alt="icon" className='absolute top-0 left-0 w-full object-cover h-full' />
             <div className='w-full h-full bg-black absolute opacity-70'></div>
             <div className='absolute top-6 z-10 text-center'>
                 <h1 className='text-white text-3xl font-semibold'>What our family says?</h1>

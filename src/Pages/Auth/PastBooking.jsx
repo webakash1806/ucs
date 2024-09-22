@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { allBookings, allTC, cancelBooking, downloadInvoice } from '../../Redux/Slices/authSlice'
-import car1 from '../../assets/car1.jpg'
-import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
-import { LuLuggage } from 'react-icons/lu'
-import { MdCarRental, MdContactSupport } from 'react-icons/md'
-import { FaDownload, FaIndianRupeeSign, FaLocationDot, FaTriangleExclamation, FaUserCheck, FaXmark } from 'react-icons/fa6'
-import { IoIosInformationCircleOutline } from 'react-icons/io'
+import car1 from '../../assets/car1.avif'
+// Importing Heroicons
+import { FaDownload, FaIndianRupeeSign, FaLocationDot, FaUserCheck, FaXmark } from 'react-icons/fa6'
 import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCloseCircle, AiOutlineSync } from 'react-icons/ai'
 import { FaCar } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner'
-import logo from '../../assets/logo.jpg'
+import logo from '../../assets/logo.avif'
+import Loading from '../../Components/Loading'
 
 const PastBooking = () => {
     const [item, setItem] = useState(null);
@@ -99,7 +97,7 @@ const PastBooking = () => {
         <div className='flex flex-col items-center justify-start w-full min-h-screen gap-6 p-3 pt-6 overflow-hidden'>
             <p className='text-[1.6rem] font-bold underline'>My Bookings</p>
             {!bookingData ?
-                <p>Loading...</p> :
+                <Loading /> :
                 bookingData && bookingData?.length === 0 ?
                     <p>No booking till now</p> :
                     bookingData?.map((item, index) => {
@@ -504,7 +502,7 @@ const PastBooking = () => {
                                         </ul>
                                     </div>
                                     <div className='flex items-center justify-between pt-2 m-2 font-semibold text-main'>
-                                        <img src={logo} className='w-[5rem]' alt="" />
+                                        <img src={logo} className='w-[5rem]' alt="icon" />
                                         Thankyou for booking with us!
                                     </div>
                                 </div>

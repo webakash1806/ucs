@@ -1,6 +1,6 @@
-import user1 from '../assets/car1.jpg'
-import user2 from '../assets/car2.jpg'
-import user3 from '../assets/car3.jpg'
+import user1 from '../assets/car1.avif'
+import user2 from '../assets/car2.avif'
+import user3 from '../assets/car3.avif'
 
 const useReviewData = [
     {

@@ -1,5 +1,4 @@
 
-import React from 'react';
 
 const ServiceDetailCard = ({ icon, title, description }) => {
     return (

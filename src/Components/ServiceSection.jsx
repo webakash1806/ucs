@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ServiceDetailCard from './ServiceDetailCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import airportTrip from '../assets/icons/airportTrip.gif';
-import addressPickup from '../assets/icons/addressPickup.gif';
-import localTrip from '../assets/icons/localTrip.gif';
-import longDistance from '../assets/icons/longDistance.gif';
+import airportTrip from '../assets/icons/airportTrip.avif';
+import addressPickup from '../assets/icons/addressPickup.avif';
+import localTrip from '../assets/icons/localTrip.avif';
+import longDistance from '../assets/icons/longDistance.avif';
 
 const ServiceSection = () => {
     const [slidesPerView, setSlidesPerView] = useState(1);

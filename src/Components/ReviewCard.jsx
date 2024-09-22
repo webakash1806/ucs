@@ -1,4 +1,3 @@
-import React from 'react'
 
 const ReviewCard = ({ data }) => {
     const { img, rev, name } = data

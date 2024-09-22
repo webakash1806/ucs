@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, EffectFade } from 'swiper/modules';
 
@@ -6,9 +5,9 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import 'swiper/css/effect-fade'; // Import the fade effect styles
-import car1 from '../assets/car1.jpg';
-import car2 from '../assets/car2.jpg';
-import car3 from '../assets/car3.jpg';
+import car1 from '../assets/car1.avif';
+import car2 from '../assets/car2.avif';
+import car3 from '../assets/car3.avif';
 import MainForm from './MainForm';
 
 

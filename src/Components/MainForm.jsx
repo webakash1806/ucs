@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { GoArrowSwitch } from 'react-icons/go';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
@@ -9,8 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getLocalCityData } from '../Redux/Slices/localTripSlice';
 import { toast } from 'sonner';
-import { getAirportCityData } from '../Redux/Slices/airportSlice';
-import { getOnewayCityData, getRoundCityData, getRoundTripData } from '../Redux/Slices/outstationSlice';
+import { getOnewayCityData, getRoundCityData } from '../Redux/Slices/outstationSlice';
 
 const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime, returnMainDate }) => {
     const dispatch = useDispatch();

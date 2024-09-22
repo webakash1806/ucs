@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaClock, FaWhatsapp } from "react-icons/fa";
-import contactIcon from '../assets/icons/contact.gif'
+import { useState } from "react";
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaWhatsapp } from "react-icons/fa";
+import contactIcon from '../assets/icons/contact.avif'
 const Contact = () => {
 
     const [formData, setFormData] = useState({

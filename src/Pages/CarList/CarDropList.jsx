@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
 import { IoDocumentText } from 'react-icons/io5'
-import { MdAirlineSeatReclineExtra, MdArrowLeft, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md'
+import { MdArrowLeft, MdKeyboardArrowRight, MdLocalParking } from 'react-icons/md'
 import { SiToll } from 'react-icons/si'
-import { TbAirConditioning } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../../assets/car1.jpg'
+import car1 from '../../assets/car1.avif'
 import { toast } from 'sonner'
 import { getTCDetails } from '../../Redux/Slices/localTripSlice'
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { FaLocationDot, FaXmark } from 'react-icons/fa6'
 import { getAirportCityData, getDistance } from '../../Redux/Slices/airportSlice'
 import MainForm from '../../Components/MainForm'
-import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
+import { UserGroupIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
 import { MdCarRental, MdContactSupport } from 'react-icons/md'
-import { FaIndianRupeeSign, FaTriangleExclamation } from 'react-icons/fa6'
+import { FaIndianRupeeSign } from 'react-icons/fa6'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
 import { FaSignOutAlt } from 'react-icons/fa'
+import Loading from '../../Components/Loading'
 
 const CarDropList = () => {
 
@@ -238,7 +237,7 @@ const CarDropList = () => {
                 </div>}
             <div className='flex flex-col py-10  px-[5vw] sm:px-[7vw] md:px-[9vw] lg:px-[11vw] items-center justify-center gap-4'>
                 {
-                    (!filteredData || distance === 0) ? "Loading..." :
+                    (!filteredData || distance === 0) ? <Loading /> :
                         filteredData && filteredData?.length === 0 ?
                             <p>No Cabs available to this city right now</p> :
                             filteredData?.map((data, index) => {

@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../../assets/car1.jpg'
-import { MdAirlineSeatReclineExtra, MdArrowLeft, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md';
-import { TbAirConditioning } from 'react-icons/tb';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import car1 from '../../assets/car1.avif'
+import { MdArrowLeft, MdKeyboardArrowRight, MdLocalParking } from 'react-icons/md';
 import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLocalCityData, getTCDetails } from '../../Redux/Slices/localTripSlice';
@@ -12,7 +10,7 @@ import { SiToll } from 'react-icons/si';
 import { IoDocumentText } from 'react-icons/io5';
 import { FaLocationDot, FaXmark } from 'react-icons/fa6';
 import MainForm from '../../Components/MainForm';
-import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
+import { UserGroupIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
 import { MdCarRental, MdContactSupport } from 'react-icons/md'
 import { FaIndianRupeeSign, FaTriangleExclamation } from 'react-icons/fa6'

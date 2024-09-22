@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import blog1 from '../assets/car1.jpg';
-import blog2 from '../assets/car2.jpg';
-import blog3 from '../assets/car3.jpg';
-import blog4 from '../assets/img1.jpg';
+import blog1 from '../assets/car1.avif';
+import blog2 from '../assets/car2.avif';
+import blog3 from '../assets/car3.avif';
+import blog4 from '../assets/img1.avif';
 import { CiFacebook, CiInstagram, CiTwitter } from "react-icons/ci";
 import { FaYoutube } from "react-icons/fa";
 import { Swiper, SwiperSlide } from 'swiper/react';

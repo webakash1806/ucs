@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../../assets/car1.jpg'
-import { MdAirlineSeatReclineExtra, MdArrowLeft, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md';
-import { TbAirConditioning } from 'react-icons/tb';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import car1 from '../../assets/car1.avif'
+import { MdArrowLeft, MdKeyboardArrowRight, MdLocalParking } from 'react-icons/md';
 import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTCDetails } from '../../Redux/Slices/localTripSlice';
@@ -13,13 +11,14 @@ import { IoDocumentText } from 'react-icons/io5';
 import { FaLocationDot, FaXmark } from 'react-icons/fa6';
 import { getDistance } from '../../Redux/Slices/airportSlice';
 import MainForm from '../../Components/MainForm';
-import { ShieldCheckIcon, UserGroupIcon, BriefcaseIcon, TruckIcon, CurrencyRupeeIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
+import { UserGroupIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
 import { MdCarRental, MdContactSupport } from 'react-icons/md'
-import { FaIndianRupeeSign, FaTriangleExclamation } from 'react-icons/fa6'
+import { FaIndianRupeeSign } from 'react-icons/fa6'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
 import { getRoundTripData } from '../../Redux/Slices/outstationSlice';
 import { FaSignOutAlt } from 'react-icons/fa';
+import Loading from '../../Components/Loading';
 
 const RoundCarList = () => {
     const [modifyActive, setModifyActive] = useState(false)
@@ -219,7 +218,7 @@ const RoundCarList = () => {
                 </div>}
             <div className='flex flex-col py-10  px-[5vw] sm:px-[7vw] md:px-[9vw] lg:px-[11vw] items-center justify-center gap-4'>
                 {
-                    !distance ? "Loading..." :
+                    !distance ? <Loading /> :
                         distance === 0 ? <p>Please select valid location</p> :
                             cabData && cabData?.rates?.length === 0 ?
                                 <p>No Cabs available to this city right now</p> :

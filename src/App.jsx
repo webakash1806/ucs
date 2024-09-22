@@ -1,11 +1,11 @@
-import React, { useEffect, lazy, Suspense } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import carIcon from './assets/icons/carTrip.gif';
 import { useEffectOnce } from './hooks/useEffectOnce'; // Custom hook for useEffect once
+import Loading from './Components/Loading';
 
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
@@ -55,7 +55,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <Suspense fallback={<div className="flex items-center justify-center h-screen"><img className='w-[6rem]' src={carIcon} alt="Loading..." /></div>}>
+      <Suspense fallback={<div className="flex items-center justify-center h-screen"><Loading /></div>}>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/contact' element={<Contact />} />

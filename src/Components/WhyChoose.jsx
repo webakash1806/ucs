@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react';
-import { FaTaxi, FaTruck, FaShieldAlt, FaCoins, FaCar, FaRoad } from 'react-icons/fa';
+import { FaCoins, FaCar, FaRoad } from 'react-icons/fa';
 import carImg from '../assets/carRed.png';
-import { MdCleanHands, MdOutlineTimer, MdPayment, MdSupportAgent } from 'react-icons/md';
-import { BiSolidLike } from 'react-icons/bi';
-import best from '../assets/icons/best.gif';
-import budgetTrip from '../assets/icons/budgetTrip.gif';
-import safePayment from '../assets/icons/safePayments.gif';
-import safety from '../assets/icons/safety.gif';
-import wellCar from '../assets/icons/wellCar.gif';
-import timer from '../assets/icons/timer.gif';
-import support from '../assets/icons/support.gif';
+import { MdCleanHands, MdOutlineTimer, MdPayment } from 'react-icons/md';
+import best from '../assets/icons/best.avif';
+import budgetTrip from '../assets/icons/budgetTrip.avif';
+import safePayment from '../assets/icons/safePayments.avif';
+import safety from '../assets/icons/safety.avif';
+import wellCar from '../assets/icons/wellCar.avif';
+import timer from '../assets/icons/timer.avif';
+import support from '../assets/icons/support.avif';
 import { AiOutlineSafety } from 'react-icons/ai';
 import { RiCustomerService2Fill } from 'react-icons/ri';
 

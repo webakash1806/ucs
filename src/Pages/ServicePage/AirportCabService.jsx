@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import airportImage from '../../assets/car2.jpg'; // Import airport image
+import airportImage from '../../assets/car2.avif'; // Import airport image
 import { useNavigate } from 'react-router-dom';
 
 const faqItems = [

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createAccount, verifyOTP } from "../../Redux/Slices/authSlice"; // Adjust the path according to your project structure
 import { toast } from "sonner";
-import signup from '../../assets/icons/registerPage.gif';
-import verify from '../../assets/icons/verify.gif';
+import signup from '../../assets/icons/registerPage.avif';
+import verify from '../../assets/icons/verify.avif';
 import { Link, useNavigate } from "react-router-dom";
 import OTPInput from "react-otp-input";
 

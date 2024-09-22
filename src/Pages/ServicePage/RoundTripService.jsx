@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import car1 from '../../assets/car1.jpg'; // Import car1 image
+import car1 from '../../assets/car1.avif'; // Import car1 image
 import { useNavigate } from 'react-router-dom';
 
 const faqItems = [

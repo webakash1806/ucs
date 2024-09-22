@@ -3,6 +3,7 @@ import globals from 'globals'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import unusedImports from 'eslint-plugin-unused-imports'
 
 export default [
   { ignores: ['dist'] },
@@ -22,6 +23,7 @@ export default [
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'unused-imports': unusedImports,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -32,6 +34,12 @@ export default [
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
+      ],
+      // Add the rules for unused imports
+      'unused-imports/no-unused-imports': 'error', // Automatically removes unused imports
+      'unused-imports/no-unused-vars': [
+        'warn',
+        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
       ],
     },
   },

@@ -1,4 +1,3 @@
-import React from 'react'
 import MainSlider from '../Components/MainSlider'
 import HomeSection1 from '../Components/HomeSection1'
 import HomeSection2 from '../Components/HomeSection2'
@@ -6,7 +5,6 @@ import BlogSection from '../Components/BlogSection'
 import Testimonial from '../Components/Testimonial'
 import WhyChoose from '../Components/WhyChoose'
 import ServiceSection from '../Components/ServiceSection'
-import car1 from '../assets/car1.jpg'
 
 
 const Home = () => {

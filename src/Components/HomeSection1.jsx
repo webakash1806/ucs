@@ -1,8 +1,7 @@
-import React from 'react';
-import about1 from '../assets/car1.jpg';
-import transparency from '../assets/icons/transparency.gif'
-import trust from '../assets/icons/trust.gif'
-import support from '../assets/icons/support.gif'
+import about1 from '../assets/car1.avif';
+import transparency from '../assets/icons/transparency.avif'
+import trust from '../assets/icons/trust.avif'
+import support from '../assets/icons/support.avif'
 
 const HomeSection1 = () => {
 

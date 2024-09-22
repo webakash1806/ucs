@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { FaBars, FaClipboardList, FaDownload, FaSignOutAlt, FaCamera, FaCheckCircle } from 'react-icons/fa';
-import userImg from '../../assets/car1.jpg'; // Replace with your asset paths
-import profileBg from '../../assets/car2.jpg';
+import userImg from '../../assets/car1.avif'; // Replace with your asset paths
+import profileBg from '../../assets/car2.avif';
 import { FaCalendarCheck, FaHourglassHalf, FaLock } from 'react-icons/fa6';
 import { allBookings, allTC, cancelBooking, changePassword, downloadInvoice, editProfile, logout, userProfile } from '../../Redux/Slices/authSlice';
 import { FaIndianRupeeSign, FaLocationDot, FaUserCheck, FaXmark } from 'react-icons/fa6'
 import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCloseCircle, AiOutlineSync } from 'react-icons/ai'
 import { FaCar } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
-import car1 from '../../assets/car1.jpg'
+import car1 from '../../assets/car1.avif'
 import { VscEye, VscEyeClosed } from 'react-icons/vsc';
-import logo from '../../assets/logo.jpg'
+import logo from '../../assets/logo.avif'
 
 
 const Profile = () => {
@@ -249,9 +249,9 @@ const Profile = () => {
                         <div className='absolute bottom-[-1.8rem] left-4'>
                             <label htmlFor="image_uploads" className='cursor-pointer'>
                                 {image ? (
-                                    <img src={image} alt="" className='size-[6.5rem] border-[2px] border-[#FFB827] rounded-full' />
+                                    <img src={image} alt="icon" className='size-[6.5rem] border-[2px] border-[#FFB827] rounded-full' />
                                 ) : (
-                                    <img src={(!data?.avatar?.secure_url ? userImg : data?.avatar?.secure_url)} alt="" className='size-[6.5rem] border-[3px] bg-white border-white rounded-full shadow-[0px_5px_15px_-5px_#808080]' />
+                                    <img src={(!data?.avatar?.secure_url ? userImg : data?.avatar?.secure_url)} alt="icon" className='size-[6.5rem] border-[3px] bg-white border-white rounded-full shadow-[0px_5px_15px_-5px_#808080]' />
                                 )}
                             </label>
                             <div className='relative'>
@@ -763,7 +763,7 @@ const Profile = () => {
                                                             </ul>
                                                         </div>
                                                         <div className='flex items-center justify-between pt-2 m-2 font-semibold text-main'>
-                                                            <img src={logo} className='w-[5rem]' alt="" />
+                                                            <img src={logo} className='w-[5rem]' alt="icon" />
                                                             Thankyou for booking with us!
                                                         </div>
                                                     </div>
@@ -1237,7 +1237,7 @@ const Profile = () => {
                                                             </ul>
                                                         </div>
                                                         <div className='flex items-center justify-between pt-2 m-2 font-semibold text-main'>
-                                                            <img src={logo} className='w-[5rem]' alt="" />
+                                                            <img src={logo} className='w-[5rem]' alt="icon" />
                                                             Thankyou for booking with us!
                                                         </div>
                                                     </div>
@@ -1661,7 +1661,7 @@ const Profile = () => {
                                                             </ul>
                                                         </div>
                                                         <div className='flex items-center justify-between pt-2 m-2 font-semibold text-main'>
-                                                            <img src={logo} className='w-[5rem]' alt="" />
+                                                            <img src={logo} className='w-[5rem]' alt="icon" />
                                                             Thankyou for booking with us!
                                                         </div>
                                                     </div>

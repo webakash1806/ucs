@@ -1,6 +1,5 @@
-import React from 'react';
-import car1 from '../assets/car1.jpg';
-import car2 from '../assets/car2.jpg';
+import car1 from '../assets/car1.avif';
+import car2 from '../assets/car2.avif';
 
 const HomeSection2 = () => {
 

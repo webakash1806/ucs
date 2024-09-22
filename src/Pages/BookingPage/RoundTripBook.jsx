@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { FaArrowRight, FaCar, FaCreditCard, FaDownload, FaHotel, FaLocationDot, FaSpinner, FaXmark } from 'react-icons/fa6'
-import { IoBed, IoDocumentText } from 'react-icons/io5'
+import { useEffect, useState } from 'react'
+import { FaArrowRight, FaCar, FaCreditCard, FaSpinner, FaXmark } from 'react-icons/fa6'
+import { IoDocumentText } from 'react-icons/io5'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import car1 from '../../assets/car1.jpg'
+import car1 from '../../assets/car1.avif'
 import { MdAirlineSeatReclineExtra, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md'
 import { TbAirConditioning } from 'react-icons/tb'
 import { PiUsersThreeFill } from 'react-icons/pi'
@@ -13,11 +13,11 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
 import { SiToll } from 'react-icons/si'
 import { sendRoundTripData } from '../../Redux/Slices/outstationSlice'
-import { downloadInvoice, verifyVoucher } from '../../Redux/Slices/authSlice'
+import { verifyVoucher } from '../../Redux/Slices/authSlice'
 import { FaRegCheckCircle } from 'react-icons/fa'
-import bookingDone from "../../assets/icons/bookingDone.gif"
-import bookingProgress from "../../assets/icons/bookProgress.gif"
-import failed from "../../assets/icons/failed.gif"
+import bookingDone from "../../assets/icons/bookingDone.avif"
+import bookingProgress from "../../assets/icons/bookProgress.avif"
+import failed from "../../assets/icons/failed.avif"
 const RoundTripBook = () => {
     const navigate = useNavigate()
     const [currentStep, setCurrentStep] = useState(1);
@@ -431,7 +431,7 @@ const RoundTripBook = () => {
 
                         {/* Cab Information */}
                         <div className="flex gap-3 p-4">
-                            <img src={cabData?.category?.photo?.secure_url || car1} className="min-w-[7.1rem] object-cover h-[5rem] rounded-md" alt="" />
+                            <img src={cabData?.category?.photo?.secure_url || car1} className="min-w-[7.1rem] object-cover h-[5rem] rounded-md" alt="icon" />
                             <div>
                                 <h2 className="text-lg font-semibold sm:text-[1.3rem]">{cabData?.category?.name}</h2>
                                 <div className="flex flex-wrap gap-2 text-sm sm:text-[0.95rem] sm:text-[1.07rem] md:text-[1.1rem] sm:text-[1.07rem] text-gray-700">
@@ -779,7 +779,7 @@ const RoundTripBook = () => {
                             <div className="flex flex-col items-center w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
                                 {/* Header */}
                                 <div className="flex flex-col items-center mb-4">
-                                    <img src={bookingProgress} className='w-[5.5rem]' alt="" />
+                                    <img src={bookingProgress} className='w-[5.5rem]' alt="icon" />
 
                                     <h2 className="text-[1.3rem] font-semibold text-gray-900">Booking In Progress</h2>
                                     <p className="text-sm text-gray-500">Please wait while we confirm your booking</p>
@@ -802,7 +802,7 @@ const RoundTripBook = () => {
                             <div className="flex flex-col items-center w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
                                 {/* Header */}
                                 <div className="flex flex-col items-center mb-4 text-center">
-                                    <img src={bookingDone} className='w-[4.5rem]' alt="" />
+                                    <img src={bookingDone} className='w-[4.5rem]' alt="icon" />
                                     <h2 className="text-[1.3rem] font-semibold text-gray-900">Booking Completed</h2>
                                     <p className="text-sm text-gray-500">Your booking has been successfully processed.</p>
                                 </div>
@@ -832,7 +832,7 @@ const RoundTripBook = () => {
                             <div className="flex flex-col items-center w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
                                 {/* Header */}
                                 <div className="flex flex-col items-center mb-4">
-                                    <img src={failed} className='w-[4.5rem]' alt="" />
+                                    <img src={failed} className='w-[4.5rem]' alt="icon" />
 
                                     <h2 className="text-xl font-semibold text-gray-700">Booking Failed</h2>
                                     <p className="text-sm text-gray-500">Something went wrong with your booking.</p>
@@ -874,7 +874,7 @@ const RoundTripBook = () => {
                             <div className="flex flex-col items-center w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
                                 {/* Header */}
                                 <div className="flex flex-col items-center mb-4">
-                                    <img src={failed} className='w-[4.5rem]' alt="" />
+                                    <img src={failed} className='w-[4.5rem]' alt="icon" />
 
                                     <h2 className="text-xl font-semibold text-gray-700">Payment Failed</h2>
                                     <p className="text-sm text-gray-500">There was an issue processing your payment.</p>

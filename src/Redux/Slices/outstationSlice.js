@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { toast } from "sonner";
 import axiosInstance from '../../Helper/axiosInstance';
 
 // Initial state setup
