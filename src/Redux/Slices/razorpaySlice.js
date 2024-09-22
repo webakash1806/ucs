@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 import axiosInstance from "../../Helper/axiosInstance"
 
@@ -16,7 +16,8 @@ export const getRazorpayId = createAsyncThunk('/razorpay/key', async () => {
         const response = await axiosInstance.get('/payment/key')
         return response.data
     } catch (e) {
-        return toast.error("Failed to load!")
+        return e?.response?.data?.message;
+
     }
 })
 
@@ -27,7 +28,8 @@ export const order = createAsyncThunk('/razorpay/purchase', async (data) => {
 
         return response.data
     } catch (e) {
-        return e
+        return e?.response?.data?.message;
+
     }
 })
 
@@ -40,7 +42,7 @@ export const verifyPayment = createAsyncThunk('/razorpay/payment-verify', async 
         })
         return response.data
     } catch (e) {
-        return toast.error(e?.response?.data?.message)
+        return e?.response?.data?.message
     }
 })
 
@@ -59,15 +61,15 @@ const razorpaySlice = createSlice({
                 state.key = action?.payload?.key
             })
             .addCase(order.fulfilled, (state, action) => {
-                toast.success(action?.payload?.message)
+                // toast.success(action?.payload?.message)
                 state.orderId = action?.payload?.order?.id
             })
             .addCase(verifyPayment.fulfilled, (state, action) => {
-                toast.success(action?.payload?.message)
+                // toast.success(action?.payload?.message)
                 state.isPaymentsVerified = action?.payload?.success
             })
             .addCase(verifyPayment.rejected, (state, action) => {
-                toast.error(action?.payload?.message)
+                // toast.error(action?.payload?.message)
                 state.isPaymentsVerified = action?.payload?.success
             })
 

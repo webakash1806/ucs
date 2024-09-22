@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { FaBars, FaClipboardList, FaDownload, FaSignOutAlt, FaCamera, FaCheckCircle } from 'react-icons/fa';
 import userImg from '../../assets/car1.jpg'; // Replace with your asset paths
 import profileBg from '../../assets/car2.jpg';
@@ -13,6 +13,8 @@ import { FaCar } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
 import car1 from '../../assets/car1.jpg'
 import { VscEye, VscEyeClosed } from 'react-icons/vsc';
+import logo from '../../assets/logo.jpg'
+
 
 const Profile = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -90,6 +92,7 @@ const Profile = () => {
         email: data?.email || "",
         avatar: "",
         phoneNumber: data?.phoneNumber || "",
+        address: data?.address || ""
     });
 
     const download = async (invoiceId) => {
@@ -142,7 +145,7 @@ const Profile = () => {
     const handleFormInput = async (e) => {
         e.preventDefault();
 
-        const { name, email, phoneNumber } = profileData;
+        const { name, email, phoneNumber, address } = profileData;
 
         if (!name || !email || !phoneNumber) {
             return toast.error("All fields are required");
@@ -155,6 +158,7 @@ const Profile = () => {
         const formData = new FormData();
         formData.append('name', name);
         formData.append('phoneNumber', phoneNumber);
+        formData.append('address', address);
         formData.append('avatar', profileData.avatar);
 
         const response = await dispatch(editProfile([data?._id, formData]));
@@ -273,7 +277,7 @@ const Profile = () => {
                                 </li>
                                 <li onClick={() => setSideActive(2)} className={`flex items-center cursor-pointer p-2 space-x-2 font-semibold ${sideActive === 2 ? 'bg-gray-200 text-main' : 'bg-white text-gray-700'} rounded-lg`}>
                                     <FaCalendarCheck size={20} />
-                                    <span className={`ml-2 ${sidebarOpen ? 'block' : 'hidden'} md:block`}>Past bookings</span>
+                                    <span className={`ml-2 ${sidebarOpen ? 'block' : 'hidden'} md:block`}>Confirmed bookings</span>
                                 </li>
 
                                 <li onClick={() => setSideActive(4)} className={`flex items-center cursor-pointer p-2 space-x-2 font-semibold ${sideActive === 4 ? 'bg-gray-200 text-main' : 'bg-white text-gray-700'} rounded-lg`}>
@@ -337,157 +341,166 @@ const Profile = () => {
                                             <label className={`${labelStyle}`} htmlFor="name">Full name</label>
                                             <input className={`${inputStyle}`} type="text" name='name' id='name' value={profileData.name} onChange={handleInput} />
                                         </div>
+                                        <div className={`${mainDiv}`}>
+                                            <label className={`${labelStyle}`} htmlFor="address">Address</label>
+                                            <textarea rows={3} className={`${inputStyle} resize-none`} type="text" name='address' id='address' value={profileData.address} onChange={handleInput} />
+                                        </div>
                                         <button type='submit' onClick={() => setLoaderActive(true)} className={`p-2 px-4 mt-2 flex items-center justify-center text-white bg-main transition-all duration-300 w-full lg:px-6 hover:shadow-[1px_1px_6px_-2px#808080] rounded text-[0.9rem] font-semibold ${!isUpdated && 'opacity-50 cursor-not-allowed'}`} disabled={!isUpdated}>
                                             Update profile {loaderActive && <div className='ml-4 ease-in-out mt-1 size-[1.2rem] border-[2.4px] border-y-[#57575769] animate-spin rounded-full bottom-0'></div>}
                                         </button>
                                     </div>
                                 </div>
                             </form>}
+
                         {sideActive === 2 &&
-                            <div className='flex flex-col items-center justify-start w-full min-h-screen gap-6 p-3 mt-10 md:mt-16'>
-                                <h1 className='w-full text-[1.2rem] font-bold mt-1'>Booking List</h1>
+                            <div className='flex flex-col items-center justify-start w-full gap-6 p-3 mt-10 md:mt-16'>
                                 {!bookingData ?
                                     <p>Loading</p> :
-                                    bookingData && bookingData?.length === 0 ?
-                                        <p>No booking till now</p> :
-                                        bookingData?.map((item, index) => {
-                                            return <motion.div
-                                                key={index}
-                                                layoutId={item?._id}
-                                                className="flex flex-col w-full overflow-hidden border border-gray-200 rounded-lg shadow-md cursor-pointer"
-                                                onClick={() => setItem(item)} // On click, set the selected card ID
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                exit={{ opacity: 0 }}
-                                            >
-                                                <div className="flex flex-col items-center justify-between w-full mx-auto bg-white border-b md:flex-row">
-                                                    {/* Car image and details */}
-                                                    <div className="flex items-start justify-between w-full pr-3 border-b md:w-fit">
-                                                        <img
-                                                            src={item?.photo?.secure_url || car1}
-                                                            alt={`car ${index + 1}`}
-                                                            className="max-w-[7.8rem] min-w-[7.8rem] min-h-[5.3rem] max-h-[5.3rem] object-cover md:max-h-[6rem] md:min-h-[6rem] md:min-w-[9.9rem] md:max-w-[9.8rem]"
-                                                        />
-                                                        <div className="w-full ml-1 md:hidden">
-                                                            <div className="block pt-3 md:pt-1 md:text-left">
-                                                                <p className='text-[0.8rem] md:text-[0.85rem] font-semibold tracking-wide border rounded border-main bg-sky-100 w-fit p-[0.1rem] px-2'>{item?.bookingId}</p>
-                                                                <h2 className=" text-[1.4rem] mt-1 leading-7 mb-1 font-semibold line-clamp-1">
-                                                                    {item?.category}
-                                                                </h2>
+                                    bookingData && bookingData?.filter(detail => detail?.status === "confirmed")?.length === 0 ?
+                                        <div className='flex flex-col items-center gap-2'>
+                                            <p>No booking till now</p>
+                                            <button onClick={() => navigate("/")} className='p-1 px-3 text-white rounded bg-main'>Book now</button>
+                                        </div> :
+                                        <>
+                                            <h1 className='w-full text-[1.2rem] font-bold mt-1'>Confirmed Booking List</h1>
+                                            {bookingData?.filter(detail => detail?.status === "confirmed")?.map((item, index) => {
+                                                return <motion.div
+                                                    key={index}
+                                                    layoutId={item?._id}
+                                                    className="flex flex-col w-full overflow-hidden border border-gray-200 rounded-lg shadow-md cursor-pointer"
+                                                    onClick={() => setItem(item)} // On click, set the selected card ID
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    exit={{ opacity: 0 }}
+                                                >
+                                                    <div className="flex flex-col items-center justify-between w-full mx-auto bg-white border-b md:flex-row">
+                                                        {/* Car image and details */}
+                                                        <div className="flex items-start justify-between w-full pr-3 border-b md:w-fit">
+                                                            <img
+                                                                src={item?.photo?.secure_url || car1}
+                                                                alt={`car ${index + 1}`}
+                                                                className="max-w-[7.8rem] min-w-[7.8rem] min-h-[5.3rem] max-h-[5.3rem] object-cover md:max-h-[6rem] md:min-h-[6rem] md:min-w-[9.9rem] md:max-w-[9.8rem]"
+                                                            />
+                                                            <div className="w-full ml-1 md:hidden">
+                                                                <div className="block pt-3 md:pt-1 md:text-left">
+                                                                    <p className='text-[0.8rem] md:text-[0.85rem] font-semibold tracking-wide border rounded border-main bg-sky-100 w-fit p-[0.1rem] px-2'>{item?.bookingId}</p>
+                                                                    <h2 className=" text-[1.4rem] mt-1 leading-7 mb-1 font-semibold line-clamp-1">
+                                                                        {item?.category}
+                                                                    </h2>
+                                                                </div>
+
                                                             </div>
 
                                                         </div>
 
-                                                    </div>
-
-                                                    {/* Right section */}
-                                                    <div className="w-full md:max-w-[70%] pl-2">
-                                                        <div className="hidden text-center md:block md:text-left">
-                                                            <h2 className="mb-2 text-2xl font-semibold">{item?.category}</h2>
-                                                        </div>
-                                                        <div className="flex items-center md:hidden mr-2 w-fit text-[1.1rem] font-bold text-gray-800">
-                                                            <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
-                                                            {Math.ceil(item?.totalPrice)}
-
-                                                        </div>
-                                                        <div className="flex relative pl-3 flex-col items-start  text-[0.9rem] md:mt-0 font-semibold font-sans mb-2">
-                                                            <div className="absolute top-[0.3rem] text-light left-[-0.3rem] text-[0.75rem] flex items-center justify-center flex-col">
-                                                                <div className="rotate-[180deg] mr-[0.01px] size-[0.65rem] border-light border-[0.2rem] rounded-full"></div>
-                                                                <div className="h-[0.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1"></div>
-                                                                <FaLocationDot />
+                                                        {/* Right section */}
+                                                        <div className="w-full md:max-w-[70%] pl-2">
+                                                            <div className="hidden text-center md:block md:text-left">
+                                                                <h2 className="mb-2 text-2xl font-semibold">{item?.category}</h2>
                                                             </div>
-                                                            {item?.tripType === "Round" ?
-                                                                <>
-                                                                    <p className="line-clamp-1">{item?.fromLocation}</p>
-                                                                    <p className="line-clamp-1">{item?.toLocation}</p>
-                                                                </> :
-                                                                <>
-                                                                    <p className="line-clamp-1">{item?.pickupAddress}</p>
-                                                                    <p className="line-clamp-1">{item?.dropAddress}</p>
-                                                                </>}
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Price and button */}
-                                                    <div className="hidden md:flex md:flex-col min-w-[9rem] max-w-[9rem] items-center">
-                                                        <div>
-                                                            <div className="flex items-center text-2xl font-bold text-gray-800">
-                                                                <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
+                                                            <div className="flex items-center md:hidden mr-2 w-fit text-[1.1rem] font-bold text-gray-800">
+                                                                <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " />{' '}
                                                                 {Math.ceil(item?.totalPrice)}
 
                                                             </div>
-                                                        </div>
-                                                        <button className="px-4 py-[0.25rem] mt-1 text-white transition rounded-md shadow bg-main border">
-                                                            View Detail
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-                                                {/* Status and Trip Type */}
-                                                <div>
-                                                    <div className='p-2 px-3 pb-0 text-[0.9rem] font-semibold flex justify-between'>
-                                                        <p>Pickup : {item?.pickupDate.split('T')[0]} at {item?.pickupTime}</p>
-                                                        {item?.tripType === "Round" &&
-                                                            <p>Return : {item?.returnDate?.split('T')[0]}</p>
-
-                                                        }
-                                                    </div>
-                                                    <div className="flex items-center justify-between gap-2 p-3 md:pl-4 text-[0.85rem] md:text-[0.95rem] font-semibold text-main">
-                                                        <div className="flex gap-2">
-                                                            <div
-                                                                className={`flex cursor-pointer items-center p-[0.15rem] pr-1 
-                                                 ${item?.status === 'confirmed'
-                                                                        ? 'bg-green-100 border border-green-500'
-                                                                        : item?.status === 'pending'
-                                                                            ? 'bg-yellow-100 border border-yellow-500'
-                                                                            : item?.status === 'ongoing'
-                                                                                ? 'bg-blue-100 border border-blue-500'
-                                                                                : item?.status === 'cancelled'
-                                                                                    ? 'bg-red-100 border border-red-500'
-                                                                                    : item?.status === 'complete'
-                                                                                        ? 'bg-gray-100 border border-gray-500'
-                                                                                        : 'bg-red-100 border border-red-500'
-                                                                    } 
-                                                 rounded`}
-                                                            >
-                                                                <div className="p-1 rounded-full">
-                                                                    {item?.status === 'confirmed' && (
-                                                                        <AiOutlineCheckCircle className="w-4 h-4 text-green-600" />
-                                                                    )}
-                                                                    {item?.status === 'pending' && (
-                                                                        <AiOutlineClockCircle className="w-4 h-4 text-yellow-600" />
-                                                                    )}
-                                                                    {item?.status === 'ongoing' && (
-                                                                        <AiOutlineSync className="w-4 h-4 text-blue-600" />
-                                                                    )}
-                                                                    {item?.status === 'cancelled' && (
-                                                                        <AiOutlineCloseCircle className="w-4 h-4 text-red-600" />
-                                                                    )}
-                                                                    {item?.status === 'complete' && (
-                                                                        <AiOutlineCheck className="w-4 h-4 text-gray-600" />
-                                                                    )}
+                                                            <div className="flex relative pl-3 flex-col items-start  text-[0.9rem] md:mt-0 font-semibold font-sans mb-2">
+                                                                <div className="absolute top-[0.3rem] text-light left-[-0.3rem] text-[0.75rem] flex items-center justify-center flex-col">
+                                                                    <div className="rotate-[180deg] mr-[0.01px] size-[0.65rem] border-light border-[0.2rem] rounded-full"></div>
+                                                                    <div className="h-[0.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1"></div>
+                                                                    <FaLocationDot />
                                                                 </div>
-                                                                <span className="text-gray-700 capitalize">{item?.status}</span>
+                                                                {item?.tripType === "Round" ?
+                                                                    <>
+                                                                        <p className="line-clamp-1">{item?.fromLocation}</p>
+                                                                        <p className="line-clamp-1">{item?.toLocation}</p>
+                                                                    </> :
+                                                                    <>
+                                                                        <p className="line-clamp-1">{item?.pickupAddress}</p>
+                                                                        <p className="line-clamp-1">{item?.dropAddress}</p>
+                                                                    </>}
                                                             </div>
                                                         </div>
-                                                        <div className="md:flex hidden items-center p-[0.15rem] pr-2 md:px-3 md:pl-2 cursor-pointer bg-blue-50 border border-main rounded">
-                                                            <div className="p-1 rounded-full">
-                                                                <FaCar className="w-4 h-4 text-main" />
+
+                                                        {/* Price and button */}
+                                                        <div className="hidden md:flex md:flex-col min-w-[9rem] max-w-[9rem] items-center">
+                                                            <div>
+                                                                <div className="flex items-center text-2xl font-bold text-gray-800">
+                                                                    <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " />{' '}
+                                                                    {Math.ceil(item?.totalPrice)}
+
+                                                                </div>
                                                             </div>
-                                                            <span className="text-gray-700">{item?.bookingId}</span>
-                                                        </div>
-                                                        <div className="flex items-center p-[0.15rem] pr-2 md:px-3 md:pl-2 cursor-pointer bg-blue-50 border border-main rounded">
-                                                            <div className="p-1 rounded-full">
-                                                                <FaCar className="w-4 h-4 text-main" />
-                                                            </div>
-                                                            <span className="text-gray-700">{item?.tripType.split(' ')[0]} trip</span>
+                                                            <button className="px-4 py-[0.25rem] mt-1 text-white transition rounded-md shadow bg-main border">
+                                                                View Detail
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </motion.div>
-                                        })}
 
-                                {/* Expanded Content */}
+                                                    {/* Status and Trip Type */}
+                                                    <div>
+                                                        <div className='p-2 px-3 pb-0 text-[0.9rem] font-semibold flex justify-between'>
+                                                            <p>Pickup : {item?.pickupDate.split('T')[0]} at {item?.pickupTime}</p>
+                                                            {item?.tripType === "Round" &&
+                                                                <p>Return : {item?.returnDate?.split('T')[0]}</p>
+
+                                                            }
+                                                        </div>
+                                                        <div className="flex items-center justify-between gap-2 p-3 md:pl-4 text-[0.85rem] md:text-[0.95rem] font-semibold text-main">
+                                                            <div className="flex gap-2">
+                                                                <div
+                                                                    className={`flex cursor-pointer items-center p-[0.15rem] pr-1 
+                                                 ${item?.status === 'confirmed'
+                                                                            ? 'bg-green-100 border border-green-500'
+                                                                            : item?.status === 'pending'
+                                                                                ? 'bg-yellow-100 border border-yellow-500'
+                                                                                : item?.status === 'ongoing'
+                                                                                    ? 'bg-blue-100 border border-blue-500'
+                                                                                    : item?.status === 'cancelled'
+                                                                                        ? 'bg-red-100 border border-red-500'
+                                                                                        : item?.status === 'complete'
+                                                                                            ? 'bg-gray-100 border border-gray-500'
+                                                                                            : 'bg-red-100 border border-red-500'
+                                                                        } 
+                                                 rounded`}
+                                                                >
+                                                                    <div className="p-1 rounded-full">
+                                                                        {item?.status === 'confirmed' && (
+                                                                            <AiOutlineCheckCircle className="w-4 h-4 text-green-600" />
+                                                                        )}
+                                                                        {item?.status === 'pending' && (
+                                                                            <AiOutlineClockCircle className="w-4 h-4 text-yellow-600" />
+                                                                        )}
+                                                                        {item?.status === 'ongoing' && (
+                                                                            <AiOutlineSync className="w-4 h-4 text-blue-600" />
+                                                                        )}
+                                                                        {item?.status === 'cancelled' && (
+                                                                            <AiOutlineCloseCircle className="w-4 h-4 text-red-600" />
+                                                                        )}
+                                                                        {item?.status === 'complete' && (
+                                                                            <AiOutlineCheck className="w-4 h-4 text-gray-600" />
+                                                                        )}
+                                                                    </div>
+                                                                    <span className="text-gray-700 capitalize">{item?.status}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="md:flex hidden items-center p-[0.15rem] pr-2 md:px-3 md:pl-2 cursor-pointer bg-blue-50 border border-main rounded">
+                                                                <div className="p-1 rounded-full">
+                                                                    <FaCar className="w-4 h-4 text-main" />
+                                                                </div>
+                                                                <span className="text-gray-700">{item?.bookingId}</span>
+                                                            </div>
+                                                            <div className="flex items-center p-[0.15rem] pr-2 md:px-3 md:pl-2 cursor-pointer bg-blue-50 border border-main rounded">
+                                                                <div className="p-1 rounded-full">
+                                                                    <FaCar className="w-4 h-4 text-main" />
+                                                                </div>
+                                                                <span className="text-gray-700">{item?.tripType.split(' ')[0]} trip</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            })}
+                                        </>}
+
                                 {/* Expanded Content */}
                                 <AnimatePresence>
                                     {item && (
@@ -498,20 +511,20 @@ const Profile = () => {
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 0.4 }}
                                                 exit={{ opacity: 0 }}
-                                                className="fixed inset-0 z-40 bg-black"
+                                                className="fixed inset-0 h-[100rem] z-40 bg-black"
                                             />
 
                                             {/* Modal Popup */}
                                             <motion.div
                                                 layoutId={item?._id}
                                                 key="modal"
-                                                className="fixed inset-0 z-50 max-h-[40vh]  flex items-center justify-center p-4 top-60 "
+                                                className="fixed inset-0 z-50 flex items-center justify-center p-4 top-16 "
                                                 initial={{ opacity: 0, scale: 0.8 }}
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 exit={{ opacity: 0, scale: 0.8 }}
                                             >
 
-                                                <div className='relative scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-200 border scroll-m-1 border-main top-2 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md max-h-[88vh] overflow-y-auto'>
+                                                <div className='relative scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-200 border scroll-m-1 border-main top-2 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md max-h-[80vh] overflow-y-auto'>
                                                     <motion.button
                                                         onClick={() => setItem(null)}
                                                         className="absolute  right-1 top-[-0.75rem]  mt-4 text-red-600 bg-red-50 border border-red-500 rounded-full p-1 rounded-tr-lg"
@@ -696,15 +709,24 @@ const Profile = () => {
 
                                                             <h3 className='mb-2 font-semibold'>Billing details :</h3>
                                                             <div className='text-[0.9rem] flex flex-col gap-2'>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {Math.ceil(item?.totalPrice)}</span></div>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>{Math.ceil(Number(10) * (Math.ceil(item?.totalPrice)) / 100)} paid at the time of booking</span></div>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {Math.ceil(item?.totalPrice - (Number(10) * (Math.ceil(item?.totalPrice)) / 100))} to driver during the trip with extras (if applicable)</span></div>
+                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {(Number(item?.totalPrice)).toFixed(2)}</span></div>
+                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
+                                                                {item?.paymentMode === "100" ?
+                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
+                                                                    :
+                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
+                                                                }
                                                             </div>
 
-                                                            <div className='mt-3 font-semibold text-[0.95rem]'>
+                                                            <div className='mt-3 pt-2 font-semibold text-[0.92rem] border-t border-gray-400'>
                                                                 *Extra charges if applicable (to be paid to the driver during the trip)
-                                                                <ul className='ml-6 font-normal list-decimal text-[0.9rem]'>
-                                                                    <li>Distance travelled beyond {item?.distance} km will be charged at Rs. {item?.extraPerKm}/Km.</li>
+                                                                <ul className='ml-6 font-normal list-decimal text-[0.87rem]'>
+                                                                    {item?.tripType === "Local" ?
+                                                                        <li>Distance travelled beyond {Number(item?.distance) === 80 ? "80" : "120"} km will be charged at Rs. {item?.extraPerKm}/Km and beyond {Number(item?.distance) === 80 ? "8" : "12"} hr will be charged at Rs. {item?.extraPerHour}/hr.</li>
+                                                                        :
+                                                                        <li>Distance travelled beyond {item?.distance} km will be charged at Rs. {item?.extraPerKm}/Km.</li>
+
+                                                                    }
                                                                     <li>This fare not includes toll tax and parking.</li>
                                                                 </ul>
                                                             </div>
@@ -739,6 +761,10 @@ const Profile = () => {
                                                                     )
                                                                 })}
                                                             </ul>
+                                                        </div>
+                                                        <div className='flex items-center justify-between pt-2 m-2 font-semibold text-main'>
+                                                            <img src={logo} className='w-[5rem]' alt="" />
+                                                            Thankyou for booking with us!
                                                         </div>
                                                     </div>
                                                 </div>
@@ -959,20 +985,20 @@ const Profile = () => {
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 0.4 }}
                                                 exit={{ opacity: 0 }}
-                                                className="fixed inset-0 z-40 bg-black"
+                                                className="fixed inset-0 h-[100rem] z-40 bg-black"
                                             />
 
                                             {/* Modal Popup */}
                                             <motion.div
                                                 layoutId={item?._id}
                                                 key="modal"
-                                                className="fixed inset-0 z-50 max-h-[40vh]  flex items-center justify-center p-4 top-60 "
+                                                className="fixed inset-0 z-50 flex items-center justify-center p-4 top-16 "
                                                 initial={{ opacity: 0, scale: 0.8 }}
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 exit={{ opacity: 0, scale: 0.8 }}
                                             >
 
-                                                <div className='relative scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-200 border scroll-m-1 border-main top-2 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md max-h-[88vh] overflow-y-auto'>
+                                                <div className='relative scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-200 border scroll-m-1 border-main top-2 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md max-h-[80vh] overflow-y-auto'>
                                                     <motion.button
                                                         onClick={() => setItem(null)}
                                                         className="absolute  right-1 top-[-0.75rem]  mt-4 text-red-600 bg-red-50 border border-red-500 rounded-full p-1 rounded-tr-lg"
@@ -1157,15 +1183,24 @@ const Profile = () => {
 
                                                             <h3 className='mb-2 font-semibold'>Billing details :</h3>
                                                             <div className='text-[0.9rem] flex flex-col gap-2'>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {Math.ceil(item?.totalPrice)}</span></div>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>{Math.ceil(Number(10) * (Math.ceil(item?.totalPrice)) / 100)} paid at the time of booking</span></div>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {Math.ceil(item?.totalPrice - (Number(10) * (Math.ceil(item?.totalPrice)) / 100))} to driver during the trip with extras (if applicable)</span></div>
+                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {(Number(item?.totalPrice)).toFixed(2)}</span></div>
+                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
+                                                                {item?.paymentMode === "100" ?
+                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
+                                                                    :
+                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
+                                                                }
                                                             </div>
 
-                                                            <div className='mt-3 font-semibold text-[0.95rem]'>
+                                                            <div className='mt-3 pt-2 font-semibold text-[0.92rem] border-t border-gray-400'>
                                                                 *Extra charges if applicable (to be paid to the driver during the trip)
-                                                                <ul className='ml-6 font-normal list-decimal text-[0.9rem]'>
-                                                                    <li>Distance travelled beyond {item?.distance} km will be charged at Rs. {item?.extraPerKm}/Km.</li>
+                                                                <ul className='ml-6 font-normal list-decimal text-[0.87rem]'>
+                                                                    {item?.tripType === "Local" ?
+                                                                        <li>Distance travelled beyond {Number(item?.distance) === 80 ? "80" : "120"} km will be charged at Rs. {item?.extraPerKm}/Km and beyond {Number(item?.distance) === 80 ? "8" : "12"} hr will be charged at Rs. {item?.extraPerHour}/hr.</li>
+                                                                        :
+                                                                        <li>Distance travelled beyond {item?.distance} km will be charged at Rs. {item?.extraPerKm}/Km.</li>
+
+                                                                    }
                                                                     <li>This fare not includes toll tax and parking.</li>
                                                                 </ul>
                                                             </div>
@@ -1200,6 +1235,10 @@ const Profile = () => {
                                                                     )
                                                                 })}
                                                             </ul>
+                                                        </div>
+                                                        <div className='flex items-center justify-between pt-2 m-2 font-semibold text-main'>
+                                                            <img src={logo} className='w-[5rem]' alt="" />
+                                                            Thankyou for booking with us!
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1370,20 +1409,20 @@ const Profile = () => {
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 0.4 }}
                                                 exit={{ opacity: 0 }}
-                                                className="fixed inset-0 z-40 bg-black"
+                                                className="fixed inset-0 h-[100rem] z-40 bg-black"
                                             />
 
                                             {/* Modal Popup */}
                                             <motion.div
                                                 layoutId={item?._id}
                                                 key="modal"
-                                                className="fixed inset-0 z-50 max-h-[40vh]  flex items-center justify-center p-4 top-60 "
+                                                className="fixed inset-0 z-50 flex items-center justify-center p-4 top-16 "
                                                 initial={{ opacity: 0, scale: 0.8 }}
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 exit={{ opacity: 0, scale: 0.8 }}
                                             >
 
-                                                <div className='relative scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-200 border scroll-m-1 border-main top-2 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md max-h-[88vh] overflow-y-auto'>
+                                                <div className='relative scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-200 border scroll-m-1 border-main top-2 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md max-h-[80vh] overflow-y-auto'>
                                                     <motion.button
                                                         onClick={() => setItem(null)}
                                                         className="absolute  right-1 top-[-0.75rem]  mt-4 text-red-600 bg-red-50 border border-red-500 rounded-full p-1 rounded-tr-lg"
@@ -1568,15 +1607,24 @@ const Profile = () => {
 
                                                             <h3 className='mb-2 font-semibold'>Billing details :</h3>
                                                             <div className='text-[0.9rem] flex flex-col gap-2'>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {Math.ceil(item?.totalPrice)}</span></div>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>{Math.ceil(Number(10) * (Math.ceil(item?.totalPrice)) / 100)} paid at the time of booking</span></div>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {Math.ceil(item?.totalPrice - (Number(10) * (Math.ceil(item?.totalPrice)) / 100))} to driver during the trip with extras (if applicable)</span></div>
+                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {(Number(item?.totalPrice)).toFixed(2)}</span></div>
+                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
+                                                                {item?.paymentMode === "100" ?
+                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
+                                                                    :
+                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
+                                                                }
                                                             </div>
 
-                                                            <div className='mt-3 font-semibold text-[0.95rem]'>
+                                                            <div className='mt-3 pt-2 font-semibold text-[0.92rem] border-t border-gray-400'>
                                                                 *Extra charges if applicable (to be paid to the driver during the trip)
-                                                                <ul className='ml-6 font-normal list-decimal text-[0.9rem]'>
-                                                                    <li>Distance travelled beyond {item?.distance} km will be charged at Rs. {item?.extraPerKm}/Km.</li>
+                                                                <ul className='ml-6 font-normal list-decimal text-[0.87rem]'>
+                                                                    {item?.tripType === "Local" ?
+                                                                        <li>Distance travelled beyond {Number(item?.distance) === 80 ? "80" : "120"} km will be charged at Rs. {item?.extraPerKm}/Km and beyond {Number(item?.distance) === 80 ? "8" : "12"} hr will be charged at Rs. {item?.extraPerHour}/hr.</li>
+                                                                        :
+                                                                        <li>Distance travelled beyond {item?.distance} km will be charged at Rs. {item?.extraPerKm}/Km.</li>
+
+                                                                    }
                                                                     <li>This fare not includes toll tax and parking.</li>
                                                                 </ul>
                                                             </div>
@@ -1611,6 +1659,10 @@ const Profile = () => {
                                                                     )
                                                                 })}
                                                             </ul>
+                                                        </div>
+                                                        <div className='flex items-center justify-between pt-2 m-2 font-semibold text-main'>
+                                                            <img src={logo} className='w-[5rem]' alt="" />
+                                                            Thankyou for booking with us!
                                                         </div>
                                                     </div>
                                                 </div>

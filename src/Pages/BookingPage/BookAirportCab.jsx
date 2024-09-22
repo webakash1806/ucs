@@ -8,7 +8,7 @@ import { TbAirConditioning } from 'react-icons/tb'
 import { PiUsersThreeFill } from 'react-icons/pi'
 import { useDispatch, useSelector } from 'react-redux'
 import { sendBookingData } from '../../Redux/Slices/localTripSlice'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import { order, verifyPayment } from '../../Redux/Slices/razorpaySlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
@@ -19,6 +19,7 @@ import { FaRegCheckCircle } from 'react-icons/fa'
 import bookingDone from "../../assets/icons/bookingDone.gif"
 import bookingProgress from "../../assets/icons/bookProgress.gif"
 import failed from "../../assets/icons/failed.gif"
+
 const BookAirportCab = () => {
 
     const navigate = useNavigate()
@@ -31,7 +32,23 @@ const BookAirportCab = () => {
     const dispatch = useDispatch()
     const location = useLocation()
 
-    const { cabData, tcData, pickupDate, pickup, drop, airpotValue, pickupTime, tripType } = location.state
+    useEffect(() => {
+        if (!location.state) {
+            navigate('/')
+        }
+    }, [])
+
+    const data = location.state
+
+    const cabData = data?.cabData
+    const tcData = data?.tcData
+    const pickupDate = data?.pickupDate
+    const pickup = data?.pickup
+    const drop = data?.drop
+    const airpotValue = data?.airpotValue
+    const pickupTime = data?.pickupTime
+    const tripType = data?.tripType
+
     const totalPrice = cabData?.rates[0]?.rate
     const [finalPrice, setFinalPrice] = useState(Number(totalPrice))
     const [price10, setPrice10] = useState(Number(finalPrice) * 10 / 100)
@@ -76,6 +93,8 @@ const BookAirportCab = () => {
 
 
     const formatPickupDate = (dateString) => {
+        if (!dateString) return
+
         // Create a new Date object directly from the "yyyy-mm-dd" string
         const dateObject = new Date(dateString);
 
@@ -260,7 +279,8 @@ const BookAirportCab = () => {
 
         if (actualPrice > 0) {
             console.log(actualPrice)
-            dispatch(order({ amount: actualPrice, forName: "Airport" }));
+            const res = dispatch(order({ amount: actualPrice, forName: "Airport" }));
+            console.log(res)
         }
     }, [actualPrice, dispatch]);
 
@@ -396,9 +416,9 @@ const BookAirportCab = () => {
                             </div>
                             <div>
                                 <div className="flex items-center text-lg sm:text-[1.3rem] font-semibold">
-                                    <h2>{pickup.split(",")[0]}</h2>
+                                    <h2>{pickup?.split(",")[0]}</h2>
                                     <MdKeyboardArrowRight className="mx-1 text-2xl" />
-                                    <h2>{drop.split(",")[0]}</h2>
+                                    <h2>{drop?.split(",")[0]}</h2>
                                 </div>
                                 <p className="text-sm font-semibold text-gray-600">{formatPickupDate(pickupDate)} <span>{pickupTime}</span></p>
                             </div>
@@ -650,7 +670,7 @@ const BookAirportCab = () => {
                                                     className="hidden mr-2 peer"
                                                 />
                                                 <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
-                                                10%  <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{price10}
+                                                10%  <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{price10.toFixed(2)}
 
                                                 </span>
                                                 <span className="ml-1">
@@ -668,7 +688,7 @@ const BookAirportCab = () => {
                                                     className="hidden mr-2 peer"
                                                 />
                                                 <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
-                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{finalPrice}</span>
+                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{finalPrice.toFixed(2)}</span>
                                                 <span className='ml-1'> now</span>
                                             </label>
                                         </div>

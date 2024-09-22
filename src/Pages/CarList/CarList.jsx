@@ -4,9 +4,9 @@ import car1 from '../../assets/car1.jpg'
 import { MdAirlineSeatReclineExtra, MdArrowLeft, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md';
 import { TbAirConditioning } from 'react-icons/tb';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTCDetails } from '../../Redux/Slices/localTripSlice';
+import { getLocalCityData, getTCDetails } from '../../Redux/Slices/localTripSlice';
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi';
 import { SiToll } from 'react-icons/si';
 import { IoDocumentText } from 'react-icons/io5';
@@ -28,16 +28,18 @@ const CarList = () => {
     const location = useLocation()
     const [pickupCity, setPickupCity] = useState('')
     const [filteredData, setFilteredData] = useState({})
+
+    useEffect(() => {
+        if (!location.state) {
+            navigate('/')
+        }
+    }, [])
+
     const data = location.state
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
 
     const tc = tcData?.tC?.map(data => data?.text)
-
-
-
-
-
 
 
     const pickupDate = data?.pickupDate
@@ -46,7 +48,13 @@ const CarList = () => {
 
     useEffect(() => {
         setPickupCity(data?.city)
+
+        const res = dispatch(getLocalCityData())
+
+        console.log(res)
+
         const filteredCityData = data?.cabData?.allCityRate?.filter(cityRate => cityRate?.cityName === pickupCity);
+        if (!filteredCityData) return
         setFilteredData(...filteredCityData)
         if (tripType === "Local") {
             const data = {
@@ -54,11 +62,13 @@ const CarList = () => {
             }
             dispatch(getTCDetails(data))
         }
-    }, [pickupCity])
+    }, [pickupCity, location.state])
 
     useEffect(() => {
         setModifyActive(false)
     }, [location.state])
+
+    console.log(filteredData)
 
     const handleBook = (data) => {
 
@@ -90,6 +100,8 @@ const CarList = () => {
 
 
     const formatPickupDate = (dateString) => {
+        console.log(dateString)
+        if (!dateString) return
         // Create a new Date object directly from the "yyyy-mm-dd" string
         const dateObject = new Date(dateString);
 
@@ -127,14 +139,14 @@ const CarList = () => {
 
                             <div className='items-center justify-center gap-1 md:flex'>
                                 <div className='rotate-[180deg] mr-[0.01px]  size-[0.7rem] border-light border-[0.2rem] hidden md:block rounded-full' ></div>
-                                <h2 className='font-semibold tracking-wide'>{pickupCity.split(',')[0]}</h2>
+                                <h2 className='font-semibold tracking-wide'>{pickupCity?.split(',')[0]}</h2>
                             </div>
                             <MdKeyboardArrowRight className='hidden text-[1.3rem] md:block' />
                             <div className='items-center justify-center gap-1 md:flex'>
 
                                 <FaLocationDot className='ml-[0.05rem] text-[0.85rem] text-light hidden md:block' />
 
-                                <h2 className='font-semibold tracking-wide'> {pickupCity.split(',')[0]}
+                                <h2 className='font-semibold tracking-wide'> {pickupCity?.split(',')[0]}
                                 </h2>
                             </div>
                         </div>

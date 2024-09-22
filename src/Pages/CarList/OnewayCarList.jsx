@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../../assets/car1.jpg'
 import { MdArrowLeft, MdKeyboardArrowRight, MdLocalParking } from 'react-icons/md';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTCDetails } from '../../Redux/Slices/localTripSlice';
 import { GiGasPump } from 'react-icons/gi';
@@ -26,9 +26,21 @@ const OnewayCarList = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const [filteredData, setFilteredData] = useState()
-    const { pickupDate, tripType, pickupTime, pickup, drop } = location.state
 
 
+    useEffect(() => {
+        if (!location.state) {
+            navigate('/')
+        }
+    }, [])
+
+    const data = location.state
+
+    const pickupDate = data?.pickupDate
+    const tripType = data?.tripType
+    const pickupTime = data?.pickupTime
+    const pickup = data?.pickup
+    const drop = data?.drop
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
 
@@ -41,6 +53,7 @@ const OnewayCarList = () => {
         }
 
         const res = await dispatch(getOnewayCabData(cityData))
+        console.log(res.payload.data)
         setFilteredData(res?.payload?.data)
     }
 
@@ -83,6 +96,9 @@ const OnewayCarList = () => {
 
 
     const formatPickupDate = (dateString) => {
+
+        if (!dateString) return
+
         // Create a new Date object directly from the "yyyy-mm-dd" string
         const dateObject = new Date(dateString);
 
@@ -122,14 +138,14 @@ const OnewayCarList = () => {
 
                             <div className='items-center justify-center gap-1 md:flex'>
                                 <div className='rotate-[180deg] mr-[0.01px]  size-[0.7rem] border-light border-[0.2rem] hidden md:block rounded-full' ></div>
-                                <h2 className='font-semibold tracking-wide'>{pickup.split(',')[0]}</h2>
+                                <h2 className='font-semibold tracking-wide'>{pickup?.split(',')[0]}</h2>
                             </div>
                             <MdKeyboardArrowRight className='hidden text-[1.3rem] md:block' />
                             <div className='items-center justify-center gap-1 md:flex'>
 
                                 <FaLocationDot className='ml-[0.05rem] text-[0.85rem] text-light hidden md:block' />
 
-                                <h2 className='font-semibold tracking-wide'> {drop.split(',')[0]}
+                                <h2 className='font-semibold tracking-wide'> {drop?.split(',')[0]}
                                 </h2>
                             </div>
                         </div>
@@ -144,7 +160,10 @@ const OnewayCarList = () => {
                     <p className='text-[0.85rem]  sm:text-[1rem]'>{formatPickupDate(pickupDate)}
                         <span> {pickupTime}</span>
                     </p>
-                    <button className='text-white bg-main p-[0.2rem] text-[0.9rem] font-semibold px-4 rounded' onClick={() => setModifyActive(true)}>Modify</button>
+                    <button className='text-white bg-main p-[0.2rem] text-[0.9rem] font-semibold px-4 rounded' onClick={() => {
+                        setModifyActive(true)
+                        setFilteredData()
+                    }}>Modify</button>
                 </div>
             </div>
             {modifyActive &&
@@ -160,10 +179,10 @@ const OnewayCarList = () => {
                 </div>}
             <div className='flex flex-col py-10  px-[5vw] sm:px-[7vw] md:px-[9vw] lg:px-[11vw] items-center justify-center gap-4'>
                 {
-                    !filteredData ? "Loading" :
+                    !filteredData ? "Loading..." :
                         filteredData && filteredData?.length === 0 ?
                             <p>No Cabs available to this city right now</p> :
-                            filteredData?.map((data, index) => {
+                            filteredData?.rates?.map((data, index) => {
                                 return <div key={index} className="flex flex-col max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden border-main  hover:shadow-none transition-all duration-300 border rounded-lg shadow-lg">
 
                                     <div className='flex flex-col items-center justify-between w-full mx-auto bg-white border-b sm:flex-row'>

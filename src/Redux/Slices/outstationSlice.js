@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axiosInstance from '../../Helper/axiosInstance';
 
 // Initial state setup
@@ -17,8 +17,8 @@ export const getRoundCityData = createAsyncThunk('/outstation/roundCityData', as
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -31,8 +31,8 @@ export const getRoundTripData = createAsyncThunk('/outstation/roundTripData', as
         console.log(res)
         return res.data;
     } catch (e) {
-        // toast.error(e?.response?.data?.message);
-        return e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -42,8 +42,8 @@ export const sendRoundTripData = createAsyncThunk('/outstation/roundTripData', a
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -54,8 +54,8 @@ export const getTCDetails = createAsyncThunk('/tc/byTrip', async (data) => {
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -66,8 +66,8 @@ export const getDistance = createAsyncThunk('/outstation/distance', async (data)
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -78,8 +78,8 @@ export const getOnewayCityData = createAsyncThunk('/outstation/onewayCityData', 
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -89,8 +89,8 @@ export const getOnewayCabData = createAsyncThunk('/outstation/onewayCabData', as
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -100,8 +100,8 @@ export const sendOnewayTripData = createAsyncThunk('/outstation/onewayBookingDat
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 

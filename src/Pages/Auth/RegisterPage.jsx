@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createAccount, verifyOTP } from "../../Redux/Slices/authSlice"; // Adjust the path according to your project structure
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import signup from '../../assets/icons/registerPage.gif';
 import verify from '../../assets/icons/verify.gif';
 import { Link, useNavigate } from "react-router-dom";
@@ -20,6 +20,15 @@ const RegisterPage = () => {
         phoneNumber: "",
     });
 
+    const [errorMessage, setErrorMessage] = useState({
+        name: false,
+        email: false,
+        phoneNumber: false,
+        password: false,
+
+    })
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -33,10 +42,36 @@ const RegisterPage = () => {
         setLoading(true);
         const { email, name, phoneNumber, password } = formData;
 
-        if (!email || !name || !phoneNumber || !password) {
+
+        let hasError = false;
+
+        if (!email) {
             setLoading(false);
-            return toast.error("All fields are required");
+            setErrorMessage((prev) => ({ ...prev, email: true }));
+            hasError = true;
         }
+
+        if (!name) {
+            setLoading(false);
+            setErrorMessage((prev) => ({ ...prev, name: true }));
+            hasError = true;
+        }
+
+        if (!phoneNumber) {
+            setLoading(false);
+            setErrorMessage((prev) => ({ ...prev, phoneNumber: true }));
+            hasError = true;
+        }
+
+        if (!password) {
+            setLoading(false);
+
+            setErrorMessage((prev) => ({ ...prev, password: true }));
+            hasError = true;
+        }
+
+        if (hasError) return;
+
 
         const response = await dispatch(createAccount(formData));
         setLoading(false); // Stop loading once request is complete
@@ -77,53 +112,73 @@ const RegisterPage = () => {
                     className={`register-form w-full   max-w-[24rem] pt-0 p-3 py-1 pb-6 bg-white rounded-xl border-main border border-opacity-55 shadow-md ${verifyActive ? 'hidden' : 'block'}`}
                 >
                     <img src={signup} className="w-[5rem] mb-4 mx-auto relative top-2" alt="signup" />
-                    <div className="relative mb-3 border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <label className="w-full text-light text-[0.8rem]">Full Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Enter full name..."
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="w-full p-[0.1rem] tracking-wide bg-transparent outline-none placeholder:text-[#808080]"
-                            required
-                        />
+                    <div className="mb-4">
+                        <div className={`relative border w-full px-2 p-1 rounded-md ${!formData?.name && errorMessage?.name ? "border-red-500" : "border-main"} bg-[#F7FBFF] flex flex-col items-center`}>
+                            <label className='w-full  text-light   text-[0.8rem]'>Full Name</label>
+                            <input
+                                type="name"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
+                                placeholder="Enter full name..."
+                                required
+                            />
+
+                        </div>
+                        {!formData?.name && errorMessage?.name &&
+                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Full Name is required!</p>}
                     </div>
-                    <div className="relative mb-3 border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <label className="w-full text-light text-[0.8rem]">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="w-full p-[0.1rem] tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
-                            placeholder="Enter email..."
-                            required
-                        />
+                    <div className="mb-4">
+                        <div className={`relative border w-full px-2 p-1 rounded-md ${!formData?.email && errorMessage?.email ? "border-red-500" : "border-main"} bg-[#F7FBFF] flex flex-col items-center`}>
+                            <label className='w-full  text-light   text-[0.8rem]'>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
+                                placeholder="Enter email..."
+                                required
+                            />
+
+                        </div>
+                        {!formData?.email && errorMessage?.email &&
+                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Email is required!</p>}
                     </div>
-                    <div className="relative mb-3 border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <label className="w-full text-light text-[0.8rem]">Phone Number</label>
-                        <input
-                            type="text"
-                            name="phoneNumber"
-                            value={formData.phoneNumber}
-                            onChange={handleChange}
-                            placeholder="Enter phone number..."
-                            className="w-full p-[0.1rem] tracking-wide bg-transparent outline-none placeholder:text-[#808080]"
-                            required
-                        />
+                    <div className="mb-4">
+                        <div className={`relative border w-full px-2 p-1 rounded-md ${!formData?.phoneNumber && errorMessage?.phoneNumber ? "border-red-500" : "border-main"} bg-[#F7FBFF] flex flex-col items-center`}>
+                            <label className='w-full  text-light   text-[0.8rem]'>Phone Number</label>
+                            <input
+                                type="phoneNumber"
+                                name="phoneNumber"
+                                value={formData.phoneNumber}
+                                onChange={handleChange}
+                                className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
+                                placeholder="Enter phoneNumber..."
+                                required
+                            />
+
+                        </div>
+                        {!formData?.phoneNumber && errorMessage?.phoneNumber &&
+                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Phone Number is required!</p>}
                     </div>
-                    <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <label className="w-full text-light text-[0.8rem]">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            placeholder="Enter password..."
-                            className="w-full p-[0.1rem] tracking-wide bg-transparent outline-none placeholder:text-[#808080]"
-                        />
+                    <div className="mb-4">
+                        <div className={`relative border w-full px-2 p-1 rounded-md ${!formData?.password && errorMessage?.password ? "border-red-500" : "border-main"} bg-[#F7FBFF] flex flex-col items-center`}>
+                            <label className='w-full  text-light   text-[0.8rem]'>Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
+                                placeholder="Enter password..."
+                                required
+                            />
+
+                        </div>
+                        {!formData?.password && errorMessage?.password &&
+                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Password is required!</p>}
                     </div>
                     <button
                         type="submit"

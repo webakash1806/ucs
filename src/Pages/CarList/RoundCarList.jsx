@@ -4,7 +4,7 @@ import car1 from '../../assets/car1.jpg'
 import { MdAirlineSeatReclineExtra, MdArrowLeft, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md';
 import { TbAirConditioning } from 'react-icons/tb';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTCDetails } from '../../Redux/Slices/localTripSlice';
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi';
@@ -29,13 +29,26 @@ const RoundCarList = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const [cabData, setCabData] = useState([])
-    const { pickupDate, returnDate, tripType, pickupTime, pickup, drop } = location.state
+
+    useEffect(() => {
+        if (!location.state) {
+            navigate('/')
+        }
+    }, [])
+
+    const data = location.state
+
+    const pickupDate = data?.pickupDate
+    const returnDate = data?.returnDate
+    const tripType = data?.tripType
+    const pickupTime = data?.pickupTime
+    const pickup = data?.pickup
+    const drop = data?.drop
+
     const [distance, setDistance] = useState()
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
     const tc = tcData?.tC?.map(data => data?.text)
-
-
 
     const loadData = async () => {
         const res = await dispatch(getRoundTripData({ cityName: pickup }))
@@ -76,6 +89,7 @@ const RoundCarList = () => {
     }
 
     const fetchDistance = async () => {
+        setDistance()
         const distanceData = {
             fromLocation: pickup,
             toLocation: drop
@@ -127,6 +141,8 @@ const RoundCarList = () => {
     }
 
     const formatPickupDate = (dateString) => {
+        if (!dateString) return
+
         // Create a new Date object directly from the "yyyy-mm-dd" string
         const dateObject = new Date(dateString);
 
@@ -165,14 +181,14 @@ const RoundCarList = () => {
 
                             <div className='items-center justify-center gap-1 md:flex'>
                                 <div className='rotate-[180deg] mr-[0.01px]  size-[0.7rem] border-light border-[0.2rem] hidden md:block rounded-full' ></div>
-                                <h2 className='font-semibold tracking-wide'>{pickup.split(',')[0]}</h2>
+                                <h2 className='font-semibold tracking-wide'>{pickup?.split(',')[0]}</h2>
                             </div>
                             <MdKeyboardArrowRight className='hidden text-[1.3rem] md:block' />
                             <div className='items-center justify-center gap-1 md:flex'>
 
                                 <FaLocationDot className='ml-[0.05rem] text-[0.85rem] text-light hidden md:block' />
 
-                                <h2 className='font-semibold tracking-wide'> {drop.split(',')[0]}
+                                <h2 className='font-semibold tracking-wide'> {drop?.split(',')[0]}
                                 </h2>
                             </div>
                         </div>

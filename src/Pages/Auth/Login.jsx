@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { forgotPassword, loginAccount, resendOTP, resetPasswords, verifyOTP } from "../../Redux/Slices/authSlice"; // Adjust the path according to your project structure
-import { toast } from "react-toastify";
+import { changePassword, forgotPassword, loginAccount, resendOTP, resetPasswords, verifyOTP } from "../../Redux/Slices/authSlice"; // Adjust the path according to your project structure
+import { toast } from "sonner";
 import loginIcon from '../../assets/icons/LoginPage.gif';
 import verify from '../../assets/icons/verify.gif';
 
@@ -25,7 +25,24 @@ const LoginPage = () => {
         newPassword: ""
     });
 
+    const [errorMessage, setErrorMessage] = useState({
+        email: false,
+        password: false,
+        loginError: "",
+        forgetPasswordError: "",
+        drop: false,
+    })
 
+    console.log(errorMessage)
+
+    useEffect(() => {
+        setErrorMessage({
+            email: false,
+            password: false,
+            loginError: "",
+            drop: false,
+        })
+    }, [formData])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -38,10 +55,23 @@ const LoginPage = () => {
 
         const { email, password } = formData
 
-        if (!email || !password) {
-            setLoading(false)
-            return toast.error("All fields are required")
+        let hasError = false;
+
+        if (!email) {
+            setLoading(false);
+            setErrorMessage((prev) => ({ ...prev, email: true }));
+            hasError = true;
         }
+
+        if (!password) {
+            setLoading(false);
+
+            setErrorMessage((prev) => ({ ...prev, password: true }));
+            hasError = true;
+        }
+
+        if (hasError) return;
+
 
 
         // Dispatch the createAccount action
@@ -57,8 +87,10 @@ const LoginPage = () => {
             }
             // setVerifyActive(true)
         } else {
-            setLoading(false)
+            console.log(response?.payload)
+            toast.error(response?.payload);
 
+            setLoading(false)
         }
 
     };
@@ -96,11 +128,17 @@ const LoginPage = () => {
         setLoading(true)
         const { email } = formData
 
-        if (!email) {
-            setLoading(false)
+        let hasError = false;
 
-            return toast.error('Email is required!')
+        if (!email) {
+            setLoading(false);
+            setErrorMessage((prev) => ({ ...prev, email: true }));
+            hasError = true;
         }
+
+
+        if (hasError) return;
+
 
 
         const response = await dispatch(forgotPassword({ email }))
@@ -117,8 +155,10 @@ const LoginPage = () => {
             setResetPasswordActive(true)
             setLoading(false)
         } else {
-            setLoading(false)
+            console.log(response?.payload)
+            toast.error(response?.payload)
 
+            setLoading(false)
             return
         }
     }
@@ -176,41 +216,50 @@ const LoginPage = () => {
                     className={`register-form w-full   max-w-[24rem] pt-0 p-3 py-1 pb-6 bg-white rounded-xl border-main border border-opacity-55 shadow-md ${(verifyActive || resetPasswordActive || forgetPasswordActive) ? 'hidden' : 'block'}`}
 
                 >
-                    <img src={loginIcon} className="w-[4.8rem] mb-5 mt-1 mx-auto relative top-2" alt="" />
+                    <img src={loginIcon} className="w-[4.8rem] mb-2 mt-1 mx-auto relative top-2" alt="" />
                     {/* <h2 className="relative z-10 mb-6 text-2xl font-bold text-center">Register</h2> */}
 
+                    <p className="mb-4 text-center text-red-500 capitalize ">{errorMessage?.loginError}</p>
 
 
-                    <div className="relative mb-4 border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <label className='w-full  text-light   text-[0.8rem]'>Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
-                            placeholder="Enter email..."
-                            required
-                        />
+                    <div className="mb-4">
+                        <div className={`relative border w-full px-2 p-1 rounded-md ${!formData?.email && errorMessage?.email ? "border-red-500" : "border-main"} bg-[#F7FBFF] flex flex-col items-center`}>
+                            <label className='w-full  text-light   text-[0.8rem]'>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
+                                placeholder="Enter email..."
+                                required
+                            />
 
+                        </div>
+                        {!formData?.email && errorMessage?.email &&
+                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Email is required!</p>}
                     </div>
 
+                    <div className="mb-4">
+                        <div className={`relative border w-full px-2 p-1 rounded-md ${!formData?.password && errorMessage?.password ? "border-red-500" : "border-main"} bg-[#F7FBFF] flex flex-col items-center`}>
+                            <label className='w-full  text-light   text-[0.8rem]'>Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
+                                placeholder="Enter password..."
+                                required
+                            />
 
-                    <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <label className='w-full  text-light   text-[0.8rem]'>Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            placeholder="Enter password..."
-                            className="w-full p-[0.1rem] tracking-wide bg-transparent outline-none placeholder:text-[#808080]"
-                        />
+                        </div>
+                        {!formData?.password && errorMessage?.password &&
+                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Password is required!</p>}
+
                     </div>
 
                     <p className="pr-1 mt-2"> <Link onClick={() => setForgetPasswordActive(true)} className="font-semibold text-[0.95rem] underline text-main">Forget Password!</Link></p>
-
 
                     <button
                         type="submit"
@@ -275,19 +324,26 @@ const LoginPage = () => {
                     style={{ transform: "rotateX(180deg)" }}
                     className={`verify-form w-full  max-w-[24rem] p-3 py-4 pb-8 bg-white rounded-xl border-main border border-opacity-55 shadow-md ${forgetPasswordActive ? 'block' : 'hidden'}`}
                 >
-                    <img src={verify} className="w-[4.8rem] mb-5 mt-1 mx-auto relative top-2" alt="verify" />
-                    <div className="relative mb-4 border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <label className='w-full  text-light   text-[0.8rem]'>Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
-                            placeholder="Enter email..."
-                            required
-                        />
+                    <img src={verify} className="w-[4.8rem] mb-2 mt-1 mx-auto relative top-2" alt="verify" />
 
+                    <p className="mb-4 text-center text-red-500 capitalize ">{errorMessage?.forgetPasswordError}</p>
+
+                    <div className="mb-4">
+                        <div className={`relative border w-full px-2 p-1 rounded-md ${!formData?.email && errorMessage?.email ? "border-red-500" : "border-main"} bg-[#F7FBFF] flex flex-col items-center`}>
+                            <label className='w-full  text-light   text-[0.8rem]'>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="w-full p-[0.1rem]  tracking-wide bg-transparent outline-none placeholder:text-[#5b5b5b]"
+                                placeholder="Enter email..."
+                                required
+                            />
+
+                        </div>
+                        {!formData?.email && errorMessage?.email &&
+                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Email is required!</p>}
                     </div>
                     {/* <p onClick={handleForgotPassword} className="pr-1 mt-2"> <span className="font-semibold text-[0.95rem] underline text-main tracking-wide">Resend Link!</span></p> */}
                     <button

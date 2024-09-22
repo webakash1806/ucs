@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axiosInstance from '../../Helper/axiosInstance';
 
 // Initial state setup
@@ -15,8 +15,8 @@ export const getLocalCityData = createAsyncThunk('/local/cityData', async () => 
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -26,8 +26,8 @@ export const sendBookingData = createAsyncThunk('/local/cityData', async (data) 
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -38,8 +38,8 @@ export const getTCDetails = createAsyncThunk('/tc/byTrip', async (data) => {
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 

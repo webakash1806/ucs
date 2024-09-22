@@ -11,8 +11,9 @@ import { IoIosInformationCircleOutline } from 'react-icons/io'
 import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCloseCircle, AiOutlineSync } from 'react-icons/ai'
 import { FaCar } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
-import { toast } from 'react-toastify'
-import { getTCDetails } from '../../Redux/Slices/localTripSlice'
+import { toast } from 'sonner'
+import logo from '../../assets/logo.jpg'
+
 const PastBooking = () => {
     const [item, setItem] = useState(null);
     const [active, setActive] = useState(false)
@@ -251,20 +252,20 @@ const PastBooking = () => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 0.4 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-40 bg-black"
+                            className="fixed inset-0 h-[100rem] z-40 bg-black"
                         />
 
                         {/* Modal Popup */}
                         <motion.div
                             layoutId={item?._id}
                             key="modal"
-                            className="fixed inset-0 z-50 max-h-[40vh]  flex items-center justify-center p-4 top-60 "
+                            className="fixed inset-0 z-50 flex items-center justify-center p-4 top-16 "
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.8 }}
                         >
 
-                            <div className='relative scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-200 border scroll-m-1 border-main top-2 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md max-h-[88vh] overflow-y-auto'>
+                            <div className='relative scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-200 border scroll-m-1 border-main top-2 max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden bg-white rounded-md max-h-[80vh] overflow-y-auto'>
                                 <motion.button
                                     onClick={() => setItem(null)}
                                     className="absolute  right-1 top-[-0.75rem]  mt-4 text-red-600 bg-red-50 border border-red-500 rounded-full p-1 rounded-tr-lg"
@@ -449,15 +450,24 @@ const PastBooking = () => {
 
                                         <h3 className='mb-2 font-semibold'>Billing details :</h3>
                                         <div className='text-[0.9rem] flex flex-col gap-2'>
-                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {Math.ceil(item?.totalPrice)}</span></div>
-                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>{Math.ceil(Number(10) * (Math.ceil(item?.totalPrice)) / 100)} paid at the time of booking</span></div>
-                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {Math.ceil(item?.totalPrice - (Number(10) * (Math.ceil(item?.totalPrice)) / 100))} to driver during the trip with extras (if applicable)</span></div>
+                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {(Number(item?.totalPrice)).toFixed(2)}</span></div>
+                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
+                                            {item?.paymentMode === "100" ?
+                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
+                                                :
+                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
+                                            }
                                         </div>
 
-                                        <div className='mt-3 font-semibold text-[0.95rem]'>
+                                        <div className='mt-3 pt-2 font-semibold text-[0.92rem] border-t border-gray-400'>
                                             *Extra charges if applicable (to be paid to the driver during the trip)
-                                            <ul className='ml-6 font-normal list-decimal text-[0.9rem]'>
-                                                <li>Distance travelled beyond {item?.distance} km will be charged at Rs. {item?.extraPerKm}/Km.</li>
+                                            <ul className='ml-6 font-normal list-decimal text-[0.87rem]'>
+                                                {item?.tripType === "Local" ?
+                                                    <li>Distance travelled beyond {Number(item?.distance) === 80 ? "80" : "120"} km will be charged at Rs. {item?.extraPerKm}/Km and beyond {Number(item?.distance) === 80 ? "8" : "12"} hr will be charged at Rs. {item?.extraPerHour}/hr.</li>
+                                                    :
+                                                    <li>Distance travelled beyond {item?.distance} km will be charged at Rs. {item?.extraPerKm}/Km.</li>
+
+                                                }
                                                 <li>This fare not includes toll tax and parking.</li>
                                             </ul>
                                         </div>
@@ -492,6 +502,10 @@ const PastBooking = () => {
                                                 )
                                             })}
                                         </ul>
+                                    </div>
+                                    <div className='flex items-center justify-between pt-2 m-2 font-semibold text-main'>
+                                        <img src={logo} className='w-[5rem]' alt="" />
+                                        Thankyou for booking with us!
                                     </div>
                                 </div>
                             </div>

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axiosInstance from '../../Helper/axiosInstance';
 
 // Initial state setup
@@ -43,10 +43,11 @@ export const loginAccount = createAsyncThunk('/user/login', async (data) => {
         let res = axiosInstance.post('/user/login', data);
 
         res = await res;
-        toast.success(res.data.message)
+        // toast.success(res.data.message)
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
+        console.log(e)
+        return e?.response?.data?.message;
     }
 });
 
@@ -60,7 +61,8 @@ export const resendOTP = createAsyncThunk('/user/verify/resent', async (data) =>
         return res.data;
     } catch (e) {
         toast.error(e?.response?.data?.message);
-        throw e;
+
+
     }
 });
 
@@ -71,8 +73,8 @@ export const logout = createAsyncThunk('/user/logout', async () => {
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -89,16 +91,15 @@ export const userProfile = createAsyncThunk('/user/details', async () => {
 export const editProfile = createAsyncThunk('user/update-profile', async (data) => {
     try {
         let res = axiosInstance.put(`user/updateProfile/${data[0]}`, data[1]);
-        toast.promise(res, {
-            loading: "Updating Profile!",
-            success: (data) => data?.data.message,
-            error: "Failed to update!"
-        });
+        // toast.promise(res, {
+        //     loading: "Updating Profile!",
+        //     success: (data) => data?.data.message,
+        //     error: "Failed to update!"
+        // });
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
     }
 });
 
@@ -109,8 +110,7 @@ export const changePassword = createAsyncThunk('user/update-password', async (da
         toast.success(res?.data.message);
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
     }
 });
 
@@ -126,8 +126,8 @@ export const forgotPassword = createAsyncThunk('user/forgot-password', async (da
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 

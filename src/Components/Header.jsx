@@ -9,7 +9,7 @@ import logoutIcon from '../assets/icons/logout.gif';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../Redux/Slices/authSlice';
 import { FaCar, FaRegUser, FaUser } from 'react-icons/fa';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { IoIosLogOut } from 'react-icons/io';
 
 const Header = () => {
@@ -23,7 +23,7 @@ const Header = () => {
     const handleLogout = async () => {
         const res = await dispatch(logout());
         if (res?.payload?.success) {
-            toast.success("Logged out!");
+            // toast.success("Logged out!");
             navigate('/');
         }
         setProfileActive(false); // Close popup after logout

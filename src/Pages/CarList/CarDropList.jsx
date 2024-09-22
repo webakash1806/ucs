@@ -7,7 +7,7 @@ import { TbAirConditioning } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../../assets/car1.jpg'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import { getTCDetails } from '../../Redux/Slices/localTripSlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { FaLocationDot, FaXmark } from 'react-icons/fa6'
@@ -25,23 +25,34 @@ const CarDropList = () => {
 
     const [modifyActive, setModifyActive] = useState(false)
 
-    const [active, setActive] = useState(1);
+    const [active, setActive] = useState(false);
     const dispatch = useDispatch()
     const [detailsActive, setDetailsActive] = useState()
     const navigate = useNavigate()
     const location = useLocation()
     const [cabData, setCabData] = useState([])
     const [distance, setDistance] = useState(0)
-    const [filteredData, setFilteredData] = useState([])
+    const [filteredData, setFilteredData] = useState()
+
+    useEffect(() => {
+        if (!location.state) {
+            navigate('/')
+        }
+    }, [])
+
     const data = location.state
 
-    const { drop, pickup, pickupDate, pickupTime, tripType } = data
+    const drop = data?.drop
+    const pickup = data?.pickup
+    const pickupDate = data?.pickupDate
+    const pickupTime = data?.pickupTime
+    const tripType = data?.tripType
 
     console.log(tripType)
 
     const loadData = async () => {
         const res = await dispatch(getAirportCityData({ cityName: tripType === 1 ? drop.replace(/,/g, "") : pickup.replace(/,/g, "") }))
-        setCabData(res?.payload?.data?.rates)
+        setCabData(res?.payload?.data)
     }
 
     console.log(cabData)
@@ -57,8 +68,8 @@ const CarDropList = () => {
 
     useEffect(() => {
         if (cabData) {
-            const newFilteredData = cabData.map((car) => {
-                const filteredRates = car.rates.filter((rate) => {
+            const newFilteredData = cabData?.rates?.map((car) => {
+                const filteredRates = car?.rates?.filter((rate) => {
                     if (distance <= 30) {
                         return rate.kilometer === '30';
                     } else if (distance > 30 && distance <= 45) {
@@ -80,15 +91,15 @@ const CarDropList = () => {
             const noDataFound = distance > 70;
 
             if (noDataFound) {
-
                 setFilteredData([]); // Or handle it based on your requirements
             } else {
                 setFilteredData(newFilteredData);
             }
         }
-    }, [distance, cabData]); // Ensure this runs when `distance` or `cabData` chang
+    }, [distance, cabData, location.state]); // Ensure this runs when `distance` or `cabData` chang
 
     const fetchDistance = async () => {
+        setDistance(0)
         const distanceData = {
             fromLocation: data?.pickup,
             toLocation: data?.drop
@@ -96,8 +107,9 @@ const CarDropList = () => {
 
         const res = await dispatch(getDistance(distanceData))
         setDistance(res?.payload?.distance)
-
+        console.log(res?.payload?.distance)
     }
+    console.log(filteredData)
 
     useEffect(() => {
 
@@ -108,7 +120,7 @@ const CarDropList = () => {
         }
         dispatch(getTCDetails(data))
 
-    }, [location.state])
+    }, [pickup, drop, location.state])
 
     useEffect(() => {
         setModifyActive(false)
@@ -143,6 +155,9 @@ const CarDropList = () => {
     }
 
     const formatPickupDate = (dateString) => {
+
+        if (!dateString) return
+
         // Create a new Date object directly from the "yyyy-mm-dd" string
         const dateObject = new Date(dateString);
 
@@ -182,14 +197,14 @@ const CarDropList = () => {
 
                             <div className='items-center justify-center gap-1 md:flex'>
                                 <div className='rotate-[180deg] mr-[0.01px]  size-[0.7rem] border-light border-[0.2rem] hidden md:block rounded-full' ></div>
-                                <h2 className='font-semibold tracking-wide'>{pickup.split(',')[0]}</h2>
+                                <h2 className='font-semibold tracking-wide'>{pickup?.split(',')[0]}</h2>
                             </div>
                             <MdKeyboardArrowRight className='hidden text-[1.3rem] md:block' />
                             <div className='items-center justify-center gap-1 md:flex'>
 
                                 <FaLocationDot className='ml-[0.05rem] text-[0.85rem] text-light hidden md:block' />
 
-                                <h2 className='font-semibold tracking-wide'> {drop.split(',')[0]}
+                                <h2 className='font-semibold tracking-wide'> {drop?.split(',')[0]}
                                 </h2>
                             </div>
                         </div>
@@ -204,7 +219,10 @@ const CarDropList = () => {
                     <p className='text-[0.85rem]  sm:text-[1rem]'>{formatPickupDate(pickupDate)}
                         <span> {pickupTime}</span>
                     </p>
-                    <button className='text-white bg-main p-[0.2rem] text-[0.9rem] font-semibold px-4 rounded' onClick={() => setModifyActive(true)}>Modify</button>
+                    <button className='text-white bg-main p-[0.2rem] text-[0.9rem] font-semibold px-4 rounded' onClick={() => {
+                        setModifyActive(true)
+                        setFilteredData()
+                    }}>Modify</button>
                 </div>
             </div>
             {modifyActive &&
@@ -220,7 +238,7 @@ const CarDropList = () => {
                 </div>}
             <div className='flex flex-col py-10  px-[5vw] sm:px-[7vw] md:px-[9vw] lg:px-[11vw] items-center justify-center gap-4'>
                 {
-                    distance === 0 ? "Loading..." :
+                    (!filteredData || distance === 0) ? "Loading..." :
                         filteredData && filteredData?.length === 0 ?
                             <p>No Cabs available to this city right now</p> :
                             filteredData?.map((data, index) => {

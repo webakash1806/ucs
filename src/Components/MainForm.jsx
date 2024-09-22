@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getLocalCityData } from '../Redux/Slices/localTripSlice';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { getAirportCityData } from '../Redux/Slices/airportSlice';
 import { getOnewayCityData, getRoundCityData, getRoundTripData } from '../Redux/Slices/outstationSlice';
 
@@ -376,7 +376,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const oneWayPickup = onewayCityData?.fromCities
 
     useEffect(() => {
-        if (active === 1 && outstationActive === 1.1 && onewayPickupValue && oneWayPickup.length > 0) {
+        if (active === 1 && outstationActive === 1.1 && onewayPickupValue && oneWayPickup?.length > 0) {
 
             const filtered = oneWayPickup
                 ?.filter((data) => data.toLowerCase().startsWith(onewayPickupValue.toLowerCase()))

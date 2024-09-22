@@ -7,7 +7,7 @@ import { MdAirlineSeatReclineExtra, MdKeyboardArrowRight, MdLocalParking, MdLugg
 import { TbAirConditioning } from 'react-icons/tb'
 import { PiUsersThreeFill } from 'react-icons/pi'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import { order, verifyPayment } from '../../Redux/Slices/razorpaySlice'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 import { GiGasPump, GiTakeMyMoney } from 'react-icons/gi'
@@ -28,7 +28,28 @@ const RoundTripBook = () => {
     const [successDetail, setSuccessDetail] = useState()
     const dispatch = useDispatch()
     const location = useLocation()
-    const { cabData, tcData, pickupDate, distance, pickupCity, dropCity, totalPrice, pickupTime, selectedType, returnDate, tripType } = location.state
+
+    useEffect(() => {
+        if (!location.state) {
+            navigate('/')
+        }
+    }, [])
+
+    const data = location.state
+
+
+    const cabData = data?.cabData
+    const tcData = data?.tcData
+    const pickupDate = data?.pickupDate
+    const distance = data?.distance
+    const pickupCity = data?.pickupCity
+    const dropCity = data?.dropCity
+    const totalPrice = data?.totalPrice
+    const pickupTime = data?.pickupTime
+    const selectedType = data?.selectedType
+    const returnDate = data?.returnDate
+    const tripType = data?.tripType
+
     const [finalPrice, setFinalPrice] = useState(Number(totalPrice))
     const [price10, setPrice10] = useState(Number(finalPrice) * 10 / 100)
     const [discountPrice, setDiscountPrice] = useState(0)
@@ -72,6 +93,9 @@ const RoundTripBook = () => {
     console.log(cabData)
 
     const formatPickupDate = (dateString) => {
+
+        if (!dateString) return
+
         // Create a new Date object directly from the "yyyy-mm-dd" string
         const dateObject = new Date(dateString);
 
@@ -399,7 +423,7 @@ const RoundTripBook = () => {
                                 <div className="flex items-center text-lg sm:text-[1.3rem] font-semibold">
                                     <h2>{pickupCity}</h2>
                                     <MdKeyboardArrowRight className="mx-1 text-2xl" />
-                                    <h2>{dropCity.split(',')[0]}</h2>
+                                    <h2>{dropCity?.split(',')[0]}</h2>
                                 </div>
                                 <p className="text-sm font-semibold text-gray-600">{formatPickupDate(pickupDate)} <span>{pickupTime}</span></p>
                             </div>
@@ -655,7 +679,7 @@ const RoundTripBook = () => {
                                                     className="hidden mr-2 peer"
                                                 />
                                                 <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
-                                                10%  <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{price10}
+                                                10%  <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{price10.toFixed(2)}
 
                                                 </span>
                                                 <span className="ml-1">
@@ -673,7 +697,7 @@ const RoundTripBook = () => {
                                                     className="hidden mr-2 peer"
                                                 />
                                                 <span className="flex items-center justify-center w-3 h-3 mt-[0.18rem] mr-1  border border-black rounded-full peer-checked:border-black peer-checked:bg-main"></span>
-                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{finalPrice}</span>
+                                                100% <FaArrowRight className='ml-2' /> <span className='ml-2 font-semibold tracking-wide'>&#8377;{finalPrice.toFixed(2)}</span>
                                                 <span className='ml-1'> now</span>
                                             </label>
                                         </div>
@@ -785,7 +809,7 @@ const RoundTripBook = () => {
 
                                 <div className='font-semibold'>
                                     <p><span className='font-normal text-[0.95rem] mr-[0.55rem]'>Booking id </span>: {successDetail?.bookingId}</p>
-                                    <p><span className='font-normal text-[0.95rem] mr-[0.05rem]'>Pickup Date </span> : {successDetail?.pickupDate.split('T')[0]}</p>
+                                    <p><span className='font-normal text-[0.95rem] mr-[0.05rem]'>Pickup Date </span> : {successDetail?.pickupDate?.split('T')[0]}</p>
                                     <p><span className='font-normal text-[0.95rem]'>Pickup Time </span> : {successDetail?.pickupTime}</p>
                                 </div>
 

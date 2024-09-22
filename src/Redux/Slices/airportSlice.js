@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axiosInstance from '../../Helper/axiosInstance';
 
 // Initial state setup
@@ -16,8 +16,8 @@ export const getAirportCityData = createAsyncThunk('/airpot/airportData', async 
         console.log(res)
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+
     }
 });
 
@@ -27,8 +27,8 @@ export const sendAirportBookingData = createAsyncThunk('/airpot/airportData', as
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+        // throw e;
     }
 });
 
@@ -39,8 +39,8 @@ export const getTCDetails = createAsyncThunk('/tc/byTrip', async (data) => {
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return e?.response?.data?.message;
+        // throw e;
     }
 });
 
@@ -51,8 +51,8 @@ export const getDistance = createAsyncThunk('/airport/distance', async (data) =>
         res = await res;
         return res.data;
     } catch (e) {
-        toast.error(e?.response?.data?.message);
-        throw e;
+        return (e?.response?.data?.message);
+        // throw e;
     }
 });
 
