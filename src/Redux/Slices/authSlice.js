@@ -110,7 +110,7 @@ export const changePassword = createAsyncThunk('user/update-password', async (da
         toast.success(res?.data.message);
         return res.data;
     } catch (e) {
-        return e?.response?.data?.message;
+        return toast.error(e?.response?.data?.message);
     }
 });
 

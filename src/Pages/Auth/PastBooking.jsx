@@ -23,12 +23,6 @@ const PastBooking = () => {
 
 
 
-
-
-
-
-
-
     const setTripTypeData = (tripType, tC) => {
         switch (tripType) {
             case 'local':
@@ -92,6 +86,8 @@ const PastBooking = () => {
     const download = async (invoiceId) => {
         const res = await dispatch(downloadInvoice({ invoiceId }))
     }
+
+    console.log(bookingData)
 
     return (
         <div className='flex flex-col items-center justify-start w-full min-h-screen gap-6 p-3 pt-6 overflow-hidden'>
@@ -480,7 +476,7 @@ const PastBooking = () => {
                                             })}
                                         </ul>
                                         <ul className='ml-6 list-disc'>
-                                            {item?.tripType === "Airport Trip" && roundTC?.map((data, index) => {
+                                            {item?.tripType === "Airport Trip" && airportTC?.map((data, index) => {
                                                 return (
                                                     <li className='list-disc text-[0.8rem] font-semibold' key={index + 1}>{data}</li>
                                                 )

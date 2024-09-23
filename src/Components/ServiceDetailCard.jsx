@@ -11,7 +11,7 @@ const ServiceDetailCard = ({ icon, title, description }) => {
             <div className="relative z-10 flex flex-col items-center justify-between flex-1 p-8 flex-glow">
                 {/* Icon */}
                 <div className="size-[5rem] flex items-center justify-center transition-transform duration-300 transform bg-white rounded-full shadow-lg hover:scale-110">
-                    <img src={icon} className="w-[4.5rem] rounded-full text-[#525FE1]">
+                    <img src={icon} alt="icon" className="w-[4.5rem] rounded-full text-[#525FE1]">
 
                     </img>
                 </div>
