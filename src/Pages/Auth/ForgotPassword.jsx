@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginAccount, resendOTP, verifyOTP } from "../../Redux/Slices/authSlice"; // Adjust the path according to your project structure
 import { toast } from "sonner";
-import loginIcon from '../../assets/icons/LoginPage.avif';
+import loginIcon from '../../assets/icons/loginPage.avif';
 import verify from '../../assets/icons/verify.avif';
 
 import { Link, useNavigate } from "react-router-dom";
