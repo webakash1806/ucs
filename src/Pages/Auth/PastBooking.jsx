@@ -445,12 +445,19 @@ const PastBooking = () => {
                                         <h3 className='mb-2 font-semibold'>Billing details :</h3>
                                         <div className='text-[0.9rem] flex flex-col gap-2'>
                                             <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {(Number(item?.totalPrice)).toFixed(2)}</span></div>
-                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
-                                            {item?.paymentMode === "100" ?
-                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
-                                                :
-                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
-                                            }
+                                            {item?.status === "complete" ?
+                                                <>
+                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {Number((item?.totalPrice)).toFixed(2)} paid</span></div>
+
+                                                </> :
+                                                <>
+                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
+                                                    {item?.paymentMode === "100" ?
+                                                        <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
+                                                        :
+                                                        <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
+                                                    }
+                                                </>}
                                         </div>
 
                                         <div className='mt-3 pt-2 font-semibold text-[0.92rem] border-t border-gray-400'>

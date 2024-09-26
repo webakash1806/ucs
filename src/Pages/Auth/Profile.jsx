@@ -590,7 +590,7 @@ const Profile = () => {
                                                             <p>Pickup: {item?.pickupDate.split('T')[0]} at {item?.pickupTime}</p>
                                                             {item?.tripType === "Round" && <p>Return: {item?.returnDate?.split('T')[0]}</p>}
                                                         </div>
-                                                        {item?.status === "completed" &&
+                                                        {item?.status === "complete" &&
                                                             <div onClick={() => download(item?._id)} className='p-2 flex items-center justify-center gap-2 cursor-pointer min-w-fit bg-blue-50 text-blue-600 border py-[0.42rem] border-blue-500 rounded'>
                                                                 <FaDownload /> Download invoice
                                                             </div>
@@ -710,12 +710,19 @@ const Profile = () => {
                                                             <h3 className='mb-2 font-semibold'>Billing details :</h3>
                                                             <div className='text-[0.9rem] flex flex-col gap-2'>
                                                                 <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {(Number(item?.totalPrice)).toFixed(2)}</span></div>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
-                                                                {item?.paymentMode === "100" ?
-                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
-                                                                    :
-                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
-                                                                }
+                                                                {item?.status === "complete" ?
+                                                                    <>
+                                                                        <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {Number((item?.totalPrice)).toFixed(2)} paid</span></div>
+
+                                                                    </> :
+                                                                    <>
+                                                                        <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
+                                                                        {item?.paymentMode === "100" ?
+                                                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
+                                                                            :
+                                                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
+                                                                        }
+                                                                    </>}
                                                             </div>
 
                                                             <div className='mt-3 pt-2 font-semibold text-[0.92rem] border-t border-gray-400'>
@@ -741,7 +748,7 @@ const Profile = () => {
                                                                 })}
                                                             </ul>
                                                             <ul className='ml-6 list-disc'>
-                                                                {item?.tripType === "Airport Trip" && roundTC?.map((data, index) => {
+                                                                {item?.tripType === "Airport Trip" && airportTC?.map((data, index) => {
                                                                     return (
                                                                         <li className='list-disc text-[0.8rem] font-semibold' key={index + 1}>{data}</li>
                                                                     )
@@ -1064,7 +1071,7 @@ const Profile = () => {
                                                             <p>Pickup: {item?.pickupDate.split('T')[0]} at {item?.pickupTime}</p>
                                                             {item?.tripType === "Round" && <p>Return: {item?.returnDate?.split('T')[0]}</p>}
                                                         </div>
-                                                        {item?.status === "completed" &&
+                                                        {item?.status === "complete" &&
                                                             <div onClick={() => download(item?._id)} className='p-2 flex items-center justify-center gap-2 cursor-pointer min-w-fit bg-blue-50 text-blue-600 border py-[0.42rem] border-blue-500 rounded'>
                                                                 <FaDownload /> Download invoice
                                                             </div>
@@ -1184,12 +1191,19 @@ const Profile = () => {
                                                             <h3 className='mb-2 font-semibold'>Billing details :</h3>
                                                             <div className='text-[0.9rem] flex flex-col gap-2'>
                                                                 <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {(Number(item?.totalPrice)).toFixed(2)}</span></div>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
-                                                                {item?.paymentMode === "100" ?
-                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
-                                                                    :
-                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
-                                                                }
+                                                                {item?.status === "complete" ?
+                                                                    <>
+                                                                        <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {Number((item?.totalPrice)).toFixed(2)} paid</span></div>
+
+                                                                    </> :
+                                                                    <>
+                                                                        <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
+                                                                        {item?.paymentMode === "100" ?
+                                                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
+                                                                            :
+                                                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
+                                                                        }
+                                                                    </>}
                                                             </div>
 
                                                             <div className='mt-3 pt-2 font-semibold text-[0.92rem] border-t border-gray-400'>
@@ -1215,7 +1229,7 @@ const Profile = () => {
                                                                 })}
                                                             </ul>
                                                             <ul className='ml-6 list-disc'>
-                                                                {item?.tripType === "Airport Trip" && roundTC?.map((data, index) => {
+                                                                {item?.tripType === "Airport Trip" && airportTC?.map((data, index) => {
                                                                     return (
                                                                         <li className='list-disc text-[0.8rem] font-semibold' key={index + 1}>{data}</li>
                                                                     )
@@ -1247,7 +1261,6 @@ const Profile = () => {
                                         </>
                                     )}
                                 </AnimatePresence>
-
 
                             </div>}
                         {sideActive === 5 &&
@@ -1488,7 +1501,7 @@ const Profile = () => {
                                                             <p>Pickup: {item?.pickupDate.split('T')[0]} at {item?.pickupTime}</p>
                                                             {item?.tripType === "Round" && <p>Return: {item?.returnDate?.split('T')[0]}</p>}
                                                         </div>
-                                                        {item?.status === "completed" &&
+                                                        {item?.status === "complete" &&
                                                             <div onClick={() => download(item?._id)} className='p-2 flex items-center justify-center gap-2 cursor-pointer min-w-fit bg-blue-50 text-blue-600 border py-[0.42rem] border-blue-500 rounded'>
                                                                 <FaDownload /> Download invoice
                                                             </div>
@@ -1608,12 +1621,19 @@ const Profile = () => {
                                                             <h3 className='mb-2 font-semibold'>Billing details :</h3>
                                                             <div className='text-[0.9rem] flex flex-col gap-2'>
                                                                 <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Total Amount :</p> <span className='font-semibold'>Rs. {(Number(item?.totalPrice)).toFixed(2)}</span></div>
-                                                                <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
-                                                                {item?.paymentMode === "100" ?
-                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
-                                                                    :
-                                                                    <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
-                                                                }
+                                                                {item?.status === "complete" ?
+                                                                    <>
+                                                                        <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {Number((item?.totalPrice)).toFixed(2)} paid</span></div>
+
+                                                                    </> :
+                                                                    <>
+                                                                        <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Amount paid :</p> <span className='font-semibold'>Rs. {(Number(item?.paymentMode) * ((item?.totalPrice)) / 100).toFixed(2)} paid at the time of booking</span></div>
+                                                                        {item?.paymentMode === "100" ?
+                                                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay extras to driver during the trip (if applicable)</span></div>
+                                                                            :
+                                                                            <div className='flex items-start'><p className='min-w-[6.3rem] max-w-[6.3rem] '>Dues Amount :</p> <span className='font-semibold'> Pay Rs. {(item?.totalPrice - (Number(item?.paymentMode) * ((item?.totalPrice)) / 100)).toFixed(2)} to driver during the trip with extras (if applicable)</span></div>
+                                                                        }
+                                                                    </>}
                                                             </div>
 
                                                             <div className='mt-3 pt-2 font-semibold text-[0.92rem] border-t border-gray-400'>
@@ -1639,7 +1659,7 @@ const Profile = () => {
                                                                 })}
                                                             </ul>
                                                             <ul className='ml-6 list-disc'>
-                                                                {item?.tripType === "Airport Trip" && roundTC?.map((data, index) => {
+                                                                {item?.tripType === "Airport Trip" && airportTC?.map((data, index) => {
                                                                     return (
                                                                         <li className='list-disc text-[0.8rem] font-semibold' key={index + 1}>{data}</li>
                                                                     )

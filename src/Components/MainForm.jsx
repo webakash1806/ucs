@@ -371,7 +371,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [onewayPickupSuggestions, setOnewayPickupSuggestions] = useState([]);
     const [onewayPickupError, setOnewayPickupError] = useState('')
 
-    const onewayCityData = useSelector((state) => state?.outstation?.onewayCityData)
+    const onewayCityData = useSelector((state) => state?.outstation?.onewayCityData[0])
     console.log(onewayCityData)
     const oneWayPickup = onewayCityData?.fromCities
     console.log(oneWayPickup)
