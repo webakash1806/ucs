@@ -121,7 +121,7 @@ const Header = () => {
                             onClick={handleProfileClick}
                         >
                             <FaRegUser />
-                            <li className='list-none'>Profile</li>
+                            <li className='list-none'>Dashboard</li>
                         </Link>
                         <Link
                             to={`/booking/${data?._id}`}

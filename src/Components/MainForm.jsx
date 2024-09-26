@@ -372,8 +372,9 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [onewayPickupError, setOnewayPickupError] = useState('')
 
     const onewayCityData = useSelector((state) => state?.outstation?.onewayCityData)
+    console.log(onewayCityData)
     const oneWayPickup = onewayCityData?.fromCities
-
+    console.log(oneWayPickup)
     useEffect(() => {
         if (active === 1 && outstationActive === 1.1 && onewayPickupValue && oneWayPickup?.length > 0) {
 
@@ -384,6 +385,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
         }
     }, [onewayPickupValue, onewayCityData, outstationActive]);
 
+    console.log(onewayPickupSuggestions)
 
     const handleOnewayPickupInputChange = (e) => {
         setOnewayPickupError('')

@@ -1254,14 +1254,14 @@ const Profile = () => {
                             <div className='flex flex-col items-center justify-start w-full gap-6 p-3 mt-10 md:mt-16'>
                                 {!bookingData ?
                                     <p>Loading</p> :
-                                    bookingData && bookingData?.filter(detail => detail?.status === "completed")?.length === 0 ?
+                                    bookingData && bookingData?.filter(detail => detail?.status === "complete")?.length === 0 ?
                                         <div className='flex flex-col items-center gap-2'>
                                             <p>No Completed booking till now</p>
                                             <button onClick={() => navigate("/")} className='p-1 px-3 text-white rounded bg-main'>Book now</button>
                                         </div> :
                                         <>
                                             <h1 className='w-full text-[1.2rem] font-bold mt-1'>Completed Booking List</h1>
-                                            {bookingData?.filter(detail => detail?.status === "completed")?.map((item, index) => {
+                                            {bookingData?.filter(detail => detail?.status === "complete")?.map((item, index) => {
                                                 return <motion.div
                                                     key={index}
                                                     layoutId={item?._id}

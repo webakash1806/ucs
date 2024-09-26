@@ -325,7 +325,7 @@ const PastBooking = () => {
                                         <p>Pickup: {item?.pickupDate.split('T')[0]} at {item?.pickupTime}</p>
                                         {item?.tripType === "Round" && <p>Return: {item?.returnDate?.split('T')[0]}</p>}
                                     </div>
-                                    {item?.status === "completed" &&
+                                    {item?.status === "complete" &&
                                         <div onClick={() => download(item?._id)} className='p-2 flex items-center justify-center gap-2 cursor-pointer min-w-fit bg-blue-50 text-blue-600 border py-[0.42rem] border-blue-500 rounded'>
                                             <FaDownload /> Download invoice
                                         </div>

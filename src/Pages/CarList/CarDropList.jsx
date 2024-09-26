@@ -237,7 +237,7 @@ const CarDropList = () => {
                 </div>}
             <div className='flex flex-col py-10  px-[5vw] sm:px-[7vw] md:px-[9vw] lg:px-[11vw] items-center justify-center gap-4'>
                 {
-                    (!filteredData || distance === 0) ? <Loading /> :
+                    (distance === 0) ? <Loading /> :
                         filteredData && filteredData?.length === 0 ?
                             <p>No Cabs available to this city right now</p> :
                             filteredData?.map((data, index) => {
