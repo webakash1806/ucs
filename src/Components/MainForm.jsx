@@ -371,10 +371,8 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [onewayPickupSuggestions, setOnewayPickupSuggestions] = useState([]);
     const [onewayPickupError, setOnewayPickupError] = useState('')
 
-    const onewayCityData = useSelector((state) => state?.outstation?.onewayCityData[0])
-    console.log(onewayCityData)
-    const oneWayPickup = onewayCityData?.fromCities
-    console.log(oneWayPickup)
+    const onewayCityData = useSelector((state) => state?.outstation?.onewayCityData)
+    const oneWayPickup = onewayCityData?.[0]?.fromCities
     useEffect(() => {
         if (active === 1 && outstationActive === 1.1 && onewayPickupValue && oneWayPickup?.length > 0) {
 
@@ -414,7 +412,7 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [onewayDropSuggestions, setOnewayDropSuggestions] = useState([]);
     const [onewayDropError, setOnewayDropError] = useState('')
 
-    const oneWayDrop = onewayCityData?.toCities
+    const oneWayDrop = onewayCityData?.[0]?.toCities
 
     useEffect(() => {
         if (active === 1 && outstationActive === 1.1 && onewayDropValue && oneWayDrop?.length > 0) {

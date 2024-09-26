@@ -43,7 +43,6 @@ const OnewayCarList = () => {
     const drop = data?.drop
 
     const tcData = useSelector((state) => state?.localTrip?.tcData)
-
     const tc = tcData?.tC?.map(data => data?.text)
 
     const fetchDistance = async () => {
@@ -53,7 +52,6 @@ const OnewayCarList = () => {
         }
 
         const res = await dispatch(getOnewayCabData(cityData))
-
         setFilteredData(res?.payload?.data)
     }
 

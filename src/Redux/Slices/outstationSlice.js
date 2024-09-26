@@ -4,9 +4,9 @@ import axiosInstance from '../../Helper/axiosInstance';
 // Initial state setup
 const initialState = {
     onewayTripData: localStorage.getItem('onewayTripData') !== "undefined" ? JSON.parse(localStorage.getItem('onewayTripData')) : {},
-    roundCityData: localStorage.getItem('roundCityData') !== "undefined" ? JSON.parse(localStorage.getItem('roundCityData')) : {},
-    onewayCityData: localStorage.getItem('onewayCityData') !== "undefined" ? JSON.parse(localStorage.getItem('onewayCityData')) : {},
-    tcData: localStorage.getItem('tcData') !== "undefined" ? JSON.parse(localStorage.getItem('tcData')) : {},
+    roundCityData: [],
+    onewayCityData: [],
+    tcData: {},
 };
 
 // Thunks for different actions
@@ -75,7 +75,7 @@ export const getOnewayCityData = createAsyncThunk('/outstation/onewayCityData', 
     try {
         let res = axiosInstance.get('city/rate/allcity');
         res = await res;
-        return res.data;
+        return res?.data;
     } catch (e) {
         return e?.response?.data?.message;
 
