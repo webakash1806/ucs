@@ -4,7 +4,7 @@ import Header from './Components/Header';
 import Footer from './Components/Footer';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { useEffectOnce } from './hooks/useEffectOnce'; // Custom hook for useEffect once
+import { useEffectOnce } from './Hooks/useEffectOnce'; // Custom hook for useEffect once
 import Loading from './Components/Loading';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { MdKeyboardDoubleArrowUp } from 'react-icons/md';
