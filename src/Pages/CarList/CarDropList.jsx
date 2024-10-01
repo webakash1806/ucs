@@ -24,7 +24,7 @@ const CarDropList = () => {
 
     const [modifyActive, setModifyActive] = useState(false)
 
-    const [active, setActive] = useState(false);
+    const [noCab, setNoCab] = useState(true);
     const dispatch = useDispatch()
     const [detailsActive, setDetailsActive] = useState()
     const navigate = useNavigate()
@@ -178,7 +178,18 @@ const CarDropList = () => {
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
 
+    console.log(cabData)
+    console.log(filteredData)
 
+    useEffect(() => {
+        if ((!cabData || cabData?.rates?.length === 0 || cabData?.length === 0) && (!filteredData || filteredData?.length === 0)) {
+            setNoCab(true)
+            console.log(1)
+        } else {
+            setNoCab(false)
+            console.log(2)
+        }
+    }, [filteredData, cabData])
 
     return (
         <div className=' bg-lightSky min-h-[90vh]'>
@@ -238,7 +249,7 @@ const CarDropList = () => {
             <div className='flex flex-col py-10  px-[5vw] sm:px-[7vw] md:px-[9vw] lg:px-[11vw] items-center justify-center gap-4'>
                 {
                     (distance === 0) ? <Loading /> :
-                        filteredData && filteredData?.length === 0 ?
+                        noCab ?
                             <p>No Cabs available to this city right now</p> :
                             filteredData?.map((data, index) => {
                                 return <div key={index} className="flex  flex-col max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden border-main border rounded-lg shadow-lg hover:shadow-none transition-all duration-300">
