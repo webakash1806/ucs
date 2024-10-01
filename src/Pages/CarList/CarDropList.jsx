@@ -178,16 +178,11 @@ const CarDropList = () => {
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
 
-    console.log(cabData)
-    console.log(filteredData)
-
     useEffect(() => {
-        if ((!cabData || cabData?.rates?.length === 0 || cabData?.length === 0) && (!filteredData || filteredData?.length === 0)) {
+        if (!filteredData || filteredData?.length === 0) {
             setNoCab(true)
-            console.log(1)
         } else {
             setNoCab(false)
-            console.log(2)
         }
     }, [filteredData, cabData])
 
