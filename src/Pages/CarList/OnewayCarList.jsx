@@ -26,6 +26,7 @@ const OnewayCarList = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const [filteredData, setFilteredData] = useState()
+    const [noCab, setNoCab] = useState(true);
 
 
     useEffect(() => {
@@ -118,6 +119,13 @@ const OnewayCarList = () => {
         return `${weekday}, ${dateWithoutWeekday}, ${year}`;
     };
 
+    useEffect(() => {
+        if (!filteredData || filteredData?.length === 0 || filteredData?.rates?.length === 0) {
+            setNoCab(true)
+        } else {
+            setNoCab(false)
+        }
+    }, [filteredData])
 
     return (
         <div className=' min-h-[90vh] bg-lightSky'>
@@ -178,7 +186,7 @@ const OnewayCarList = () => {
             <div className='flex flex-col py-10  px-[5vw] sm:px-[7vw] md:px-[9vw] lg:px-[11vw] items-center justify-center gap-4'>
                 {
                     !filteredData ? <Loading /> :
-                        filteredData && filteredData?.length === 0 ?
+                        noCab ?
                             <p>No Cabs available to this city right now</p> :
                             filteredData?.rates?.map((data, index) => {
                                 return <div key={index} className="flex flex-col max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden border-main  hover:shadow-none transition-all duration-300 border rounded-lg shadow-lg">

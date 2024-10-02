@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense, useState } from 'react';
-import { matchPath, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, matchPath, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import AOS from 'aos';
@@ -11,6 +11,7 @@ import { MdKeyboardDoubleArrowUp } from 'react-icons/md';
 import routeTitles from './Hooks/routeTitles'
 import seoMetaDescriptions from './Hooks/seoMetaDescriptions';
 import seoKeywords from './Hooks/seoKeywords';
+import { FaWhatsapp } from 'react-icons/fa';
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
 const Contact = lazy(() => import('./Pages/Contact'));
@@ -202,15 +203,25 @@ const App = () => {
         </Routes>
       </Suspense>
       <Footer />
-      {isVisible && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-4 flex items-center justify-center right-4 z-20 p-[0.6rem] rounded-full bg-[#2A4CFF] text-white shadow-lg"
+      <div className='fixed z-20 bottom-4 right-4'>
+        <Link
+          target='_blank'
+          to={"https://api.whatsapp.com/send/?phone=919520801801"}
+          className=" flex items-center justify-center mb-2 p-[0.6rem] rounded-full bg-[#0BC144] text-white shadow-lg"
           aria-label="Scroll to top"
         >
-          <MdKeyboardDoubleArrowUp className='text-[1.7rem]' />
-        </button>
-      )}
+          <FaWhatsapp className='text-[1.7rem]' />
+        </Link>
+        {isVisible && (
+          <button
+            onClick={scrollToTop}
+            className=" flex items-center justify-center  p-[0.6rem] rounded-full bg-main text-white shadow-lg"
+            aria-label="Scroll to top"
+          >
+            <MdKeyboardDoubleArrowUp className='text-[1.7rem]' />
+          </button>
+        )}
+      </div>
     </>
   );
 };

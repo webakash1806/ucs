@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaWhatsapp } from "react-icons/fa";
 import contactIcon from '../assets/icons/contact.avif'
+import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { sendInquiry } from "../Redux/Slices/authSlice";
+import { ImSpinner8 } from "react-icons/im";
 const Contact = () => {
+    const dispatch = useDispatch()
+    const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({
         name: "",
@@ -14,9 +20,49 @@ const Contact = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Add form submission logic here
+        setLoading(true)
+
+        const { name, email, phoneNumber, message } = formData
+
+        if (!name) {
+            setLoading(false)
+            return toast.error("Name is required!")
+        }
+
+        if (!email) {
+            setLoading(false)
+            return toast.error("Email is required!")
+        }
+
+        if (!phoneNumber) {
+            setLoading(false)
+            return toast.error("Phone number is required!")
+        }
+
+        if (!message) {
+            setLoading(false)
+            return toast.error("Message is required!")
+        }
+
+        const data = { fullName: name, email, phoneNumber, message }
+
+        const res = await dispatch(sendInquiry(data))
+
+        console.log(res)
+
+        if (res?.payload?.success) {
+            setLoading(false)
+            setFormData({
+                name: "",
+                email: "",
+                phoneNumber: "",
+                message: "",
+            })
+            return toast.success("Message sent successfully!")
+        }
+
     };
 
     return (
@@ -95,10 +141,11 @@ const Contact = () => {
 
                         {/* Submit Button */}
                         <button
+                            disabled={loading}
                             type="submit"
-                            className="w-full p-2 mt-1 font-semibold text-white transition-colors duration-300 rounded bg-main hover:bg-secondary"
+                            className="flex items-center justify-center w-full gap-3 p-2 mt-1 font-semibold text-white transition-colors duration-300 rounded bg-main hover:bg-secondary"
                         >
-                            Send Message
+                            {loading && <ImSpinner8 className=" animate-spin text-[1.2rem] mt-[2px]" />}  Send Message
                         </button>
                     </form>
 

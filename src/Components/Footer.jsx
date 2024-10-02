@@ -132,9 +132,10 @@ const Footer = () => {
                 {/* Bottom Footer */}
 
             </div>
-            <div className="flex w-full bg-[#000a12] items-center justify-center gap-1 text-[1rem] py-4 text-[#fff]">
+            <div className="flex w-full bg-[#000a12] items-center justify-around gap-1 flex-wrap text-[1rem] py-4 text-[#fff]">
 
-                <span className="text-center text-[0.9rem]">© 2024 UCS All rights reserved.</span>
+                <span className="text-center text-[0.9rem] w-[18rem]">© 2024 UCS All rights reserved.</span>
+                <span className="text-center text-[0.9rem] w-[18rem]">Developed by - <Link target='_blank' className='font-semibold underline' to={"https://cleverclicks.in/"}>Clever Clicks</Link></span>
             </div>
         </footer>
     );

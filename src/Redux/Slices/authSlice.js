@@ -220,6 +220,19 @@ export const allTC = createAsyncThunk('/user/bookings', async () => {
     }
 });
 
+export const sendInquiry = createAsyncThunk('/user/inquiry', async (data) => {
+    try {
+        let res = axiosInstance.post('/inquiry', data);
+
+        res = await res;
+        // toast.success(res.data.message)
+        return res.data;
+    } catch (e) {
+
+        return e?.response?.data?.message;
+    }
+});
+
 
 const authSlice = createSlice({
     name: 'auth',
