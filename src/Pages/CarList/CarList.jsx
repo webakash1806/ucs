@@ -13,7 +13,7 @@ import MainForm from '../../Components/MainForm';
 import { UserGroupIcon, BoltIcon } from '@heroicons/react/24/outline'; // Importing Heroicons
 import { LuLuggage } from 'react-icons/lu'
 import { MdCarRental, MdContactSupport } from 'react-icons/md'
-import { FaIndianRupeeSign, FaTriangleExclamation } from 'react-icons/fa6'
+import { FaIndianRupeeSign } from 'react-icons/fa6'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
 import { FaSignOutAlt } from 'react-icons/fa';
 const CarList = () => {
@@ -470,7 +470,7 @@ const CarList = () => {
                                         <div className='flex gap-2'>
                                             <div onClick={() => setDetailsActive(`2.${index}`)} className="flex cursor-pointer  items-center p-[0.15rem] pr-1 sm:px-3 sm:pl-2 bg-blue-100 border border-blue-500 rounded">
                                                 <div className="p-1 rounded-full">
-                                                    <FaTriangleExclamation className="w-4 h-4 text-blue-600" />
+                                                    <FaSignOutAlt className="w-4 h-4 text-blue-600" />
                                                 </div>
                                                 <span className="text-gray-700 ">Exclusions</span>
                                             </div>

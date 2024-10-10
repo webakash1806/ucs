@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { FaArrowRight, FaCar, FaCreditCard, FaSpinner, FaXmark } from 'react-icons/fa6'
-import { IoDocumentText } from 'react-icons/io5'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../../assets/car1.avif'
 import { MdAirlineSeatReclineExtra, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md'
@@ -56,6 +55,7 @@ const BookOnewayCab = () => {
     const [discountPrice, setDiscountPrice] = useState(0)
     const [voucherLoading, setVoucherLoading] = useState(false)
     const [gstActive, setGstActive] = useState(false)
+    const [gstPrice, setGstPrice] = useState(0)
 
     const userData = useSelector((state) => state?.auth)
 
@@ -88,11 +88,24 @@ const BookOnewayCab = () => {
         phoneNumber: userData?.data?.phoneNumber || "",
         voucherCode: "",
         paymentMode: '10',
+        actualAmount: totalPrice,
+        discountAmount: discountPrice,
+        totalAmount: finalPrice,
+        gstAmount: gstPrice,
         declaration: false,
         gst: false,
         extraPerKm: cabData?.extraKm,
     })
 
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            actualAmount: totalPrice,
+            discountAmount: discountPrice,
+            totalAmount: finalPrice,
+            gstAmount: gstPrice,
+        })
+    }, [totalPrice, discountPrice, finalPrice, gstPrice])
 
 
 
@@ -199,11 +212,15 @@ const BookOnewayCab = () => {
         if (formData.gst) {
             setFinalPrice((Number(gst) + Number(finalPrice)))
             setGstActive(true)
+            setGstPrice(gst)
+
         }
 
         if (gstActive) {
             setFinalPrice((Number(finalPrice) - Number(gst)))
             setGstActive(false)
+            setGstPrice(gst)
+
         }
     }
 
@@ -505,12 +522,12 @@ const BookOnewayCab = () => {
                         <div className='text-[#0f0f0f]'>
                             {detailsActive === 1 && (
                                 <div className="text-[0.8rem] sm:text-[0.95rem] p-2 py-4 flex flex-col gap-3">
-                                    <div className="flex items-center gap-2">
+                                    {/* <div className="flex items-center gap-2">
                                         <div className="p-[6px] border-[0.1px] border-black rounded-full">
                                             <IoDocumentText className="text-[1.1rem]" />
                                         </div>
                                         <p>GST charges (5%)</p>
-                                    </div>
+                                    </div> */}
                                     <div className="flex items-center gap-2">
                                         <div className="p-[6px] border-[0.1px] border-black rounded-full">
                                             <GiGasPump className="text-[1.1rem]" />

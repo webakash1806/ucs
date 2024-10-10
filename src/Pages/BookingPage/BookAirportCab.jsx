@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { FaArrowRight, FaCar, FaCreditCard, FaSpinner, FaXmark } from 'react-icons/fa6'
-import { IoDocumentText } from 'react-icons/io5'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../../assets/car1.avif'
 import { MdAirlineSeatReclineExtra, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md'
@@ -54,6 +53,7 @@ const BookAirportCab = () => {
     const [discountPrice, setDiscountPrice] = useState(0)
     const [voucherLoading, setVoucherLoading] = useState(false)
     const [gstActive, setGstActive] = useState(false)
+    const [gstPrice, setGstPrice] = useState(0)
 
     const userData = useSelector((state) => state?.auth)
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
@@ -86,9 +86,23 @@ const BookAirportCab = () => {
         declaration: false,
         airpotValue: airpotValue,
         gst: false,
+        actualAmount: cabData?.rates[0]?.rate,
+        discountAmount: discountPrice,
+        totalAmount: finalPrice,
+        gstAmount: gstPrice,
         rate: cabData?.rates[0]?.rate,
         extraPerKm: cabData?.rates[0]?.extra,
     })
+
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            actualAmount: totalPrice,
+            discountAmount: discountPrice,
+            totalAmount: finalPrice,
+            gstAmount: gstPrice,
+        })
+    }, [totalPrice, discountPrice, finalPrice, gstPrice])
 
 
     const formatPickupDate = (dateString) => {
@@ -191,15 +205,19 @@ const BookAirportCab = () => {
 
 
     const handleGst = () => {
-        const gst = totalPrice * 5 / 100
+
+        const gst = finalPrice * 5 / 100
+
         if (formData.gst) {
             setFinalPrice((Number(gst) + Number(finalPrice)))
             setGstActive(true)
+            setGstPrice(gst)
         }
 
         if (gstActive) {
             setFinalPrice((Number(finalPrice) - Number(gst)))
             setGstActive(false)
+            setGstPrice(0)
         }
     }
 
@@ -287,6 +305,8 @@ const BookAirportCab = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
+        console.log(formData)
 
         const { fromLocation, tripType, category, airpotValue, pickupDate, pickupTime, name, email, phoneNumber, airpotAddress, paymentMode, distance } = formData
 
@@ -495,10 +515,7 @@ const BookAirportCab = () => {
                         <div className="p-4 text-gray-700">
                             {detailsActive === 1 && (
                                 <div className="space-y-3">
-                                    <div className="flex items-center gap-2">
-                                        <IoDocumentText className="text-xl text-blue-600" />
-                                        <p>GST charges (5%)</p>
-                                    </div>
+
                                     <div className="flex items-center gap-2">
                                         <GiGasPump className="text-xl text-blue-600" />
                                         <p>Base Fare</p>

@@ -245,7 +245,7 @@ const RoundCarList = () => {
                                                     <div className="flex justify-between sm:flex-col sm:w-[13rem] max-w-[14.5rem] items-center gap-3">
                                                         <div className='flex flex-col items-center'>
                                                             <div className="flex items-center mr-2 text-[1.1rem] font-bold text-gray-800">
-                                                                <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " /> {(totalFare()) * Number(data?.perKm)}
+                                                                <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " /> {((totalFare()) * Number(data?.perKm))?.toFixed(2)}
                                                             </div>
                                                             <p className='text-[0.78rem] font-semibold'>Upto {totalFare()} km</p>
                                                         </div>
@@ -290,7 +290,7 @@ const RoundCarList = () => {
                                             <div className="hidden sm:flex sm:flex-col  min-w-[9rem] max-w-[9rem]  items-center ">
                                                 <div>
                                                     <div className="flex items-center text-2xl font-bold text-gray-800">
-                                                        <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " /> {(totalFare()) * (data?.perKm)}
+                                                        <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " /> {((totalFare()) * (data?.perKm))?.toFixed(2)}
                                                     </div>
                                                     <p className='text-[0.8rem] font-semibold'>Upto {totalFare()} km</p>
                                                 </div>

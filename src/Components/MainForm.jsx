@@ -20,11 +20,32 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [startDate, setStartDate] = useState(new Date());
     const [returnDate, setReturnDate] = useState(new Date());
     const [minSelectableDate, setMinSelectableDate] = useState(new Date());
-    const [startTime, setStartTime] = useState(() => {
+    const [startTime, setStartTime] = useState();
+    useEffect(() => {
         const now = new Date();
-        now.setHours(now.getHours() + 3);
-        return now;
-    });
+        const selectedDate = new Date(startDate);
+
+        const isToday = now.getFullYear() === selectedDate.getFullYear() &&
+            now.getMonth() === selectedDate.getMonth() &&
+            now.getDate() === selectedDate.getDate();
+
+        const currentHour = selectedDate.getHours();
+        const tomorrow = new Date(selectedDate);
+        tomorrow.setDate(selectedDate.getDate() + 1);
+        tomorrow.setHours(7, 0, 0, 0); // Set to 7:00 AM
+
+        if (isToday) {
+            now.setHours(now.getHours() + 3);
+            setStartTime(now);
+
+        } else {
+            // If it's not today, just set to 7:00 AM next day
+            setStartTime(tomorrow);
+        }
+
+        console.log(currentHour);
+    }, [startDate]);
+    // Watch minSelectableDate changes
 
     useEffect(() => {
         // Load Google Maps script if not already loaded

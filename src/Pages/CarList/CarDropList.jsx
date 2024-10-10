@@ -263,13 +263,13 @@ const CarDropList = () => {
 
                                             <div className="w-full ml-2 sm:hidden">
                                                 <div className="block sm:text-left">
-                                                    <h2 className="mb-1 text-[1.4rem] font-semibold line-clamp-1">{data?.name}</h2>
+                                                    <h2 className="mb-1 sm:text-[1.4rem] text-[1.15rem] font-semibold ">{data?.name}</h2>
 
                                                 </div>
                                                 <div className="flex justify-between sm:flex-col sm:w-[13rem] max-w-[14.5rem] items-center gap-3">
                                                     <div className='flex flex-col items-center'>
                                                         <div className="flex items-center mr-2 text-[1.1rem] font-bold text-gray-800">
-                                                            <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " /> {data?.rates[0]?.rate}
+                                                            <FaIndianRupeeSign className="w-4 h-4 text-gray-800 " /> {data?.rates[0]?.rate?.toFixed(2)}
                                                         </div>
                                                         <p className='text-[0.78rem] font-semibold'>Upto {data?.rates[0]?.kilometer} km</p>
                                                     </div>
@@ -314,7 +314,7 @@ const CarDropList = () => {
                                         <div className="hidden sm:flex sm:flex-col  min-w-[9rem] max-w-[9rem]  items-center ">
                                             <div>
                                                 <div className="flex items-center text-2xl font-bold text-gray-800">
-                                                    <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " /> {data?.rates[0]?.rate}
+                                                    <FaIndianRupeeSign className="w-4 h-4 mt-1 text-gray-800 " /> {data?.rates[0]?.rate?.toFixed(2)}
                                                 </div>
                                                 <p className='text-[0.8rem] font-semibold'>Upto {data?.rates[0]?.kilometer} km</p>
                                             </div>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { FaArrowRight, FaCar, FaCreditCard, FaSpinner, FaXmark } from 'react-icons/fa6'
-import { IoDocumentText } from 'react-icons/io5'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../../assets/car1.avif'
 import { MdAirlineSeatReclineExtra, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md'
@@ -55,6 +54,9 @@ const RoundTripBook = () => {
     const [discountPrice, setDiscountPrice] = useState(0)
     const [voucherLoading, setVoucherLoading] = useState(false)
     const [gstActive, setGstActive] = useState(false)
+    const [gstPrice, setGstPrice] = useState(0)
+
+
     const userData = useSelector((state) => state?.auth)
 
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
@@ -84,12 +86,25 @@ const RoundTripBook = () => {
         voucherCode: "",
         distance: distance,
         paymentMode: '10',
+        actualAmount: totalPrice,
+        discountAmount: discountPrice,
+        totalAmount: finalPrice,
+        gstAmount: gstPrice,
         declaration: false,
         gst: false,
         extraPerKm: cabData?.extraKm,
         perKm: cabData?.perKm
     })
 
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            actualAmount: totalPrice,
+            discountAmount: discountPrice,
+            totalAmount: finalPrice,
+            gstAmount: gstPrice,
+        })
+    }, [totalPrice, discountPrice, finalPrice, gstPrice])
 
 
     const formatPickupDate = (dateString) => {
@@ -198,11 +213,15 @@ const RoundTripBook = () => {
         if (formData.gst) {
             setFinalPrice((Number(gst) + Number(finalPrice)))
             setGstActive(true)
+            setGstPrice(gst)
+
         }
 
         if (gstActive) {
             setFinalPrice((Number(finalPrice) - Number(gst)))
             setGstActive(false)
+            setGstPrice(gst)
+
         }
     }
 
@@ -449,7 +468,7 @@ const RoundTripBook = () => {
                                     </div>
                                     <div className="flex items-center gap-1 font-medium text-gray-600">
                                         <GiTakeMyMoney />
-                                        <p>&#8377; {finalPrice} for {distance} km</p>
+                                        <p>&#8377; {finalPrice?.toFixed(2)} for {distance} km</p>
                                     </div>
                                 </div>
                             </div>
@@ -463,7 +482,7 @@ const RoundTripBook = () => {
                             </div>
                             <div className="flex items-center mt-1">
                                 <h3 className="font-semibold">Total Fare:</h3>
-                                <p className="ml-2">&#8377; {finalPrice} upto {distance} km</p>
+                                <p className="ml-2">&#8377; {finalPrice?.toFixed(2)} upto {distance} km</p>
                             </div>
                             <div className="flex items-center mt-1">
                                 <h3 className="font-semibold">Return date:</h3>
@@ -530,10 +549,10 @@ const RoundTripBook = () => {
                                 )}
                                 {detailsActive === 1 && (
                                     <div className="text-[0.8rem] sm:text-[0.9rem] p-2 py-4 space-y-4">
-                                        <div className="flex items-center gap-2">
+                                        {/* <div className="flex items-center gap-2">
                                             <IoDocumentText className="text-[1.1rem]" />
                                             <p>GST charges (5%)</p>
-                                        </div>
+                                        </div> */}
                                         <div className="flex items-center gap-2">
                                             <GiGasPump className="text-[1.1rem]" />
                                             <p>Base Fare</p>

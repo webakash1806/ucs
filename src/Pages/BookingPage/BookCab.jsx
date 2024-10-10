@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { FaArrowRight, FaCar, FaCreditCard, FaSpinner, FaXmark } from 'react-icons/fa6'
-import { IoDocumentText } from 'react-icons/io5'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import car1 from '../../assets/car1.avif'
 import { MdAirlineSeatReclineExtra, MdKeyboardArrowRight, MdLocalParking, MdLuggage } from 'react-icons/md'
@@ -55,6 +54,7 @@ const BookCab = () => {
     const [discountPrice, setDiscountPrice] = useState(0)
     const [voucherLoading, setVoucherLoading] = useState(false)
     const [gstActive, setGstActive] = useState(false)
+    const [gstPrice, setGstPrice] = useState(0)
 
     const userData = useSelector((state) => state?.auth)
 
@@ -75,11 +75,25 @@ const BookCab = () => {
         dropAddress: "",
         distance: selectedType === "8 hrs | 80 km" ? 80 : 120,
         paymentMode: '10',
+        actualAmount: totalPrice,
+        discountAmount: discountPrice,
+        totalAmount: finalPrice,
+        gstAmount: gstPrice,
         declaration: false,
         gst: false,
         extraPerKm: cabData?.perKm,
         extraPerHr: cabData?.perHour,
     })
+
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            actualAmount: totalPrice,
+            discountAmount: discountPrice,
+            totalAmount: finalPrice,
+            gstAmount: gstPrice,
+        })
+    }, [totalPrice, discountPrice, finalPrice, gstPrice])
 
 
 
@@ -198,11 +212,15 @@ const BookCab = () => {
         if (formData.gst) {
             setFinalPrice((Number(gst) + Number(finalPrice)))
             setGstActive(true)
+            setGstPrice(gst)
+
         }
 
         if (gstActive) {
             setFinalPrice((Number(finalPrice) - Number(gst)))
             setGstActive(false)
+            setGstPrice(gst)
+
         }
     }
 
@@ -293,7 +311,7 @@ const BookCab = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
+        console.log(formData)
         const { cityName, tripType, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, dropAddress, paymentMode, distance } = formData
 
         if (currentStep === 1) {
@@ -511,12 +529,12 @@ const BookCab = () => {
                         <div className="text-[#0f0f0f] px-4 py-2">
                             {detailsActive === 1 && (
                                 <div className="text-[0.8rem] flex flex-col items-start gap-2">
-                                    <div className="flex items-center gap-2">
+                                    {/* <div className="flex items-center gap-2">
                                         <div className="p-[6px] border-[0.1px] border-black rounded-full">
                                             <IoDocumentText className="text-[1.1rem]" />
                                         </div>
                                         <p>GST charges (5%)</p>
-                                    </div>
+                                    </div> */}
                                     <div className="flex items-center gap-2">
                                         <div className="p-[6px] border-[0.1px] border-black rounded-full">
                                             <GiGasPump className="text-[1.1rem]" />

@@ -37,13 +37,6 @@ const Profile = () => {
     const [onewayTC, setOnewayTC] = useState([]);
 
 
-
-
-
-
-
-
-
     const setTripTypeData = (tripType, tC) => {
         switch (tripType) {
             case 'local':
@@ -231,7 +224,6 @@ const Profile = () => {
     const inputStyle = "w-full p-[0.1rem] tracking-wide bg-transparent outline-none placeholder:text-[#808080]";
     const disabledInputStyle = "w-full p-[0.1rem] tracking-wide bg-transparent outline-none placeholder:text-[#808080]";
 
-
     return (
         <div className="flex flex-col items-center justify-center min-h-screen overflow-x-hidden">
 
@@ -268,6 +260,7 @@ const Profile = () => {
                         <div className={`relative overflow-hidden top-0 left-0 bg-sky-50 min-h-full ${sidebarOpen ? 'min-w-[15rem]' : 'max-w-[2.8rem] min-w-[2.7rem]'} p-1 transition-transform transform z-40 shadow-lg md:min-w-[15rem] md:transform-none md:transition-none`}>
                             <ul className="pt-[3.2rem] space-y-4">
                                 {/* Hamburger Menu Button (Visible on small screens only) */}
+                                <li className='ml-2 text-[1.1rem]'>Hello <span className='font-semibold'>{profileData?.name?.split(" ")[0]}</span></li>
                                 <div onClick={toggleSidebar} className={`text-[1.1rem] p-2 cursor-pointer bg-[#FFB827] text-white rounded-lg shadow-lg md:hidden`}>
                                     <FaBars />
                                 </div>
