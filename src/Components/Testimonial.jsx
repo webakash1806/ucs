@@ -18,19 +18,22 @@ const Testimonial = () => {
     };
 
     return (
-        <div className='relative flex flex-col items-center justify-between pb-[5rem] bg-black' >
-            <img src={cardBgImg} alt="icon" className='absolute top-0 left-0 w-full object-cover h-full' />
-            <div className='w-full h-full bg-black absolute opacity-70'></div>
-            <div className='absolute top-6 z-10 text-center'>
-                <h1 className='text-white text-3xl font-semibold'>What our family says?</h1>
+        <div>
+               <div className='text-center'>
+                <h1 className='text-main text-3xl font-semibold'>What our family says?</h1>
                 <p className='text-white mt-1'>Listen by them</p>
             </div>
+        <div className='relative flex flex-col items-center justify-between pb-[5rem] bg-main' >
+            {/* <img src={cardBgImg} alt="icon" className='absolute top-0 left-0 w-full object-cover h-full' /> */}
+            {/* <div className='w-full h-full bg-black absolute opacity-70'></div> */}
+         
             <Slider {...settings} className='mt-[8rem] xl:mt-[10rem] flex h-fit z-[60] w-full'>
                 {
                     useReviewData.map((data, ind) => <ReviewCard key={ind + 1} data={data} />)
                 }
             </Slider>
         </div >
+        </div>
     )
 }
 

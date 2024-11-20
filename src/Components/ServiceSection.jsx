@@ -57,7 +57,7 @@ const ServiceSection = () => {
     return (
         <div className="sm:px-6 px-4 py-12 bg-[#F5F6F7] flex flex-col items-center">
             <div className="mb-8 text-center">
-                <h1 className="text-3xl font-bold text-gray-800 md:text-4xl">
+                <h1 className="text-3xl font-bold text-main md:text-4xl">
                     A Car for Every Occasion
                 </h1>
                 <p className="mt-4 text-gray-600">

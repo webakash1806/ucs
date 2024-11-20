@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { sendInquiry } from "../Redux/Slices/authSlice";
 import { ImSpinner8 } from "react-icons/im";
+import { Link } from "react-router-dom";
 const Contact = () => {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
@@ -156,17 +157,21 @@ const Contact = () => {
                             <FaPhoneAlt className="mr-4 text-4xl text-main" />
                             <div>
                                 <h2 className="text-xl font-semibold text-main">Phone</h2>
-                                <p className="text-gray-600">+91 98765 43210</p>
+                                <a href="tel:+919520801801" className="hover:text-gray-800">+91-9520801801</a>
+                            
                             </div>
                         </div>
 
                         {/* WhatsApp */}
                         <div className="flex items-center p-6 transition-shadow duration-300 bg-white rounded-lg shadow-md hover:shadow-lg">
+                            {/* <a href='919876543210' > */}
                             <FaWhatsapp className="mr-4 text-4xl text-green-500" />
                             <div>
                                 <h2 className="text-xl font-semibold text-main">WhatsApp</h2>
-                                <p className="text-gray-600">+91 98765 43210</p>
+                                <Link        target='_blank'
+          to={"https://api.whatsapp.com/send/?phone=919520801801"} className="text-gray-600">+91 9520801801</Link>
                             </div>
+                            {/* </a> */}
                         </div>
 
                         {/* Email */}
@@ -174,7 +179,7 @@ const Contact = () => {
                             <FaEnvelope className="mr-4 text-4xl text-main" />
                             <div>
                                 <h2 className="text-xl font-semibold text-main">Email</h2>
-                                <p className="text-gray-600">contact@ucs.com</p>
+                                <p className="text-gray-600">ucscab@gmail.com</p>
                             </div>
                         </div>
 
@@ -183,7 +188,7 @@ const Contact = () => {
                             <FaMapMarkerAlt className="mr-4 text-4xl text-main" />
                             <div>
                                 <h2 className="text-xl font-semibold text-main">Location</h2>
-                                <p className="text-gray-600">Ground floor, Plot no 29, F-33, Milan Colony, Mumbai</p>
+                                <p className="text-gray-600">UCS CAB, Shimla Bypass Rd, Near ISBT, Dehradun, Uttarakhand</p>
                             </div>
                         </div>
                     </div>
@@ -194,7 +199,7 @@ const Contact = () => {
                 {/* Google Maps Iframe */}
                 <div className="mt-10 bg-white rounded-lg shadow-md">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.872156197157!2d72.92381737448714!3d19.066799746678923!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c02f9bc7bce7%3A0x58a06dcda2cbff0!2sGovandi!5e0!3m2!1sen!2sin!4v1693891709390!5m2!1sen!2sin"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3444.921536487134!2d77.9939660095581!3d30.296295274692604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39092b46125c112f%3A0x491274c94aa3bfb2!2sUCS%20CAB!5e0!3m2!1sen!2sin!4v1731949865323!5m2!1sen!2sin"
                         width="100%"
                         height="400"
                         allowFullScreen=""

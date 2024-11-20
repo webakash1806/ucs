@@ -9,6 +9,7 @@ export default {
       animation: {
         'spin-slow': 'spin 100s linear infinite', // Spin slowly
       },
+      
       colors: {
         main: '#08828E',
         light: '#656262',
@@ -17,6 +18,11 @@ export default {
         white: '#ffffff',  // Standard white color
         black: '#000000',  // Standard black color
       },
+      fontFamily: {
+        strong: ['strong_girl', '!important'],
+        p1:["Poppins","sans-serif"]
+      }
+    
     },
   },
   plugins: [

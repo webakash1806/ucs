@@ -64,10 +64,14 @@ const CarDropList = () => {
 
     const tc = tcData?.tC?.map(data => data?.text)
 
+    let newFilteredData
 
+    // filter function
     useEffect(() => {
         if (cabData) {
-            const newFilteredData = cabData?.rates?.map((car) => {
+            console.log("cab data is",cabData);
+            
+         newFilteredData = cabData?.rates?.map((car) => {
                 const filteredRates = car?.rates?.filter((rate) => {
                     if (distance <= 30) {
                         return rate.kilometer === '30';
@@ -86,6 +90,11 @@ const CarDropList = () => {
                 return { ...car, rates: filteredRates };
             });
 
+            console.log(newFilteredData);
+
+          
+            
+
             // Handle case where no data is found for distances beyond 45 km
             const noDataFound = distance > 70;
 
@@ -96,6 +105,27 @@ const CarDropList = () => {
             }
         }
     }, [distance, cabData, location.state]); // Ensure this runs when `distance` or `cabData` chang
+
+   
+    //  kya hua bro
+
+    console.log(filteredData);
+    
+
+
+   // Sorting logic (ensure newFilteredData is valid)
+   const sortedCars = (filteredData || []).filter(car => car.rates?.length > 0) // Only include cars with valid rates
+   .sort((a, b) => {
+       // Ensure both cars have a rate and then compare
+       if (a.rates?.[0]?.rate && b.rates?.[0]?.rate) {
+           return a.rates[0].rate - b.rates[0].rate; // Sort based on rate
+       }
+       return 0; // If rates are not available, don't change the order
+   });
+
+console.log("Sorted cars:", sortedCars);
+
+
 
     const fetchDistance = async () => {
         setDistance(0)
@@ -186,6 +216,11 @@ const CarDropList = () => {
         }
     }, [filteredData, cabData])
 
+
+
+    console.log(filteredData);
+    
+
     return (
         <div className=' bg-lightSky min-h-[90vh]'>
             <div className='flex flex-row items-center bg-[#dfdfdf] py-4 justify-between px-[0.4rem] pl-6 sm:flex-row sm:px-10 gap-4'>
@@ -246,7 +281,7 @@ const CarDropList = () => {
                     (distance === 0) ? <Loading /> :
                         noCab ?
                             <p>No Cabs available to this city right now</p> :
-                            filteredData?.map((data, index) => {
+                            sortedCars?.map((data, index) => {
                                 return <div key={index} className="flex  flex-col max-w-[27rem] sm:max-w-[55rem] w-full overflow-hidden border-main border rounded-lg shadow-lg hover:shadow-none transition-all duration-300">
                                     <div className='flex flex-col items-center justify-between w-full mx-auto bg-white border-b sm:flex-row'>
                                         {/* Left section */}

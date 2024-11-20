@@ -64,10 +64,10 @@ const BlogSection = () => {
         <div className='flex flex-col items-center justify-center p-6 bg-white xl:p-10 bg-gradient-to-br'>
             {/* Header */}
             <div className='mb-10 text-center'>
-                <button className='px-10 py-3 font-semibold text-white transition-all rounded-full shadow-lg bg-main hover:bg-blue-700'>
+                {/* <button className='px-10 py-3 font-semibold text-white transition-all rounded-full shadow-lg bg-main hover:bg-blue-700'>
                     News & Blogs
-                </button>
-                <h1 className='mt-4 text-2xl font-bold xl:text-3xl'>Latest News & Blogs</h1>
+                </button> */}
+                <h1 className='mt-4 text-2xl font-bold xl:text-3xl text-main'>Latest News & Blogs</h1>
             </div>
 
             <div className="relative w-full max-w-[82rem] mx-auto flex items-center justify-center">
@@ -84,9 +84,11 @@ const BlogSection = () => {
                         <SwiperSlide key={index} className='relative overflow-hidden text-white rounded-lg mx-auto w-[18rem] flex flex-col items-center justify-between bg-dark shadow-xl min-h-[25rem] max-h-[25rem] cursor-pointer'>
                             <img src={blog.img} alt={`blog${index + 1}`} className='w-full h-[10rem] object-cover transition-transform duration-300 hover:opacity-80' />
                             <div className='p-4 pt-2 '>
-                                <h2 className='text-[1.1rem] line-clamp-2 font-semibold mb-1 hover:text-blue-400 transition-all'>
+                                <Link to={"/blog/details"}>
+                                <h2 className='text-[1.1rem] line-clamp-2 font-semibold mb-1 hover:text-red-500 transition-all'>
                                     {blog.title}
                                 </h2>
+                                </Link>
                                 <p className='text-gray-400 mb-4 text-[0.9rem] line-clamp-3'>
                                     {blog.description}
                                 </p>

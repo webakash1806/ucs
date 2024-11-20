@@ -30,8 +30,8 @@ const HomeSection2 = () => {
 
     return (
         <div className='w-full px-[4vw] lg:px-[6vw] flex flex-col items-center justify-center bg-[#F5F6F7]  py-20 pt-6'>
-            <h1 className='text-3xl md:text-4xl font-semibold pb-10  text-dark '>
-                UCS Cabs : Aao Chalein
+            <h1 className='text-3xl md:text-4xl font-semibold pb-10  text-main '>
+                UCS CAB : Aao Chalein
             </h1>
             <div className='w-fit flex flex-col sm:block p-4 bg-[#cedfe427] rounded-lg shadow-md '>
                 <img src={car1} className='float-left w-full sm:w-[40vw] md:w-[30vw] lg:w-[25vw] sm:mr-3' alt="Main visual" />

@@ -12,6 +12,8 @@ import routeTitles from './Hooks/routeTitles'
 import seoMetaDescriptions from './Hooks/seoMetaDescriptions';
 import seoKeywords from './Hooks/seoKeywords';
 import { FaWhatsapp } from 'react-icons/fa';
+import HolidayPage from './Pages/Holiday/HolidayPage';
+import HolidayDetail from './Pages/Holiday/HolidayDetail';
 // Lazy loading the pages
 const Home = lazy(() => import('./Pages/Home'));
 const Contact = lazy(() => import('./Pages/Contact'));
@@ -37,6 +39,12 @@ const RoundTripService = lazy(() => import('./Pages/ServicePage/RoundTripService
 const AirportCabService = lazy(() => import('./Pages/ServicePage/AirportCabService'));
 const OneWayService = lazy(() => import('./Pages/ServicePage/OneWayService'));
 const ForgotPassword = lazy(() => import('./Pages/Auth/ForgotPassword'));
+import 'primereact/resources/themes/saga-blue/theme.css';  // or any other available theme
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+import SocialMediaIcons from './Components/SocailMedia';
+import BlogDetail from './Pages/Blog/BlogDetail';
+
 
 const App = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -194,6 +202,9 @@ const App = () => {
           <Route path='/services/round-trip' element={<RoundTripService />} />
           <Route path='/services/airport-cabs' element={<AirportCabService />} />
           <Route path='/services/one-way-cabs' element={<OneWayService />} />
+          <Route path='/holiday/package' element={<HolidayPage/>} />
+          <Route path='/holiday/package/detail' element={<HolidayDetail/>} />
+          <Route path='/blog/details' element={<BlogDetail/>} />
 
           {/* Auth */}
           <Route element={<RequireAuth />}>
@@ -203,6 +214,7 @@ const App = () => {
         </Routes>
       </Suspense>
       <Footer />
+   
       <div className='fixed z-20 bottom-4 right-4'>
         <Link
           target='_blank'

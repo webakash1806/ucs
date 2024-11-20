@@ -7,6 +7,12 @@ import {
     BsWhatsapp
 } from 'react-icons/bs'
 
+import facebook from '../assets/Social/facebook.png'
+import instagram from '../assets/Social/instagram.png'
+import twitter from '../assets/Social/twitter.png'
+import youtube from '../assets/Social/youtube.png'
+
+
 const Footer = () => {
     return (
         <footer className="relative flex flex-col items-center justify-center overflow-x-hidden">
@@ -56,16 +62,18 @@ const Footer = () => {
                                                     <path fill="none" d="M0 0h24v24H0z"></path>
                                                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"></path>
                                                 </svg>
-                                                contact@domain.com
+                                                ucscab@gmail.com
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
                                 <div className='flex gap-4 mt-4'>
-                                    <a href={''} className='text-[18px]'><BsLinkedin /></a>
-                                    <Link to={''} target='_blank' className='text-[18px]'><BsFacebook /></Link>
-                                    <Link to={`https://wa.me/${''}?text=Hello`} target='_blank' className='text-[18px]'><BsWhatsapp /></Link>
-                                    <Link to={''} target='_blank' className='text-[18px]'><BsInstagram /></Link>
+                                    <Link to={"https://www.facebook.com/UcsCabOfficial"} target='_blank' className='text-[18px]'>
+                                        <img src={facebook} alt="" className='w-5 h-5 object-cover' />
+                                        </Link>
+                                    <Link to={'https://www.instagram.com/UcsCabOfficial/'} target='_blank' className='text-[18px]'><img src={instagram} alt="" className='w-5 h-5 object-cover' /></Link>  
+                                    <Link to={`https://x.com/i/flow/login?redirect_after_login=%2Fucscabofficial`} target='_blank' className='text-[18px]'>  <img src={twitter} alt="" className='w-5 h-5 object-cover' /></Link>
+                                    <Link to={'https://www.youtube.com/@ucscab'} target='_blank' className='text-[18px]'>  <img src={youtube} alt="" className='w-5 h-5 object-cover' /></Link>
                                     {/* <a href="" className='text-[18px]'><BsTwitter /></a> */}
                                 </div>
                             </div>

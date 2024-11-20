@@ -18,6 +18,8 @@ import bookingDone from "../../assets/icons/bookingDone.avif"
 import bookingProgress from "../../assets/icons/bookProgress.avif"
 import failed from "../../assets/icons/failed.avif"
 
+
+
 const BookCab = () => {
     const navigate = useNavigate()
     const [currentStep, setCurrentStep] = useState(1);
@@ -314,12 +316,24 @@ const BookCab = () => {
         console.log(formData)
         const { cityName, tripType, category, pickupDate, pickupTime, name, email, phoneNumber, pickupAddress, dropAddress, paymentMode, distance } = formData
 
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const phonePattern = /^[6-9]\d{9}$/;
+     
+        console.log(emailPattern.test(email));
+        console.log(phonePattern.test(phoneNumber));
+        
+        
+         
         if (currentStep === 1) {
 
             let hasError = false;
 
             if (!name) {
+                console.log("i am phone number");
+                
                 setErrorMessage((prev) => ({ ...prev, nameMsg: true }));
+                console.log(errorMessage);
+                
                 hasError = true;
             }
 
@@ -328,8 +342,28 @@ const BookCab = () => {
                 hasError = true;
             }
 
+            if(!emailPattern.test(email)){
+                
+                console.log("email pattern is:-",emailPattern.test(email));
+                
+                setErrorMessage((prev) => ({ ...prev, email: true }));
+                console.log(errorMessage);
+                
+                hasError = true;
+            }
+
             if (!phoneNumber) {
+                
                 setErrorMessage((prev) => ({ ...prev, phoneNumber: true }));
+                hasError = true;
+            }
+            
+            if(!phonePattern.test(phoneNumber)){
+                console.log("phone pattern is:-",phonePattern.test(phoneNumber));
+                
+                setErrorMessage((prev) => ({ ...prev, phoneNumber: true }));
+                console.log(errorMessage);
+                
                 hasError = true;
             }
 
@@ -599,7 +633,7 @@ const BookCab = () => {
                                     <div className='p-[5px] border-[0.1px] border-black rounded-full size-fit'>
                                         <PiUsersThreeFill className='text-[1.3rem]' />
                                     </div>
-                                    <h2 className='font-semibold tracking-wide sm:text-[1.3rem]'>Travelers </h2>
+                                    <h2 className='font-semibold tracking-wide sm:text-[1.3rem]'>Travelers 123 </h2>
 
                                 </div>
                                 <div className='p-2 space-y-2'>
@@ -823,6 +857,8 @@ const BookCab = () => {
                                 </div>
                             </>}
                     </form>
+
+
                 </div>
             </div>
             {showBookingCard &&

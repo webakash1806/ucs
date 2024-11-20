@@ -21,6 +21,8 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
     const [returnDate, setReturnDate] = useState(new Date());
     const [minSelectableDate, setMinSelectableDate] = useState(new Date());
     const [startTime, setStartTime] = useState();
+
+    
     useEffect(() => {
         const now = new Date();
         const selectedDate = new Date(startDate);
