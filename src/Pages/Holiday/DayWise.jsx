@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 
-const DayWiseSection = () => {
+const DayWiseSection = ({data}) => {
+  console.log(data);
+  
+
   const dayData = [
     {
       day: 1,
@@ -46,12 +49,13 @@ const DayWiseSection = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4  border borde-red-500">
+    <div className="container mx-auto px-4  border borde-red-500 pt-4">
       {dayData.length === 0 ? (
         <p className="text-center text-gray-500">No itinerary data available</p>
       ) : (
-        dayData.map((day, index) => (
-          <DayDetail key={index} day={day.day} date={day.date} details={day.details} />
+        data.map((day, index) => (
+          <DayDetail key={index} day={day?.day}  details={day?.description
+          } />
         ))
       )}
     </div>
@@ -66,7 +70,7 @@ const DayDetail = ({ day, date, details }) => {
       {/* Circle with Day Label */}
       <div className="flex flex-col items-center">
         <div className="rounded-full bg-blue-500 text-white text-sm font-medium w-12 h-12 flex items-center justify-center">
-          Day {day}
+           {day}
         </div>
         {/* Dotted Line */}
         <div className="flex flex-col items-center">
@@ -79,7 +83,7 @@ const DayDetail = ({ day, date, details }) => {
       {/* Detail Section */}
       <div className={`ml-3 bg-white shadow-sm rounded-md ${isOpen? ' mb-4 ' :'mb-0'} p-3 w-full border border-gray-200`}>
         <div className="flex justify-between items-center">
-          <h3 className="text-md text-gray-800">{`Day ${day} - ${date}`}</h3>
+          <h3 className="text-md text-gray-800">{` ${day} `}</h3>
           {/* Toggle Button */}
           <button
             className="text-blue-500 text-sm"
@@ -89,11 +93,17 @@ const DayDetail = ({ day, date, details }) => {
           </button>
         </div>
         {isOpen && (
-          <div className="mt-2 text-sm text-gray-600 space-y-1">
-            {details.map((detail, index) => (
-              <p key={index}>{detail}</p>
-            ))}
-          </div>
+          // <div className="mt-2 text-sm text-gray-600 space-y-1">
+          //   {details.map((detail, index) => (
+          //     <p key={index}>{detail}</p>
+          //   ))}
+          // </div>
+          <div
+             
+                dangerouslySetInnerHTML={{ __html:details }}
+            />
+
+
         )}
       </div>
     </div>

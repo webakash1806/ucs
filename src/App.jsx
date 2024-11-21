@@ -42,6 +42,10 @@ const ForgotPassword = lazy(() => import('./Pages/Auth/ForgotPassword'));
 import 'primereact/resources/themes/saga-blue/theme.css';  // or any other available theme
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+
+
+
+
 import SocialMediaIcons from './Components/SocailMedia';
 import BlogDetail from './Pages/Blog/BlogDetail';
 

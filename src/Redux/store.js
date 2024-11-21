@@ -5,6 +5,7 @@ import airportTripReducer from './Slices/airportSlice'
 import razorpaySlice from './Slices/razorpaySlice'
 import outstationSlice from './Slices/outstationSlice'
 import dynamicSlice from './Slices/dynamicSlice'
+import packageSlice from './Slices/packageSlice'
 
 const store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ const store = configureStore({
         airportTrip: airportTripReducer,
         razorpay: razorpaySlice,
         outstation: outstationSlice,
-        dynamic: dynamicSlice
+        dynamic: dynamicSlice,
+        packages:packageSlice
     },
     devTools: true
 })

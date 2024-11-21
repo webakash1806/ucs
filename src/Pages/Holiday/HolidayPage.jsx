@@ -12,6 +12,9 @@ import { FaSearch } from 'react-icons/fa'; // Import search icon from react-icon
 import PopularDesti from './PopularDesti';
 import CallToAction from './CallAction';
 import WhyWe from './WhyChooseUs';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPackage } from '../../Redux/Slices/packageSlice';
+import { useEffect } from 'react';
 
 
 const HolidayPage = () => {
@@ -19,6 +22,37 @@ const HolidayPage = () => {
         { id: 1, image: car1 },
         { id: 2, image: car2 },
     ];
+
+    const {data,loading,error}=useSelector((state)=>state?.packages)
+
+    console.log("data is",data);
+    
+
+    const dispatch=useDispatch()
+     
+    const fetchData=async()=>{
+       const response=await dispatch(getPackage())
+       console.log(response);
+       
+    }
+
+
+    useEffect(()=>{
+       fetchData()
+    },[])
+
+    if(error){
+        return <p>Error..</p>
+    }
+
+    {data && data.length > 0 && data.map(item => (
+        <div key={item.id}>{item.name}</div>
+    ))}
+    
+
+    // if(loading){
+    //     return <p>Loading...</p>
+    // }
 
     return (
         <section>
@@ -72,7 +106,8 @@ const HolidayPage = () => {
                 </Swiper>
             </div>
         </div>
-        <PopularDesti/>
+        
+        <PopularDesti holiday={data} isLoading={loading} isError={error}/>
         <CallToAction/>
         <WhyWe/>
       

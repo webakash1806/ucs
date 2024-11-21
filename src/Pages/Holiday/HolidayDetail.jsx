@@ -6,6 +6,10 @@ import { TbPointFilled } from "react-icons/tb";
 import { SiTicktick } from "react-icons/si";
 import BreadCrumbs from "../../Components/BreadCums";
 import DayWiseSection from "./DayWise";
+import { useDispatch } from "react-redux";
+import { getPackage } from "../../Redux/Slices/packageSlice";
+import { useLocation } from "react-router-dom";
+import './StyleHoliday.css'
 
 const HolidayDetail = () => {
   const [showDetails, setShowDetails] = useState(null);
@@ -13,6 +17,14 @@ const HolidayDetail = () => {
   const [openBookingPolicy, setOpenBookingPolicy] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeTab, setActiveTab] = useState('terms');
+  const dispatch=useDispatch()
+
+  const {state}=useLocation()
+
+  console.log(state);
+  
+
+
 
   const termsPoints = [
     'Users must be 18 years or older to make a booking.',
@@ -30,12 +42,24 @@ const HolidayDetail = () => {
 
   const images = [img1, img2];
 
+  const fetchData=async()=>{
+    const response=await dispatch(getPackage())
+    console.log(response);
+    
+  }
+
+
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
     }, 3000); // Change slide every 3 seconds
     return () => clearInterval(interval); // Clear interval on component unmount
   }, [images.length]);
+
+  useEffect(()=>{
+      fetchData()
+  },[])
 
   const toggleDetails = (day) => {
     setShowDetails(showDetails === day ? null : day);
@@ -47,17 +71,24 @@ const HolidayDetail = () => {
     { label: 'PackageDetail' },
   ];
 
+  const formattedInclusive = state?.inclusive
+  ? state.inclusive.replace(
+      /{tick}/g, // Replace a placeholder `{tick}` with the icon
+      `<i class="text-green-500"><svg xmlns="http://www.w3.org/2000/svg" class="text-green-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6.293 9.293a1 1 0 0 1 1.414 0L10 11.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0L6.293 10.707a1 1 0 0 1 0-1.414z"/></svg></i>`
+    )
+  : '';
+
   return (
-    <div className="bg-gray-50 font-sans text-gray-800">
+    <div className="bg-gray-50 font-sans text-gray-800 ">
       <BreadCrumbs headText={"Dubai Delights"} items={breadcrumbItems} />
       
       <div className="container mx-auto p-4 lg:p-6 flex flex-col lg:flex-row lg:max-w-7xl gap-6">
         
         {/* Left Section */}
         <div className="flex-1">
-          <HolidayDetailScroll />
-          <div className="bg-gray-50 border border-gray-100 mt-4">
-            <DayWiseSection />
+          <HolidayDetailScroll data={state?.photos} />
+          <div className="bg-gray-50 border border-gray-100 mt-4 ">
+            <DayWiseSection  data={state?.dayWise} />
           </div>
           
      
@@ -68,11 +99,19 @@ const HolidayDetail = () => {
       <i className="text-blue-600 mr-2">🌟</i> {/* Icon */}
       <h2 className="text-lg font-semibold text-blue-700">Inclusive</h2>
     </div>
-    <div className="flex items-center gap-2 mb-2">
+      <div className="holiday">
+    <div
+             
+                dangerouslySetInnerHTML={{ __html: formattedInclusive}}
+            />
+            </div> 
+
+
+    {/* <div className="flex items-center gap-2 mb-2">
       <i className="text-green-500"><SiTicktick /></i>
       <p className="text-gray-600">Feature 1 included</p>
-    </div>
-    <div className="flex items-center gap-2 mb-2">
+    </div> */}
+    {/* <div className="flex items-center gap-2 mb-2">
       <i className="text-green-500"><SiTicktick /></i>
       <p className="text-gray-600">Feature 2 included</p>
     </div>
@@ -83,7 +122,7 @@ const HolidayDetail = () => {
     <div className="flex items-center gap-2 mb-2">
       <i className="text-green-500"><SiTicktick /></i>
       <p className="text-gray-600">Feature 4 included</p>
-    </div>
+    </div> */}
   </div>
 
   {/* Exclusive Section */}
@@ -94,7 +133,15 @@ const HolidayDetail = () => {
     </div>
     {/* Scrollable Content */}
     <div className="h-32 overflow-y-scroll space-y-2 pr-2">
-      <div className="flex items-center gap-2">
+      <div className="holiday">
+    <div
+             className=""
+             dangerouslySetInnerHTML={{ __html: state?.
+              exclusive
+               }}
+         />
+         </div>
+      {/* <div className="flex items-center gap-2">
         <i className="text-gray-500">❌</i>
         <p className="text-gray-600">Feature 1 excluded</p>
       </div>
@@ -113,7 +160,7 @@ const HolidayDetail = () => {
       <div className="flex items-center gap-2">
         <i className="text-gray-500">❌</i>
         <p className="text-gray-600">Feature 5 excluded</p>
-      </div>
+      </div> */}
     </div>
   </div>
 
@@ -140,18 +187,34 @@ const HolidayDetail = () => {
 
             <div className="mt-4">
               {activeTab === 'terms' && (
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  {termsPoints.map((point, index) => (
-                    <li key={index}>{point}</li>
-                  ))}
-                </ul>
+                // <ul className="list-disc list-inside space-y-2 text-gray-700">
+                //   {termsPoints.map((point, index) => (
+                //     <li key={index}>{point}</li>
+                //   ))}
+                // </ul>
+                <div className="holiday">
+                <div
+             
+             dangerouslySetInnerHTML={{ __html: state?.termsAndCondition
+              
+               }}
+         />
+         </div>
               )}
               {activeTab === 'booking' && (
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
-                  {bookingPolicyPoints.map((point, index) => (
-                    <li key={index}>{point}</li>
-                  ))}
-                </ul>
+                // <ul className="list-disc list-inside space-y-2 text-gray-700">
+                //   {bookingPolicyPoints.map((point, index) => (
+                //     <li key={index}>{point}</li>
+                //   ))}
+                // </ul>
+                <div className="holiday">
+                <div
+             
+                dangerouslySetInnerHTML={{ __html: state?.bookingPolicy
+
+                  }}
+            />
+            </div>
               )}
             </div>
           </div>
@@ -165,30 +228,51 @@ const HolidayDetail = () => {
               <div className="flex items-center justify-between w-full mb-2">
                 <p className="text-sm font-semibold text-gray-800">Starting from</p>
                 <select className="bg-white text-xs border border-gray-300 rounded px-1 py-0.5">
-                  <option>New Delhi</option>
+                  <option>{state?.location}</option>
                 </select>
               </div>
-              <div className="text-3xl font-bold text-black mb-1 font-p1">₹34,775</div>
-              <p className="text-xs text-gray-600">per person</p>
+              <div className="text-3xl font-bold text-black mb-1 font-p1">Rs {state?.rate}</div>
+              {/* <p className="text-xs text-gray-600">per person</p>
               <p className="text-xs text-gray-500">
                 EMI starts from <span className="font-semibold text-blue-600">₹6552</span>
-              </p>
+              </p> */}
             </div>
 
-            {/* Hotel Info */}
-            <div className="px-4 mb-4">
-              <p className="font-semibold text-gray-700">Hotel Included</p>
-              <p className="text-lg text-blue-600">3<sup>★</sup></p>
+            {/* What We Included */}
+            <div className="px-4 mb-8">
+      {/* Header Section */}
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Package Included</h2>
+
+      {/* Package Points in a Row */}
+      <div className="flex flex-wrap gap-4">
+        {state?.includedDetails && state.includedDetails.length > 0 ? (
+          state.includedDetails.map((val, index) => (
+            <div key={index} className="flex items-center space-x-2 bg-gray-100 p-2 rounded-lg shadow-sm">
+              {/* Check Icon */}
+              <i className="text-green-500 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" className="bi bi-check-circle">
+                  <path d="M16 8a8 8 0 1 1-8-8 8 8 0 0 1 8 8zm-8-1a1 1 0 0 0-.707.293L6 8.707l-2-2a1 1 0 1 0-1.414 1.414l2.707 2.707a1 1 0 0 0 1.414 0l4-4a1 1 0 1 0-1.414-1.414L8 7z" />
+                </svg>
+              </i>
+              {/* Point Text */}
+              <p className="text-sm font-medium text-gray-700">{val}</p>
             </div>
+          ))
+        ) : (
+          <p className="text-gray-500">No details available.</p>
+        )}
+      </div>
+    </div>
 
             {/* Dates Selection */}
             <div className="flex items-center px-4 text-xs mb-4">
-              <p className="text-gray-500 mr-2 flex items-center">
-                <i className="pi pi-calendar mr-1" /> 3 Dec - 7 Dec
-              </p>
-              <button className="text-blue-600 underline hover:text-blue-700">
+              <div className="text-gray-500  flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-gray-800">Duration:</h2>
+                <p className=" text-2xl text-black font-normal" >{state?.duration}</p>
+              </div>
+              {/* <button className="text-blue-600 underline hover:text-blue-700">
                 Modify
-              </button>
+              </button> */}
             </div>
 
             {/* Book Now and Submit Query Buttons */}
