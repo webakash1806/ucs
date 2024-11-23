@@ -27,11 +27,11 @@ const About = () => {
         <div className="py-10 bg-gray-100">
             <div className="p-4 mx-auto max-w-7xl md:px-8">
                 {/* Hero Section */}
-                <h1 className="mb-4 text-4xl font-[600] text-center text-main">{data[2]?.title}</h1>
+                <h1 className="mb-4 text-4xl font-[600] text-center text-main">{data[0]?.title}</h1>
                 <section className="flex flex-col items-center sm:block">
-                    <img src={data[2]?.photo?.secure_url} alt="Cab service" className="float-right object-cover w-full md:w-[22rem] lg:w-[25rem] sm:w-[18rem] ml-2 h-full rounded-md shadow-lg md:ml-16" />
+                    <img src={data[0]?.photo?.secure_url} alt="Cab service" className="float-right object-cover w-full md:w-[22rem] lg:w-[25rem] sm:w-[18rem] ml-2 h-full rounded-md shadow-lg md:ml-16" />
                     <div
-                        dangerouslySetInnerHTML={{ __html: data[2]?.description }}
+                        dangerouslySetInnerHTML={{ __html: data[0]?.description }}
                     />
 
                 </section>
@@ -44,7 +44,7 @@ const About = () => {
                             <h3 className="mb-3 text-xl font-semibold text-center text-main">{data[3]?.title}</h3>
                             <img src={mission} className=" w-[4.5rem] sm:w-[5rem] mr-4 float-left" alt="icon" />
                             <div
-                                dangerouslySetInnerHTML={{ __html: data[3]?.description }}
+                                dangerouslySetInnerHTML={{ __html: data[1]?.description }}
                             />
                         </div>
                         <div className="p-6 bg-white rounded-lg shadow-lg">
@@ -52,7 +52,7 @@ const About = () => {
                             <img src={vision} className=" w-[4.3rem] sm:w-[4.7rem] mr-4 float-left" alt="icon" />
 
                             <div
-                                dangerouslySetInnerHTML={{ __html: data[4]?.description }}
+                                dangerouslySetInnerHTML={{ __html: data[2]?.description }}
                             />
                         </div>
                     </div>
