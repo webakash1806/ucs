@@ -4,7 +4,7 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 const CallToAction = () => {
 	return (
-		<section className="ezy__cta2 light relative overflow-hidden py-14 md:py-24 bg-[#08828E]">
+		<section className="ezy__cta2 light relative overflow-hidden py-8 md:py-8 bg-[#08828E]">
 			{/* shapes */}
 			<div className="w-[400px] h-[400px] bg-white bg-opacity-5 rounded-full -m-[100px] absolute left-0 top-0"></div>
 			<div className="w-[400px] h-[400px] bg-white bg-opacity-5 rounded-full -m-[100px] absolute right-0 bottom-0"></div>

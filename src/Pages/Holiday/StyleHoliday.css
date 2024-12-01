@@ -1,7 +1,1 @@
 
-.holiday ul {
-    list-style-type: disc; /* This ensures bullets (dots) are used */
-    list-style-position: inside; /* This keeps bullets inside the list container */
-    padding-left: 20px; /* Adds padding to the left for better spacing */
-  }
-

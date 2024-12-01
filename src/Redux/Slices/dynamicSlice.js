@@ -11,6 +11,7 @@ const initialState = {
     onewayCab: localStorage.getItem('onewayCab') !== "undefined" ? JSON.parse(localStorage.getItem('onewayCab')) : {},
     faq: localStorage.getItem('faq') !== "undefined" ? JSON.parse(localStorage.getItem('faq')) : {},
     about: localStorage.getItem('about') !== "undefined" ? JSON.parse(localStorage.getItem('about')) : {},
+    home: localStorage.getItem('home') !== "undefined" ? JSON.parse(localStorage.getItem('home')) : {},
 };
 
 // Thunks for different actions
@@ -24,6 +25,25 @@ export const getTermsAndCondition = createAsyncThunk('/dynamic/termsAndCondition
 
     }
 });
+
+
+export const getAllHome = createAsyncThunk('/dynamic/home', async () => {
+    try {
+        let res = axiosInstance.get('dynamic/home');
+
+
+        console.log(res);
+        
+        res = await res;
+        return res.data;
+    } catch (e) {
+        return e?.response?.data?.message;
+
+    }
+});
+
+
+
 
 export const getPrivacyPolicy = createAsyncThunk('/dynamic/privacy-policy', async () => {
     try {
@@ -104,6 +124,9 @@ export const getAbout = createAsyncThunk('/dynamic/about', async () => {
 });
 
 
+
+
+
 const dynamicSlice = createSlice({
     name: 'dynamic',
     initialState,
@@ -141,7 +164,8 @@ const dynamicSlice = createSlice({
             .addCase(getAbout.fulfilled, (state, action) => {
                 localStorage.setItem('about', JSON.stringify(action.payload.data));
                 state.about = action.payload.data;
-            })
+            }) 
+            
 
     }
 });

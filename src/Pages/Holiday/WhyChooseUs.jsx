@@ -109,8 +109,8 @@ const WhyWe = () => {
 			<div className="max-w-7xl px-4 mx-auto">
 				<div className="grid grid-cols-12 gap-6">
 					<div className="col-span-12 md:col-span-4">
-						<h2 className="text-3xl md:text-[40px] font-bold leading-normal mb-4 text-black">
-							Why Choose Us for Your Holiday in Dehradun
+						<h2 className="text-3xl md:text-[40px] font-bold leading-normal mb-4 text-main">
+							Why Choose UCS CAB Package
 						</h2>
 						<p className="text-[17px] leading-normal opacity-80 text-black">
 							Plan your dream vacation with our expertly designed holiday packages, personalized travel experiences, and premium UCS cab services in Dehradun.

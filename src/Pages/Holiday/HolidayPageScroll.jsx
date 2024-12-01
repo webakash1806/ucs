@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'; // For navigation
 // Import AOS (Animate On Scroll) for animations
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 // Sample holiday data
 const holidayPackages = [
@@ -27,21 +28,18 @@ const HolidayCard = ({ data }) => {
   const navigate = useNavigate();
 
   return (
-    <div
-      className="dark:bg-[#404156] shadow-lg border-none rounded-none mt-4 cursor-pointer"
-      onClick={() => navigate('/holiday/package/detail', { state: { ...data } })}
-    >
-      <div className="relative">
-        <img src={data?.mainPhoto?.secure_url} alt="" className="w-full h-auto" />
-        <div className="absolute top-4 right-4 bg-[#414257] text-white px-3 py-2">
-          <h6 className="mb-0 font-normal">From {data?.rate}</h6>
-        </div>
-      </div>
-      <div className="p-4">
-        <h5 className="font-medium text-[20px] mb-1">{data?.packageName}</h5>
-        <p className="text-[14px] opacity-50 mb-0">{data?.location}</p>
-      </div>
-    </div>
+  
+    // <div
+    //   className=" shadow-lg border-none rounded-none mt-4 cursor-pointer"
+    //   onClick={() => navigate('/holiday/package/detail', { state: { ...data } })}
+    // >
+              <article class="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl px-8 pb-8 pt-40 max-w-sm mx-auto cursor-pointer" onClick={() => navigate('/holiday/package/detail', { state: { ...data } })}>
+    <img src={data?.mainPhoto?.secure_url} alt="University of Southern California" class="absolute inset-0 h-full w-full object-cover" />
+    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
+    <h3 class="z-10 mt-3 text-3xl font-bold text-white">{data?.location}</h3>
+    {/* <div class="z-10 gap-y-1 overflow-hidden text-sm leading-6 text-black border">City of love</div> */}
+</article>
+    // </div>
   );
 };
 
@@ -83,18 +81,19 @@ const HolidayScrollPage = ({ holidayData }) => {
   };
 
   return (
-    <section className="relative bg-gray-100  pb-6">
-      <div className="max-w-7xl mx-auto p-8 md:px-12">
-        <div className='text-start md:text-center flex flex-col md:items-center justify-center'>
-          <h2 className="font-bold mb-4 transition duration-300 transform text-main text-3xl">
+    <section className="relative bg-gray-100  md:py-10 ">
+      <div className="max-w-7xl mx-auto p-8 md:px-8">
+        <div className='text-start md:text-center flex flex-col md:items-start justify-start b'>
+          <h2 className="font-bold mb-2 transition duration-300 transform text-main text-3xl">
           Top Trending Destinations
           </h2>
-          <h1 className="mb-8 lg:w-1/2 lg:text-center text-black text-xl">Explore Our Top Vacation Packages</h1>
+          <h1 className="mb-4  text-black text-xl">Explore Our Top Vacation Packages</h1>
         </div>
 
         <Slider {...settings}>
+
           {holidayData.map((holiday, index) => (
-            <div key={index} className="p-4">
+            <div key={index} className="">
               <HolidayCard data={holiday} />
             </div>
           ))}
@@ -107,18 +106,24 @@ const HolidayScrollPage = ({ holidayData }) => {
 const SampleNextArrow = (props) => {
   const { className, onClick } = props;
   return (
-    <div className={`${className} arrow-next text-black bg-black rounded-full border border-red-500`} onClick={onClick}>
-      &#8250; {/* Right Arrow Icon */}
-    </div>
+    <div
+    className="absolute top-1/2 right-[-3rem] transform -translate-y-1/2 bg-[#1f708e] text-white rounded-full p-3 cursor-pointer hover:bg-[#1f708e] z-10"
+    onClick={onClick}
+  >
+    <FaArrowRight size={20} />
+  </div>
   );
 };
 
 const SamplePrevArrow = (props) => {
   const { className, onClick } = props;
   return (
-    <div className={`${className} arrow-prev text-black bg-black rounded-full`} onClick={onClick}>
-      &#8249; {/* Left Arrow Icon */}
-    </div>
+    <div
+    className="absolute top-1/2 left-[-3rem] transform -translate-y-1/2 bg-[#1f708e] text-white rounded-full p-3 cursor-pointer hover:bg-[#1f708e] z-10"
+    onClick={onClick}
+  >
+    <FaArrowLeft size={20} />
+  </div>
   );
 };
 

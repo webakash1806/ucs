@@ -7,6 +7,7 @@ const initialState = {
     loading: false,
     error: false,
     data: [],
+    packageCategory:[]
 }
 
 
@@ -38,6 +39,24 @@ export const getPackage = createAsyncThunk(
     }
 );
 
+export const getPackageCategory = createAsyncThunk(
+    'package/getPackageCategory',
+    async (_,{ rejectWithValue }) => {
+        try {
+            
+                        
+            const response = await axiosInstance.get(`/package/category`);
+            console.log(response);
+            
+            // toast.success(response.data.message);
+            return response.data.data;
+        } catch (error) {
+            toast.error(error?.response?.data?.message || 'Failed to add discount');
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 
 const packageSlice = createSlice({
     name: "package",
@@ -49,6 +68,10 @@ const packageSlice = createSlice({
             state.loading = true;
             state.error = null;
         })
+        .addCase(getPackageCategory.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
        .addCase(getPackage.fulfilled, (state, action) => {
                 console.log(action);
           
@@ -56,8 +79,18 @@ const packageSlice = createSlice({
                 state.loading=false
                 state.error=false
         })
+        .addCase(getPackageCategory.fulfilled, (state, action) => {
+            console.log(action);
+      
+            state.packageCategory = action?.payload
+            state.loading=false
+            state.error=false
+    })
         .addCase(getPackage.rejected, (state, action) => {
                 state.error = action?.payload?.success
+        })
+        .addCase(getPackageCategory.rejected, (state, action) => {
+            state.error = action?.payload?.success
         })
 
     }

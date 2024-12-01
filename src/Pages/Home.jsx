@@ -5,9 +5,32 @@ import BlogSection from '../Components/BlogSection'
 import Testimonial from '../Components/Testimonial'
 import WhyChoose from '../Components/WhyChoose'
 import ServiceSection from '../Components/ServiceSection'
+import { useDispatch } from 'react-redux'
+
+import { useEffect } from 'react'
+import { getAbout, getAllHome } from '../Redux/Slices/dynamicSlice'
+
 
 
 const Home = () => {
+
+    const dispatch=useDispatch()
+
+    const fetchData=async()=>{
+        console.log("fetch datat call..");
+        
+        const response=await dispatch(getAllHome())
+        console.log(response);
+        
+    }
+
+
+
+    useEffect(()=>{
+        fetchData()
+    },[])
+
+
     return (
         <div>
             <MainSlider />

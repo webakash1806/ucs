@@ -7,6 +7,7 @@ import outstationSlice from './Slices/outstationSlice'
 import dynamicSlice from './Slices/dynamicSlice'
 import packageSlice from './Slices/packageSlice'
 
+
 const store = configureStore({
     reducer: {
         auth: authSliceReducer,
