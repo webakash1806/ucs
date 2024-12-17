@@ -49,6 +49,7 @@ import 'primeicons/primeicons.css';
 import SocialMediaIcons from './Components/SocailMedia';
 import BlogDetail from './Pages/Blog/BlogDetail';
 import HolidayForm from './Pages/Holiday/HolidayForm';
+import PackageMoreDetail from './Pages/Holiday/PackageMoreDetail';
 
 
 const App = () => {
@@ -212,6 +213,7 @@ const App = () => {
           <Route path='/holiday/package/detail' element={<HolidayDetail/>} />
           <Route path='/holiday/form' element={<HolidayForm/>} />
           <Route path='/blog/details' element={<BlogDetail/>} />
+          <Route path='/holiday/package/detail/:name' element={<PackageMoreDetail/>} />
 
           {/* Auth */}
           <Route element={<RequireAuth />}>

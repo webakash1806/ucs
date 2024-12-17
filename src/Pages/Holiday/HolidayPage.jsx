@@ -13,27 +13,33 @@ import PopularDesti from './PopularDesti';
 import CallToAction from './CallAction';
 import WhyWe from './WhyChooseUs';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPackage } from '../../Redux/Slices/packageSlice';
-import { useEffect } from 'react';
+import { getPackage, getPackageCategory, getPackageTag } from '../../Redux/Slices/packageSlice';
+import React, { useEffect, useRef, useState } from 'react';
 import CategoriesBar from './CategoryBar';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Category = ({ icon, label, isNew = false }) => {
+const Category = ({ image, label, isNew = false }) => {
+
+ 
+
     return (
-      <div className="flex items-center text-center relative border border-green-500">
+      <div className="flex items-center text-center relative ">
         {/* Circle with Icon */}
-        <div className="bg-gray-100 rounded-full p-4 w-12 h-12 flex items-center justify-center shadow-sm">
-          <span className="text-xl">{icon}</span>
+        {/* <div className="bg-gray-100 rounded-full p-4 w-12 h-12 flex items-center justify-center shadow-sm">
+        
+          <img src={icon} alt="" />
         </div>
-  
+   */}
         {/* Label */}
+        <img src={image} alt="" />
         <span className="text-sm mt-2 font-medium text-gray-600">{label}</span>
   
         {/* New Badge */}
-        {isNew && (
+        {/* {isNew && (
           <div className="absolute -top-1 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
             New
           </div>
-        )}
+        )} */}
       </div>
     );
   };
@@ -44,7 +50,20 @@ const HolidayPage = () => {
         { id: 2, image: car2 },
     ];
 
-    const {data,loading,error}=useSelector((state)=>state?.packages)
+     // Local States
+     const [input, setInput] = useState(""); // Holds the input value
+     const [filteredTags, setFilteredTags] = useState([]); // Stores suggestions
+     const [showSuggestions, setShowSuggestions] = useState(false); // Controls visibility
+     const navigate=useNavigate()
+   
+     const inputRef = useRef(null); // To track input focus
+   
+
+    const {data,loading,error,packageCategory,packageTag}=useSelector((state)=>state?.packages)
+    
+
+    console.log("package is ",packageCategory);
+    
 
     console.log("data is",data);
     
@@ -57,10 +76,76 @@ const HolidayPage = () => {
        
     }
 
+    const fetchCategory=async()=>{
+             const response=await dispatch(getPackageCategory())
+             console.log("response is",response);
+             
+     }
+
+     const fetchTagData=async()=>{
+        const response=await dispatch(getPackageTag())
+        console.log("fetch tag data is",response);    
+     }
+
+      // Handle Input Change (Filter Tags Dynamically)
+  // Handle input changes (filters suggestions)
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInput(value);
+
+    // Filter suggestions based on input
+    if (value.trim() !== "") {
+      const filtered = packageTag.filter((tag) =>
+        tag?.tagName?.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredTags(filtered);
+    } else {
+      setFilteredTags(packageTag); // Show all tags if input is empty
+    }
+
+    setShowSuggestions(true); // Show suggestions on input
+  };
+
+  // Handle input focus (show all suggestions)
+  const handleInputFocus = () => {
+    setFilteredTags(packageTag); // Show all tags
+    setShowSuggestions(true);
+  };
+
+  // Hide suggestions on outside click
+  const handleClickOutside = (e) => {
+    if (inputRef.current && !inputRef.current.contains(e.target)) {
+      setShowSuggestions(false); // Hide suggestions
+    }
+  };
+
+  // Add event listener to detect clicks outside the component
+  React.useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  // Handle suggestion click
+  const handleSuggestionClick = (tagName) => {
+    setInput(tagName); // Set input value
+    setShowSuggestions(false); // Hide suggestions
+  };
+    
+
 
     useEffect(()=>{
        fetchData()
     },[])
+    
+    useEffect(()=>{
+         fetchCategory()
+   },[])
+
+   useEffect(()=>{
+    fetchTagData()
+},[])
 
     if(error){
         return <p>Error..</p>
@@ -75,28 +160,24 @@ const HolidayPage = () => {
     //     return <p>Loading...</p>
     // }
 
-    const Category = ({ icon, label, isNew = false }) => {
+    const Category = ({ icon, label, isNew = false,image }) => {
         return (
-          <div className="flex items-center text-center relative">
+          <div className="flex items-center text-center relative ">
             {/* Circle with Icon */}
-            <div className="bg-gray-100 rounded-full p-4 w-12 h-12 flex items-center justify-center shadow-sm">
-              <span className="text-xl">{icon}</span>
+            <div className="bg-gray-100 rounded-full p-4 w-50 h-50 flex items-center justify-center shadow-sm"   onClick={() => navigate(`/holiday/package/detail/${label}`, { state: { input:label } })}>
+              <img src={image} alt="" className='w-[30px]' />
             </div>
+
+      
       
             {/* Label */}
-            <span className="text-sm mt-2 font-medium text-gray-600">{label}</span>
       
-            {/* New Badge */}
-            {isNew && (
-              <div className="absolute -top-1 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                New
-              </div>
-            )}
+            <span className="text-sm mt-2 font-medium text-gray-600 cursor-pointer"   onClick={() => navigate(`/holiday/package/detail/${label}`, { state: { input:label } })}>{label}</span>
           </div>
         );
       };
 
-      console.log(data);
+      console.log("package tag is",packageTag);
       
       
       
@@ -107,18 +188,39 @@ const HolidayPage = () => {
 
             
             {/* Input Section */}
-            <div className="absolute z-10 w-full flex items-start justify-center mt-8">
-                <div className="flex items-center gap-2 bg-white p-2 rounded-full shadow-lg w-[90%] max-w-[600px]">
-                    <input
-                        type="text"
-                        placeholder="Enter your designation"
-                        className="flex-1 px-4 py-2 outline-none text-gray-700 rounded-full"
-                    />
-                    <button className="px-10 py-2 bg-blue-500 text-white rounded-full flex items-center justify-center">
-                        <FaSearch className="mr-1" /> Search
-                    </button>
-                </div>
-            </div>
+            <div ref={inputRef} className="absolute z-10 w-full flex items-start justify-center mt-8">
+      <div className="flex items-center gap-2 bg-white p-2 rounded-full shadow-lg w-[90%] max-w-[600px]">
+        {/* Input Field */}
+        <input
+          type="text"
+          placeholder="Enter your designation"
+          value={input}
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          className="flex-1 px-4 py-2 outline-none text-gray-700 rounded-full"
+        />
+
+        {/* Search Button */}
+        <button className="px-10 py-2 bg-blue-500 text-white rounded-full flex items-center justify-center"  onClick={() => navigate(`/holiday/package/detail/${input}`, { state: { input } })}>
+          <FaSearch className="mr-1" /> Search
+        </button>
+      </div>
+
+      {/* Suggestions Dropdown */}
+      {showSuggestions && filteredTags.length > 0 && (
+        <ul className="absolute top-14 w-[60%] max-w-[600px] bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
+          {filteredTags.map((tag, index) => (
+            <li
+              key={index}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleSuggestionClick(tag.tagName)}
+            >
+              {tag.tagName}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
 
             {/* Slider Section */}
             <div className="relative w-full h-[30rem]"> {/* Reduced height */}
@@ -154,13 +256,13 @@ const HolidayPage = () => {
             </div>
             <div className="absolute bottom-[-2rem] z-30 mx-auto left-1/2">
   <div className="transform -translate-x-1/2 bg-white shadow-xl rounded-full  flex items-center px-10 py-2 space-x-4">
-    {/* Category Items */}
-    <Category icon="🌹" label="Honeymoon" isNew={true} />
-    <Category icon="🙏" label="Pilgrimage" />
-    <Category icon="💆" label="Ayurveda" />
-    <Category icon="✨" label="Luxury" />
-    <Category icon="⛰️" label="Adventure" />
-    {/* <Category icon="👨‍👩‍👧‍👦" label="Group Departure" /> */}
+
+  {packageCategory.map((val,index)=>{
+    return(
+      <Category  label={val?.categoryName}  image={val?.categoryPhoto?.secure_url} />
+    )
+  })}
+ 
   </div>
 </div>
 

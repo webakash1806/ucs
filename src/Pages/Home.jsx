@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 
 import { useEffect } from 'react'
 import { getAbout, getAllHome } from '../Redux/Slices/dynamicSlice'
+import HolidayPackage from '../Components/HolidayPackage'
 
 
 
@@ -34,12 +35,9 @@ const Home = () => {
     return (
         <div>
             <MainSlider />
+            <HolidayPackage/>
             <HomeSection1 />
             <ServiceSection />
-
-
-
-
             <HomeSection2 />
             <WhyChoose />
             <Testimonial />

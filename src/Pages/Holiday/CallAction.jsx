@@ -14,7 +14,7 @@ const CallToAction = () => {
 					<div className="col-span-12 lg:col-span-6 lg:col-start-4 mx-auto">
 						<div className="lg:px-16">
 							<h2 className="text-2xl md:text-[45px] leading-none font-bold mb-6">
-								Have any query?
+							Customize your package
 							</h2>
 							<p className="text-lg leading-6 mb-12">
 								We’re here to help! Contact us on WhatsApp for quick assistance.

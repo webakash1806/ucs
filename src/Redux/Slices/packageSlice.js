@@ -7,7 +7,10 @@ const initialState = {
     loading: false,
     error: false,
     data: [],
-    packageCategory:[]
+    packageCategory:[],
+    categoryData:[],
+    includeData:[],
+    packageTag:[]
 }
 
 
@@ -57,6 +60,61 @@ export const getPackageCategory = createAsyncThunk(
     }
 );
 
+export const getPackageInclude = createAsyncThunk(
+    'package/getPackageInclude',
+    async (_,{ rejectWithValue }) => {
+        try {
+            console.log("get package category");
+            
+                        
+            const response = await axiosInstance.get(`/package/include`);
+            console.log(response);
+            
+            // toast.success(response.data.message);
+            return response.data.data;
+        } catch (error) {
+        
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+
+export const getPackageTag = createAsyncThunk(
+    'package/getPackageTag',
+    async (_,{ rejectWithValue }) => {
+        try {
+                   
+            const response = await axiosInstance.get(`/package/tag`);
+            console.log(response);
+            
+            // toast.success(response.data.message);
+            return response.data.data;
+        } catch (error) {
+        
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const addPackageQuery= createAsyncThunk(
+    'package/getPackageQuery',
+    async (data,{ rejectWithValue }) => {
+        try {
+                   
+            const response = await axiosInstance.post(`/query`,data);
+            console.log(response);
+            
+            // toast.success(response.data.message);
+            return response.data.data;
+        } catch (error) {
+        
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+
 
 const packageSlice = createSlice({
     name: "package",
@@ -72,6 +130,15 @@ const packageSlice = createSlice({
             state.loading = true;
             state.error = null;
         })
+        .addCase(getPackageInclude.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(getPackageTag.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+    
        .addCase(getPackage.fulfilled, (state, action) => {
                 console.log(action);
           
@@ -85,11 +152,35 @@ const packageSlice = createSlice({
             state.packageCategory = action?.payload
             state.loading=false
             state.error=false
-    })
+         })
+         .addCase(getPackageInclude.fulfilled, (state, action) => {
+            console.log(action);
+      
+            state.includeData = action?.payload
+            state.loading=false
+            state.error=false
+        })
+        .addCase(getPackageTag.fulfilled, (state, action) => {
+            
+            console.log("tag is",action);
+            
+            state.packageTag = action?.payload
+            state.loading=false
+            state.error=false
+        })
+
+
+
         .addCase(getPackage.rejected, (state, action) => {
                 state.error = action?.payload?.success
         })
         .addCase(getPackageCategory.rejected, (state, action) => {
+            state.error = action?.payload?.success
+        })
+        .addCase(getPackageInclude.rejected, (state, action) => {
+            state.error = action?.payload?.success
+        })
+        .addCase(getPackageTag.rejected, (state, action) => {
             state.error = action?.payload?.success
         })
 
