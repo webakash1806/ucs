@@ -250,7 +250,7 @@ const HolidayDetail = () => {
          setSpinLoading(true)
          const response=await dispatch(addPackageQuery(data))
          setSpinLoading(false)
-         setIsIncludeModalOpen(isIncludeModalOpen)
+         setIsIncludeModalOpen(false)
          
     }
 
