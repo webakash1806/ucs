@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import useReviewData from '../Hooks/useReviewData';
 
-const Testimonial = () => {
+const Testimonial = ({data}) => {
     const settings = {
         infinite: true,
         speed: 1000,  // Adjust the speed for the fade effect
@@ -17,10 +17,18 @@ const Testimonial = () => {
         cssEase: 'linear'  // Use linear easing for smooth transitions
     };
 
+    console.log("testi",data);
+
+    const {children}=data
+
+
+
+    
+
     return (
         <div>
                <div className='text-center'>
-                <h1 className='text-main text-3xl font-semibold'>What our family says?</h1>
+                <h1 className='text-main text-3xl font-semibold'>{data?.title}</h1>
                 <p className='text-white mt-1'>Listen by them</p>
             </div>
         <div className='relative flex flex-col items-center justify-between pb-[5rem] bg-main' >
@@ -29,7 +37,7 @@ const Testimonial = () => {
          
             <Slider {...settings} className='mt-[8rem] xl:mt-[10rem] flex h-fit z-[60] w-full'>
                 {
-                    useReviewData.map((data, ind) => <ReviewCard key={ind + 1} data={data} />)
+                    children.map((data, ind) => <ReviewCard key={ind + 1} data={data} />)
                 }
             </Slider>
         </div >

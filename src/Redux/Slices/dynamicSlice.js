@@ -27,9 +27,9 @@ export const getTermsAndCondition = createAsyncThunk('/dynamic/termsAndCondition
 });
 
 
-export const getAllHome = createAsyncThunk('/dynamic/home', async () => {
+export const getAllHome = createAsyncThunk('/dynamic/Home', async () => {
     try {
-        let res = axiosInstance.get('dynamic/home');
+        let res = axiosInstance.get('dynamic/Home');
 
 
         console.log(res);
@@ -164,6 +164,11 @@ const dynamicSlice = createSlice({
             .addCase(getAbout.fulfilled, (state, action) => {
                 localStorage.setItem('about', JSON.stringify(action.payload.data));
                 state.about = action.payload.data;
+            }) 
+            .addCase(getAllHome.fulfilled, (state, action) => {
+         
+                localStorage.setItem('home', JSON.stringify(action.payload.sections));
+                state.home = action.payload.sections;
             }) 
             
 

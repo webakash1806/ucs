@@ -14,10 +14,11 @@ import HolidayForm from "./HolidayForm";
 import RouteMap from "./RouteMap";
 
 import p1 from '../../assets/icon.avif'
-import routemap from '../../assets/route.jpg'
+import routemap from '../../assets/route1.jpg'
 import wrong from '../../assets/wrong.avif'
 import time from '../../assets/time.avif'
 import RouteDesign from "./RouteMap";
+import SimilarPackage from "./SimilarPackage";
 
 
 
@@ -29,7 +30,7 @@ const BlogItems = ({ data }) => {
       </h4>
 
       {/* Scrollable container for the packages in a column */}
-      <div className="space-y-6">
+      <div className="space-y-6 flex items-center">
         {data.map((val, i) => (
           <div
             className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition duration-300"
@@ -293,7 +294,7 @@ const HolidayDetail = () => {
       <BreadCrumbs headText={state?.packageName}  image={state?.mainPhoto?.secure_url} />
       
       <div className="container mx-auto p-4 lg:p-6 flex flex-col lg:flex-row lg:max-w-7xl gap-6">
-        
+
         {/* Left Section */}
         <div className="flex-1">
 
@@ -393,6 +394,7 @@ const HolidayDetail = () => {
               )}
             </div>
           </div>
+       
              {/* Similar Packages Section */}
    <div className="mt-6">
     {/* <BlogItems data={similarPackages}/> */}
@@ -430,7 +432,9 @@ const HolidayDetail = () => {
     )}
   </div> */}
 </div>
+
         </div>
+        
 
         {/* Right Section */}
         <div className="lg:w-1/3">
@@ -497,6 +501,9 @@ const HolidayDetail = () => {
       <button className="bg-gradient-to-r from-orange-400 to-orange-600 w-full text-white py-2 font-semibold text-sm hover:from-orange-500 hover:to-orange-700 transition rounded-full"   onClick={toggleIncludeModal}>
         SUBMIT QUERY
       </button>
+      <button className="border  border-main text-main w-full  py-2 font-semibold text-sm transition rounded-full"   onClick={toggleIncludeModal}>
+        CUSTOMIZE  YOUR PACKAGE
+      </button>
     </div>
 
     {/* Contact Info */}
@@ -522,7 +529,7 @@ const HolidayDetail = () => {
       </p>
     </div>
    
-    <BlogItems data={similarPackages}/>
+ 
 
 
   </div>
@@ -532,8 +539,11 @@ const HolidayDetail = () => {
 
 
 
-{isIncludeModalOpen && (
-  <div className="fixed top-0 left-0 z-[80] w-full h-full flex justify-center items-center bg-black bg-opacity-50 overflow-x-hidden overflow-y-auto" role="dialog">
+  {isIncludeModalOpen && (
+  <div
+    className="fixed top-0 left-0 z-[80] w-full h-full flex justify-center items-center bg-black bg-opacity-50 overflow-x-hidden overflow-y-auto"
+    role="dialog"
+  >
     <div className="bg-white border shadow-sm rounded-xl w-full max-w-lg pointer-events-auto transition-all ease-out duration-500 mt-7 opacity-100 sm:mx-auto">
       <div className="flex justify-between items-center py-3 px-4 border-b">
         <h3 className="font-bold text-gray-800">
@@ -562,19 +572,24 @@ const HolidayDetail = () => {
         </button>
       </div>
       <div className="p-4">
-        {/* Holiday Form directly in the modal */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
             const formValues = Object.fromEntries(formData.entries());
-            handleSubmit(formValues)
+
+            // Ensure mandatory fields are filled
+            if (!formValues.name || !formValues.email || !formValues.mobile) {
+              alert("Name, Email, and Mobile No. are mandatory fields!");
+              return;
+            }
+
+            handleSubmit(formValues);
           }}
           className="space-y-6"
         >
-          {/* Destination and Name in one row */}
+          {/* Destination and Name */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Destination */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Destination
@@ -586,45 +601,43 @@ const HolidayDetail = () => {
                 className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               />
             </div>
-
-            {/* Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Name
+                Name <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"
                 name="name"
                 placeholder="Enter Your Name"
+                required
                 className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               />
             </div>
           </div>
 
-          {/* Mobile and Email in one row */}
+          {/* Mobile and Email */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Mobile Number */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Mobile No.
+                Mobile No. <span className="text-red-600">*</span>
               </label>
               <input
                 type="tel"
                 name="mobile"
                 placeholder="+91 Mobile No."
+                required
                 className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               />
             </div>
-
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email ID
+                Email ID <span className="text-red-600">*</span>
               </label>
               <input
                 type="email"
                 name="email"
                 placeholder="Your E-Mail ID"
+                required
                 className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               />
             </div>
@@ -636,7 +649,6 @@ const HolidayDetail = () => {
               Passengers
             </label>
             <div className="grid grid-cols-3 gap-4">
-              {/* Adults */}
               <div className="text-center">
                 <label className="block font-medium text-gray-700 mb-2">
                   Adults
@@ -649,8 +661,6 @@ const HolidayDetail = () => {
                   className="w-20 border rounded-md px-2 py-1 text-center"
                 />
               </div>
-
-              {/* Children */}
               <div className="text-center">
                 <label className="block font-medium text-gray-700 mb-2">
                   Children
@@ -663,8 +673,6 @@ const HolidayDetail = () => {
                   className="w-20 border rounded-md px-2 py-1 text-center"
                 />
               </div>
-
-              {/* Infants */}
               <div className="text-center">
                 <label className="block font-medium text-gray-700 mb-2">
                   Infants
@@ -680,18 +688,18 @@ const HolidayDetail = () => {
             </div>
           </div>
 
-           {/* Textarea for Query */}
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      Submit Your Message
-    </label>
-    <textarea
-      name="query"
-      placeholder="Type your message here..."
-      rows={4}
-      className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-    ></textarea>
-  </div>
+          {/* Textarea for Query */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Submit Your Message
+            </label>
+            <textarea
+              name="query"
+              placeholder="Type your message here..."
+              rows={4}
+              className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            ></textarea>
+          </div>
 
           {/* Submit and Cancel */}
           <div className="mt-4 flex justify-end gap-2">
@@ -706,12 +714,14 @@ const HolidayDetail = () => {
               type="submit"
               className="py-2 px-3 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700"
             >
-              {spinLoading ? <div className="w-6 h-6 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div> :"Submit"}
+              {spinLoading ? (
+                <div className="w-6 h-6 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
+              ) : (
+                "Submit"
+              )}
             </button>
           </div>
         </form>
-
-
       </div>
     </div>
   </div>
@@ -720,12 +730,16 @@ const HolidayDetail = () => {
 
 
 
-</div>
+
+       </div>
 
 
 
 
       </div>
+      {/* <BlogItems data={similarPackages}/> */}
+      <SimilarPackage similar={similarPackages}/>
+      
     </div>
   );
 };

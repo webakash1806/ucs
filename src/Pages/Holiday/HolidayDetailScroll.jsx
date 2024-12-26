@@ -5,6 +5,10 @@ import { Galleria } from 'primereact/galleria';
 const HolidayDetailScroll = ({ data }) => {
     const [images, setImages] = useState([]);
 
+
+     console.log("holidays details scrool is",data);
+     
+
     useEffect(() => {
         // Check if `data` is available and map it to the required image format
         if (data && data.length > 0) {

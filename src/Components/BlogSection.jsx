@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
-const BlogSection = () => {
+const BlogSection = ({data}) => {
     const blogs = [
         {
             img: blog1,
@@ -60,6 +60,15 @@ const BlogSection = () => {
         };
     }, []);
 
+    console.log("data is",data);
+
+    const {children}=data
+
+    const stripHTMLTags = (str) => {
+        return str.replace(/<\/?[^>]+(>|$)/g, "");
+      };
+    
+
     return (
         <div className='flex flex-col items-center justify-center p-6 bg-white xl:p-10 bg-gradient-to-br'>
             {/* Header */}
@@ -67,7 +76,7 @@ const BlogSection = () => {
                 {/* <button className='px-10 py-3 font-semibold text-white transition-all rounded-full shadow-lg bg-main hover:bg-blue-700'>
                     News & Blogs
                 </button> */}
-                <h1 className='mt-4 text-2xl font-bold xl:text-3xl text-main'>Latest News & Blogs</h1>
+                <h1 className='mt-4 text-2xl font-bold xl:text-3xl text-main'>{data?.title}</h1>
             </div>
 
             <div className="relative w-full max-w-[82rem] mx-auto flex items-center justify-center">
@@ -80,34 +89,31 @@ const BlogSection = () => {
                     slidesPerView={slidesPerView > 4 ? 4 : slidesPerView}
                     spaceBetween={10} // Reduce the gap between slides
                 >
-                    {blogs.concat(blogs).map((blog, index) => (
-                        <SwiperSlide key={index} className='relative overflow-hidden text-white rounded-lg mx-auto w-[18rem] flex flex-col items-center justify-between bg-dark shadow-xl min-h-[25rem] max-h-[25rem] cursor-pointer'>
-                            <img src={blog.img} alt={`blog${index + 1}`} className='w-full h-[10rem] object-cover transition-transform duration-300 hover:opacity-80' />
+                    {children.concat(blogs).map((blog, index) => (
+                        <SwiperSlide key={index} className='relative overflow-hidden text-white rounded-lg mx-auto w-[18rem] flex flex-col items-center justify-between bg-dark shadow-xl  cursor-pointer'>
+                            <img src={blog?.photo?.secure_url} alt={`blog${index + 1}`} className='w-full h-[10rem] object-cover transition-transform duration-300 hover:opacity-80' />
                             <div className='p-4 pt-2 '>
-                                <Link to={"/blog/details"}>
+                                <Link to={"/blog/details" } state={{ ...blog
+                 }} >
                                 <h2 className='text-[1.1rem] line-clamp-2 font-semibold mb-1 hover:text-red-500 transition-all'>
-                                    {blog.title}
+                                    {blog?.title}
                                 </h2>
                                 </Link>
-                                <p className='text-gray-400 mb-4 text-[0.9rem] line-clamp-3'>
-                                    {blog.description}
-                                </p>
-                                <div className='flex flex-col items-center justify-between gap-2'>
-                                    <div className='flex items-center gap-4'>
-                                        <img src={''} alt="user" className='w-10 h-10 bg-gray-500 rounded-full' />
-                                        <p>By: {blog.author}</p>
-                                    </div>
-                                    <div className='flex justify-between gap-3'>
-                                        <Link className='p-2 transition bg-gray-800 rounded-full hover:bg-blue-500'><CiFacebook className='text-xl text-gray-400 hover:text-white' /></Link>
-                                        <Link className='p-2 transition bg-gray-800 rounded-full hover:bg-red-500'><FaYoutube className='text-xl text-gray-400 hover:text-white' /></Link>
-                                        <Link className='p-2 transition bg-gray-800 rounded-full hover:bg-pink-500'><CiInstagram className='text-xl text-gray-400 hover:text-white' /></Link>
-                                        <Link className='p-2 transition bg-gray-800 rounded-full hover:bg-blue-400'><CiTwitter className='text-xl text-gray-400 hover:text-white' /></Link>
-                                    </div>
-                                </div>
+                                {/* <p className='text-gray-400 mb-4 text-[0.9rem] line-clamp-3'>
+                                    {blog?.description}
+                                </p> */}
+                              <p>
+  {blog?.description
+    ? `${stripHTMLTags(blog?.description)
+        .split(" ")
+        .slice(0, 20)
+        .join(" ")}...`
+    : "Description Not Available"}
+</p>
+
+                            
                             </div>
-                            <div className='absolute px-4 py-2 font-semibold text-center text-white bg-blue-500 rounded-lg shadow-lg top-5 left-5'>
-                                <p className='leading-tight'>{blog.date}</p>
-                            </div>
+                       
                         </SwiperSlide>
                     ))}
                 </Swiper>

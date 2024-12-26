@@ -164,8 +164,8 @@ const HolidayPage = () => {
         return (
           <div className="flex items-center text-center relative ">
             {/* Circle with Icon */}
-            <div className="bg-gray-100 rounded-full p-4 w-50 h-50 flex items-center justify-center shadow-sm"   onClick={() => navigate(`/holiday/package/detail/${label}`, { state: { input:label } })}>
-              <img src={image} alt="" className='w-[30px]' />
+            <div className="bg-gray-100 rounded-full p-4 w-20 h-20 flex items-center justify-center shadow-sm"   onClick={() => navigate(`/holiday/package/detail/${label}`, { state: { input:label } })}>
+              <img src={image} alt="" className='w-[20rem]' />
             </div>
 
       

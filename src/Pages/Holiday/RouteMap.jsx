@@ -1,4 +1,5 @@
 import React from 'react';
+import img from '../../assets/route1.jpg'
 import { FaMapMarkerAlt } from 'react-icons/fa'; // Location Icon
 
 const RouteDesign = () => {

@@ -10,6 +10,7 @@ import {
 import { faBookmark, faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 
 const blogs = [
 	{
@@ -99,19 +100,14 @@ BlogItem.propTypes = {
 	item: PropTypes.object.isRequired,
 };
 
-const Contents = () => (
+const Contents = ({data}) => (
 	<div>
-		<p className="text-[17px] mb-2 opacity-80">
-			Teaching is a noble profession. Think about the most respected persons in
-			our society. Yes, they are the teachers. If you ask someone about some of
-			his favourite persons, it is most likely to find a teacher of him in his
-			answer. So, being a teacher is an amazing thing. Besides, the career
-			prospect in teaching is also lucrative. In England and Wales, as a Newly
-			Qualified Teacher (NQT) you’ll earn £24,373 to £30,480 depending on
-			location Since you have decided to become a teacher, you may be known to
-			all of these.
-		</p>
-		<p className="text-[17px] mb-2 opacity-80">
+
+		<div
+                dangerouslySetInnerHTML={{ __html: data }}
+            />
+		
+		{/* <p className="text-[17px] mb-2 opacity-80">
 			Getting into teaching requires many years of preparation. If you don’t
 			know how to become a teacher, you may find the way challenging. So, in
 			this article, I’ll walk you through the steps to becoming a teacher in the
@@ -174,7 +170,7 @@ const Contents = () => (
 			will require 3 to 4 years. However, if you want to be a nursery or
 			pre-school teacher, you don’t need a bachelor degree rather a proper
 			license and certification in teaching children.
-		</p>
+		</p> */}
 	</div>
 );
 
@@ -235,6 +231,15 @@ const SideBar = () => (
 );
 
 const BlogDetail = () => {
+   
+	const location=useLocation()
+
+	const {state}=location
+
+	console.log("state is",state);
+	
+
+
 	return (
 		<section className="ezy__blogdetails1 light py-6 md:py-10 bg-white  text-zinc-900 dark:text-black max-w-7xl mx-auto
         ">
@@ -242,7 +247,7 @@ const BlogDetail = () => {
 				<div className="grid md:grid-cols-3 gap-4">
 					<div className="col-span-3 md:col-span-2 px-4">
 						<h1 className="font-bold  md:text-3xl lg:text-4xl text-2xl mb-12 text-main">
-							How to Pitch a Video Game: 7 Tips for Pitching Games
+							{state?.title}
 						</h1>
 					</div>
 				</div>
@@ -250,15 +255,18 @@ const BlogDetail = () => {
 				<div className="grid grid-cols-12 gap-4">
 					<div className="col-span-12 md:col-span-8 px-4">
 						<img
-							src="https://cdn.easyfrontend.com/pictures/blog/blog_12_1.png"
+							src={state?.photo?.secure_url}
 							alt=""
 							className="w-full h-auto rounded"
 						/>
 						{/* social content */}
-						<SocialContent />
+						{/* <SocialContent /> */}
 
 						{/* contents */}
-						<Contents />
+						<div className="mt-10">
+						<Contents data={state?.description}/>
+						</div>
+				
 					</div>
 					{/* sidebar */}
 					<div className="col-span-12 md:col-span-4 lg:col-span-3 lg:col-start-9 px-4 md:pl-6 lg:pl-0">

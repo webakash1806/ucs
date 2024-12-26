@@ -11,7 +11,7 @@ import car3 from '../assets/car3.avif';
 import MainForm from './MainForm';
 
 
-const MainSlider = () => {
+const MainSlider = ({data}) => {
     const slides = [
         {
             id: 1,
@@ -32,7 +32,13 @@ const MainSlider = () => {
             image: car3,
         },
     ];
+   
+    const {children}=data
 
+         
+    const stripHTMLTags = (str) => {
+        return str.replace(/<\/?[^>]+(>|$)/g, "");
+      };
 
     return (
         <div className="relative w-full min-h-[40rem] flex flex-col md:flex-row-reverse items-center justify-center">
@@ -48,14 +54,16 @@ const MainSlider = () => {
                         loop={true}
                         className="w-full h-full"
                     >
-                        {slides.map((slide) => (
+                        {children.map((slide) => (
                             <SwiperSlide key={slide.id}>
                                 <div className="flex flex-col pt-10 justify-center items-center lg:items-start lg:text-start text-center min-w-[17rem] md:pr-4 max-w-[30rem] md:max-w-[35rem] w-full">
                                     <h1 className="mb-4 text-3xl font-bold text-white md:text-4xl">
-                                        {slide.title}
+                                        {slide?.title}
                                     </h1>
                                     <p className="mb-6 text-lg text-gray-200 md:text-xl">
-                                        {slide.description}
+                                    {slide?.description
+        ? stripHTMLTags(slide?.description)
+        : "Description Not Available"}
                                     </p>
                                 </div>
                             </SwiperSlide>
@@ -79,12 +87,12 @@ const MainSlider = () => {
                     // fadeEffect={{ crossFade: true }} // Ensure crossfade for smooth transitions
                     className="w-full h-full"
                 >
-                    {slides.map((slide) => (
+                    {children.map((slide) => (
                         <SwiperSlide key={slide.id}>
                             <div
                                 className="relative w-full h-full bg-center bg-cover"
                                 style={{
-                                    backgroundImage: `url(${slide.image})`,
+                                    backgroundImage: `url(${slide?.photo?.secure_url})`,
                                     backgroundSize: 'cover', // Ensures the image fully covers the slide
                                     backgroundPosition: 'center', // Centers the image in the slide
                                 }}
