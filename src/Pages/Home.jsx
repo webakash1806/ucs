@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getAbout, getAllHome } from '../Redux/Slices/dynamicSlice'
 import HolidayPackage from '../Components/HolidayPackage'
+import BlogList from './Blog/BlogList'
+import PackageCard from '../Components/PackageCard'
 
 const Home = () => {
     const dispatch = useDispatch()
@@ -41,12 +43,14 @@ const Home = () => {
         <div>
             {/* Conditionally render based on data availability */}
             {home[0] && <MainSlider data={home[0]} />}
+             <HolidayPackage/>
             {home[1] && <HomeSection1 data={home[1]} />}
             <ServiceSection />
             {home[3] && <HomeSection2 data={home[3]} />}
             <WhyChoose />
             {home[4] && <Testimonial data={home[4]} />}
-            {home[5] && <BlogSection data={home[5]} />}
+            {/* {  <BlogSection  />} */}
+            <BlogList/>
         </div>
     )
 }

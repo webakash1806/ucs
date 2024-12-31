@@ -18,9 +18,10 @@ const TermsAndConditions = () => {
 
     return (
         <div className="max-w-4xl p-6 mx-auto my-12 bg-white rounded-lg shadow-lg">
-            <h1 className="mb-16 text-3xl font-semibold text-center">Terms and Conditions</h1>
+            <h1 className="mb-4 text-3xl font-semibold text-center text-main">Terms and Conditions</h1>
 
             <div
+            className="p1"
                 dangerouslySetInnerHTML={{ __html: data?.description }}
             />
         </div>

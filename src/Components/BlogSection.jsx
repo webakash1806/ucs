@@ -9,6 +9,8 @@ import { FaYoutube } from "react-icons/fa";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getBlogs } from '../Redux/Slices/dynamicSlice';
 
 const BlogSection = ({data}) => {
     const blogs = [
@@ -43,6 +45,17 @@ const BlogSection = ({data}) => {
     ];
 
     const [slidesPerView, setSlidesPerView] = useState(1);
+    const dispatch=useDispatch()
+
+    const {blog,loading,error}=useSelector((state)=>state.dynamic)
+
+    console.log("blog section is",blog);
+    
+
+     const fetchData=async()=>{
+          const response=await dispatch(getBlogs())
+
+     }
 
     useEffect(() => {
         const updateSlidesPerView = () => {
@@ -60,7 +73,12 @@ const BlogSection = ({data}) => {
         };
     }, []);
 
-    console.log("data is",data);
+    useEffect(()=>{
+       fetchData()
+    },[])
+
+    
+
 
     const {children}=data
 
@@ -89,7 +107,7 @@ const BlogSection = ({data}) => {
                     slidesPerView={slidesPerView > 4 ? 4 : slidesPerView}
                     spaceBetween={10} // Reduce the gap between slides
                 >
-                    {children.concat(blogs).map((blog, index) => (
+                    {blog.concat(blogs).map((blog, index) => (
                         <SwiperSlide key={index} className='relative overflow-hidden text-white rounded-lg mx-auto w-[18rem] flex flex-col items-center justify-between bg-dark shadow-xl  cursor-pointer'>
                             <img src={blog?.photo?.secure_url} alt={`blog${index + 1}`} className='w-full h-[10rem] object-cover transition-transform duration-300 hover:opacity-80' />
                             <div className='p-4 pt-2 '>

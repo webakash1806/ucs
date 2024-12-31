@@ -12,6 +12,7 @@ const initialState = {
     faq: localStorage.getItem('faq') !== "undefined" ? JSON.parse(localStorage.getItem('faq')) : {},
     about: localStorage.getItem('about') !== "undefined" ? JSON.parse(localStorage.getItem('about')) : {},
     home: localStorage.getItem('home') !== "undefined" ? JSON.parse(localStorage.getItem('home')) : {},
+    blog: []
 };
 
 // Thunks for different actions
@@ -121,7 +122,20 @@ export const getAbout = createAsyncThunk('/dynamic/about', async () => {
         return e?.response?.data?.message;
 
     }
+})
+
+export const getBlogs = createAsyncThunk('/dynamic/blogs', async () => {
+    try {
+        let res = axiosInstance.get('dynamic/Blogs');
+        res = await res;
+        return res.data;
+    } catch (e) {
+        return e?.response?.data?.message;
+
+    }
 });
+
+
 
 
 
@@ -171,6 +185,11 @@ const dynamicSlice = createSlice({
                 state.home = action.payload.sections;
             }) 
             
+            .addCase(getBlogs.fulfilled, (state, action) => {
+                // localStorage.setItem('blog', JSON.stringify(action.payload.sections));
+                state.blog=action?.payload?.sections
+                state.home = action.payload.sections;
+            })
 
     }
 });

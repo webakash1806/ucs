@@ -196,4 +196,15 @@ button {
   }
 
 
+
+  
+.p1 ol {
+    list-style-type: decimal; /* Ensure numbers are used */
+    padding-left: 20px; /* To add some indentation */
+  }
+  
+  .p1 ul {
+    list-style-type: disc; /* Ensure bullets are used */
+    padding-left: 20px; /* Add indentation */
+  }
   
