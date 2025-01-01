@@ -50,6 +50,7 @@ import SocialMediaIcons from './Components/SocailMedia';
 import BlogDetail from './Pages/Blog/BlogDetail';
 import HolidayForm from './Pages/Holiday/HolidayForm';
 import PackageMoreDetail from './Pages/Holiday/PackageMoreDetail';
+import RefundPolicy from './Pages/RefundPolicy';
 
 
 const App = () => {
@@ -184,6 +185,7 @@ const App = () => {
           <Route path='/contact' element={<Contact />} />
           <Route path='/about' element={<About />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+          <Route path='/refund-policy' element={<RefundPolicy/>} />
           <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
           <Route path='/cars/:cityName' element={<CarList />} />
           <Route path='/cars/from/:pickupName' element={<CarDropList />} />

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getPrivacyPolicy } from "../Redux/Slices/dynamicSlice";
 
-const PrivacyPolicy = () => {
+const RefundPolicy = () => {
 
     const dispatch = useDispatch()
     const [data, setData] = useState("")
@@ -31,4 +31,4 @@ const PrivacyPolicy = () => {
 
 
 
-export default PrivacyPolicy;
+export default RefundPolicy;
