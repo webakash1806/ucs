@@ -55,10 +55,6 @@ const PackageMoreDetail = () => {
   }, [data, state?.input]);
   
 
-  console.log("Filtered Data:", filteredData);
-  console.log("State Input:", state?.input);
-
-  console.log(data);
   
 
   return (

@@ -62,11 +62,6 @@ const HolidayPage = () => {
     const {data,loading,error,packageCategory,packageTag}=useSelector((state)=>state?.packages)
     
 
-    console.log("package is ",packageCategory);
-    
-
-    console.log("data is",data);
-    
 
     const dispatch=useDispatch()
      

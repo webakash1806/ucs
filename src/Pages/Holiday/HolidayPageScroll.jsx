@@ -7,41 +7,37 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
-// Sample holiday data
-const holidayPackages = [
-  { 
-    mainPhoto: { secure_url: 'url-to-image-1.jpg' },
-    rate: '$2000', 
-    packageName: 'Beach Vacation', 
-    location: 'Maldives' 
-  },
-  { 
-    mainPhoto: { secure_url: 'url-to-image-2.jpg' },
-    rate: '$1500', 
-    packageName: 'Mountain Adventure', 
-    location: 'Swiss Alps' 
-  },
-  // Add more holiday data here
-];
+
 
 const HolidayCard = ({ data }) => {
   const navigate = useNavigate();
 
   return (
-  
-    // <div
-    //   className=" shadow-lg border-none rounded-none mt-4 cursor-pointer"
-    //   onClick={() => navigate('/holiday/package/detail', { state: { ...data } })}
-    // >
-              <article class="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl px-8 pb-8 pt-40 max-w-sm mx-auto cursor-pointer" onClick={() => navigate('/holiday/package/detail', { state: { ...data } })}>
-    <img src={data?.mainPhoto?.secure_url} alt="University of Southern California" class="absolute inset-0 h-full w-full object-cover" />
-    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
-    <h3 class="z-10 mt-3 text-3xl font-bold text-white">{data?.location}</h3>
-    {/* <div class="z-10 gap-y-1 overflow-hidden text-sm leading-6 text-black border">City of love</div> */}
-</article>
-    // </div>
+    <article 
+      className="relative flex flex-col justify-end overflow-hidden rounded-3xl max-w-[24rem] mx-auto cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
+      onClick={() => navigate('/holiday/package/detail', { state: { ...data } })}
+    >
+      {/* Image */}
+      <img 
+        src={data?.mainPhoto?.secure_url} 
+        alt={data?.location || "Holiday Location"} 
+        className="w-full h-60 object-cover rounded-t-3xl transition-all duration-500"
+      />
+      
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent rounded-t-3xl"></div>
+      
+      {/* Content */}
+      <div className="relative z-10 p-2 pb-2  ">
+        <p className=" text-md text-white/80">{data?.packageName}</p>
+        
+        <p className="text-md text-white/80">{data?.rate} <span>{data?.rateBy}</span></p>
+      </div>
+    </article>
   );
 };
+
+
 
 const HolidayScrollPage = ({ holidayData }) => {
   useEffect(() => {
@@ -79,9 +75,11 @@ const HolidayScrollPage = ({ holidayData }) => {
       },
     ],
   };
+  
+
 
   return (
-    <section className="relative bg-gray-100  md:py-10 ">
+    <section className="relative bg-gray-100  md:py-10  ">
       <div className="max-w-7xl mx-auto p-8 md:px-8">
         <div className='text-start md:text-center flex flex-col md:items-start justify-start b'>
           <h2 className="font-bold mb-2 transition duration-300 transform text-main text-3xl">

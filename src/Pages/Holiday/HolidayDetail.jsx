@@ -62,12 +62,6 @@ const BlogItems = ({ data }) => {
   );
 };
 
-
-
-
-
-
-
 const HolidayDetail = () => {
   const [showDetails, setShowDetails] = useState(null);
   const [similarPackages, setSimilarPackages] = useState([]);
@@ -97,12 +91,6 @@ const HolidayDetail = () => {
   const [spinLoading,setSpinLoading]=useState(false)
 
   // Function to handle input changes and update state
-
-
-  console.log(state);
-  
-
-
 
   const termsPoints = [
     'Users must be 18 years or older to make a booking.',
@@ -134,7 +122,6 @@ const HolidayDetail = () => {
 
   const fetchIncludeData=async()=>{
     const response=await dispatch(getPackageInclude())
-    console.log("include package is", response); 
   }
 
 
@@ -282,13 +269,8 @@ const HolidayDetail = () => {
       }
     };    
 
-    console.log("similar package is",similarPackages);
 
-    console.log("package include is",includeData);
-    
-    
   
-
   return (
     <div className="bg-gray-50 font-sans text-gray-800 ">
       <BreadCrumbs headText={state?.packageName}  image={state?.mainPhoto?.secure_url} />
@@ -301,7 +283,7 @@ const HolidayDetail = () => {
      
           <HolidayDetailScroll data={state?.photos} />
           {/* <RouteMap/> */}
-          <RouteDesign/>
+          <RouteDesign data={state?.routesDetail}/>
           <div className="bg-gray-50 border border-gray-100 mt-4 ">
             <DayWiseSection  data={state?.dayWise} />
           </div>
@@ -446,7 +428,7 @@ const HolidayDetail = () => {
       </div>
       <div className="text-4xl font-bold text-black">
         ₹{state?.rate}
-        <span className="text-lg font-medium text-gray-600 ml-2">/ Person</span>
+        <span className="text-lg font-medium text-gray-600 ml-2">/ {state?.rateBy}</span>
       </div>
     </div>
 
@@ -598,6 +580,7 @@ const HolidayDetail = () => {
                 type="text"
                 name="destination"
                 placeholder="Enter Destination"
+                value={state?.packageName}
                 className="w-full border rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               />
             </div>

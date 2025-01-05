@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Galleria } from 'primereact/galleria';
 
-// Assuming `data` is an array where each item has a `secure_url` for the image link
+// Assuming `data` is an array where each item has a `secure_url` for the image link and packageName & rate
 const HolidayDetailScroll = ({ data }) => {
     const [images, setImages] = useState([]);
 
-
-     console.log("holidays details scrool is",data);
-     
 
     useEffect(() => {
         // Check if `data` is available and map it to the required image format
@@ -22,27 +19,49 @@ const HolidayDetailScroll = ({ data }) => {
     }, [data]); // Only run when `data` changes
 
     const itemTemplate = (item) => {
-        return <img src={item.itemImageSrc} alt={item.alt} style={{ width: '100%', height: '460px', objectFit: 'cover', display: 'block' }} className='rounded-lg' />;
-    }
+        return (
+            <div className="relative">
+                <img
+                    src={item.itemImageSrc}
+                    alt={item.alt}
+                    style={{
+                        width: '100%',
+                        height: '460px',
+                        objectFit: 'cover',
+                        display: 'block',
+                    }}
+                    className="rounded-lg"
+                />
+           
+            </div>
+        );
+    };
 
     const thumbnailTemplate = (item) => {
-        return <img src={item.thumbnailImageSrc} alt={item.alt} style={{ height: '100px', objectFit: 'cover', display: 'block' }} />;
+        return (
+            <img
+                src={item.thumbnailImageSrc}
+                alt={item.alt}
+                style={{ height: '100px', objectFit: 'cover', display: 'block' }}
+                className="rounded-md"
+            />
+        );
     };
 
     return (
-        <div className="card ">
-            <Galleria 
-                value={images} 
-                numVisible={5} 
-                circular 
-                style={{ maxWidth: '840px' }}
-                showThumbnails={false} 
-                showItemNavigators 
-                item={itemTemplate} 
-                thumbnail={thumbnailTemplate} 
+        <div className="card max-w-3xl mx-auto ">
+            <Galleria
+                value={images}
+                numVisible={5}
+                circular
+                style={{ maxWidth: '100%' }}
+                showThumbnails={false}
+                showItemNavigators
+                item={itemTemplate}
+                thumbnail={thumbnailTemplate}
             />
         </div>
     );
-}
+};
 
 export default HolidayDetailScroll;
