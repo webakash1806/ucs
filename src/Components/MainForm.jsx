@@ -763,14 +763,14 @@ const MainForm = ({ mainActive, inner, pickupData, dropData, mainDate, mainTime,
                             <div
                                 onClick={() => setOutstationActive(1.1)}
                                 className={`py-[0.15rem] font-semibold px-4 border-[0.3px] rounded-l-full border-gray-400 transform scale-105 transition-all duration-500 ease-in-out
-${outstationActive === 1.1 ? 'bg-main text-white' : 'bg-white text-light hover:bg-[#f0f4f8]'}`}
+${outstationActive === 1.1 ? 'bg-main text-white' : 'bg-white text-black hover:bg-[#f0f4f8]'}`}
                             >
                                 One way
                             </div>
                             <div
                                 onClick={() => setOutstationActive(1.2)}
                                 className={`py-[0.15rem] font-semibold px-4 border-[0.3px] rounded-r-full border-gray-400 transform scale-105 transition-all duration-500 ease-in-out
-${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:bg-[#f0f4f8]'}`}
+${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-black hover:bg-[#f0f4f8]'}`}
                             >
                                 Round Trip
                             </div>
@@ -782,16 +782,16 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
 
                                 className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
 
-                                <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
-                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-light border-[0.2rem] rounded-full' ></div>
-                                    <div className='h-[3.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1'>
+                                <div className='absolute top-[0.75rem]  text-black left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
+                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-black border-[0.2rem] rounded-full' ></div>
+                                    <div className='h-[3.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-black w-1'>
                                     </div>
                                     <FaLocationDot />
                                 </div>
                                 <div
 
                                     className='relative w-full'>
-                                    <label className='w-full text-light py-1 text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Location</label>
+                                    <label className='w-full text-black py-1 text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Location</label>
                                     <input
 
                                         type="text"
@@ -830,7 +830,7 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
                                 <div
 
                                     className='relative w-full mt-[0.52rem]'>
-                                    <label className='w-full  text-light py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop Location</label>
+                                    <label className='w-full  text-black py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop Location</label>
                                     <input
 
 
@@ -868,16 +868,16 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
 
                                 className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
 
-                                <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
-                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-light border-[0.2rem] rounded-full' ></div>
-                                    <div className='h-[4.2rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1'>
+                                <div className='absolute top-[0.75rem]  text-black left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
+                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-black border-[0.2rem] rounded-full' ></div>
+                                    <div className='h-[4.2rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-black w-1'>
                                     </div>
                                     <FaLocationDot />
                                 </div>
                                 <div
 
                                     className='relative w-full'>
-                                    <label className='w-full text-light py-1 text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Location</label>
+                                    <label className='w-full text-black py-1 text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Location</label>
                                     <input
 
                                         type="text"
@@ -915,7 +915,7 @@ ${outstationActive === 1.2 ? 'bg-main text-white' : 'bg-white text-light hover:b
                                 <div
 
                                     className='relative w-full mt-[0.52rem]'>
-                                    <label className='w-full  text-light py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop Location</label>
+                                    <label className='w-full  text-black py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop Location</label>
                                     <input
 
 
@@ -976,16 +976,16 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
 
                                 className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
 
-                                <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
-                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-light border-[0.2rem] rounded-full' ></div>
-                                    <div className='h-[4.2rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1'>
+                                <div className='absolute top-[0.75rem]  text-black left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
+                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-black border-[0.2rem] rounded-full' ></div>
+                                    <div className='h-[4.2rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-black w-1'>
                                     </div>
                                     <FaLocationDot />
                                 </div>
                                 <div
 
                                     className='relative w-full' >
-                                    <label className='w-full text-light text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Location</label>
+                                    <label className='w-full text-black text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Location</label>
                                     <input
                                         type="text"
                                         value={inputValue}
@@ -1022,7 +1022,7 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                                 <div
 
                                     className='relative w-full mt-[0.52rem]'>
-                                    <label className='w-full  text-light py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop to airport</label>
+                                    <label className='w-full  text-black py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop to airport</label>
                                     <input
 
 
@@ -1059,15 +1059,15 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
 
                                 className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
 
-                                <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
-                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-light border-[0.2rem] rounded-full' ></div>
-                                    <div className='h-[4.2rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1'>
+                                <div className='absolute top-[0.75rem]  text-black left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
+                                    <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-black border-[0.2rem] rounded-full' ></div>
+                                    <div className='h-[4.2rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-black w-1'>
                                     </div>
                                     <FaLocationDot />
                                 </div>
                                 <div
                                     className='relative w-full' >
-                                    <label className='w-full text-light text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up from airport</label>
+                                    <label className='w-full text-black text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up from airport</label>
                                     <input
                                         type="text"
                                         value={airportDropValue}
@@ -1107,7 +1107,7 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                                 <div
 
                                     className='relative w-full mt-[0.52rem]'>
-                                    <label className='w-full  text-light py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop Location</label>
+                                    <label className='w-full  text-black py-3 pb-2  text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Drop Location</label>
                                     <input
 
 
@@ -1143,13 +1143,13 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                 {active === 2 &&
                     <div className="relative border p-1 rounded-md pr-2 border-main bg-[#F7FBFF] pl-7 flex flex-col items-center">
 
-                        <div className='absolute top-[0.75rem]  text-light left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
-                            {/* <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-light border-[0.2rem] rounded-full' ></div>
-                            <div className='h-[3.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-light w-1'>
+                        <div className='absolute top-[0.75rem]  text-black left-[0.4rem] text-[0.85rem] flex items-center justify-center flex-col'>
+                            {/* <div className='rotate-[180deg] mr-[0.01px]  size-[0.75rem] border-black border-[0.2rem] rounded-full' ></div>
+                            <div className='h-[3.7rem] border-dashed border-r-[1.3px] mr-[0.155rem] border-black w-1'>
                             </div> */}
                             <FaLocationDot />
                         </div>
-                        <label className='w-full text-light py-1 text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Location</label>
+                        <label className='w-full text-black py-1 text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Location</label>
                         <input
                             type="text"
                             value={searchInput}
@@ -1182,8 +1182,8 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
 
                 <div className="flex w-full gap-3">
                     <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                        <FaRegCalendarAlt className='text-light left-2 absolute md:top-[1.92rem] sm:top-[1.76rem] top-[1.67rem] md:text-[1.2rem] sm:text-[1.1rem]' />
-                        <label className='w-full  text-light   text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Date</label>
+                        <FaRegCalendarAlt className='text-black left-2 absolute md:top-[1.92rem] sm:top-[1.76rem] top-[1.67rem] md:text-[1.2rem] sm:text-[1.1rem]' />
+                        <label className='w-full  text-black   text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Date</label>
 
                         <DatePicker
                             selected={startDate}
@@ -1196,9 +1196,9 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                     </div>
                     {active === 1 && outstationActive === 1.2 &&
                         <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                            <label className='w-full  text-light   text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Return Date</label>
+                            <label className='w-full  text-black   text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Return Date</label>
 
-                            <FaRegCalendarAlt className='text-light left-2 absolute md:top-[1.92rem] sm:top-[1.76rem] top-[1.67rem] md:text-[1.2rem] sm:text-[1.1rem]' />
+                            <FaRegCalendarAlt className='text-black left-2 absolute md:top-[1.92rem] sm:top-[1.76rem] top-[1.67rem] md:text-[1.2rem] sm:text-[1.1rem]' />
 
                             <DatePicker
                                 selected={returnDate}
@@ -1212,9 +1212,9 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                         </div>}
                     {(active === 2 || active === 3 || outstationActive === 1.1) &&
                         <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex flex-col items-center">
-                            <MdOutlineAccessTime className='text-light left-2 absolute top-[1.73rem] md:top-[1.95rem] sm:top-[1.78rem] md:text-[1.2rem] sm:text-[1.1rem]' />
+                            <MdOutlineAccessTime className='text-black left-2 absolute top-[1.73rem] md:top-[1.95rem] sm:top-[1.78rem] md:text-[1.2rem] sm:text-[1.1rem]' />
 
-                            <label className='w-full  text-light text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Time</label>
+                            <label className='w-full  text-black text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Time</label>
                             <DatePicker
                                 selected={startTime}
                                 onChange={(date) => setStartTime(date)}
@@ -1245,9 +1245,9 @@ ${airportActive === 3.2 ? 'bg-main text-white' : 'bg-white text-main hover:bg-[#
                 </div>
                 {active === 1 && outstationActive === 1.2 &&
                     <div className="relative border w-full px-2 p-1 rounded-md border-main bg-[#F7FBFF] flex items-center">
-                        <label className=' pr-6  text-light text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Time</label>
+                        <label className=' pr-6  text-black text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem]'>Pick-up Time</label>
 
-                        <MdOutlineAccessTime className='text-light  md:text-[1.2rem] sm:text-[1.1rem]' />
+                        <MdOutlineAccessTime className='text-black  md:text-[1.2rem] sm:text-[1.1rem]' />
                         <DatePicker
                             selected={startTime}
                             onChange={(date) => setStartTime(date)}

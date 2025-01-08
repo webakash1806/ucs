@@ -9,7 +9,7 @@ const PackageCard = ({ val }) => {
       onClick={() => navigate('/holiday/package/detail', { state: { ...val } })}
     >
       {/* Image Section */}
-      <div className="relative h-[30rem] w-full object-cover">
+      <div className="relative h-[20rem] w-full object-cover">
         <img
           src={val?.mainPhoto?.secure_url}
           alt={val?.packageName || "Package Image"}

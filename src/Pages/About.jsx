@@ -25,7 +25,7 @@ const About = () => {
 
     return (
         <div className="py-10 bg-gray-100">
-            <div className="p-4 mx-auto max-w-7xl md:px-8">
+            <div className="p-4 mx-auto max-w-7xl md:px-8 ">
                 {/* Hero Section */}
                 <h1 className="mb-4 text-4xl font-[600] text-center text-main">{data[0]?.title}</h1>
                 <section className="flex flex-col items-center sm:block">

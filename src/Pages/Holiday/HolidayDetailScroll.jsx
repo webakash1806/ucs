@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Galleria } from 'primereact/galleria';
 
-// Assuming `data` is an array where each item has a `secure_url` for the image link and packageName & rate
 const HolidayDetailScroll = ({ data }) => {
     const [images, setImages] = useState([]);
-
+    const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
-        // Check if `data` is available and map it to the required image format
         if (data && data.length > 0) {
             const formattedImages = data.map(item => ({
-                itemImageSrc: item.secure_url, // use the secure_url from the data
-                thumbnailImageSrc: item.secure_url, // use the secure_url for thumbnail as well
-                alt: item.alt || 'Holiday Image'  // Optional: set alt text
+                itemImageSrc: item.secure_url,
+                thumbnailImageSrc: item.secure_url,
+                alt: item.alt || 'Holiday Image'
             }));
             setImages(formattedImages);
         }
-    }, [data]); // Only run when `data` changes
+    }, [data]);
 
     const itemTemplate = (item) => {
         return (
@@ -32,7 +30,6 @@ const HolidayDetailScroll = ({ data }) => {
                     }}
                     className="rounded-lg"
                 />
-           
             </div>
         );
     };
@@ -48,12 +45,21 @@ const HolidayDetailScroll = ({ data }) => {
         );
     };
 
+    const onSlideChange = (event) => {
+        const newIndex = event.index;
+        setActiveIndex(newIndex);
+    };
+
     return (
         <div className="card max-w-3xl mx-auto ">
             <Galleria
                 value={images}
+                activeIndex={activeIndex}
+                onItemChange={onSlideChange}
                 numVisible={5}
                 circular
+                autoPlay
+                transitionInterval={3000} // Change slides every 3 seconds
                 style={{ maxWidth: '100%' }}
                 showThumbnails={false}
                 showItemNavigators

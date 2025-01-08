@@ -42,7 +42,7 @@ const HolidayPackage = () => {
     }, []);
 
     // Filter data based on destinationType "home"
-    const filteredData = data.filter((service) => service.destinationType === 'home');
+    const filteredData = data.filter((service) => service.destinationType === 'home'  ||  service.destinationType==='both');
 
     return (
         <div className="sm:px-6 px-4 py-12 bg-[#F5F6F7] flex flex-col items-center">

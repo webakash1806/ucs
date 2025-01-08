@@ -68,6 +68,7 @@ const HolidayDetail = () => {
   const [openTerms, setOpenTerms] = useState(false);
   const [openBookingPolicy, setOpenBookingPolicy] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [customize,setCustomise]=useState(false)
   
   const [activeTab, setActiveTab] = useState('terms');
   const dispatch=useDispatch()
@@ -284,7 +285,7 @@ const HolidayDetail = () => {
           <HolidayDetailScroll data={state?.photos} />
           {/* <RouteMap/> */}
           <RouteDesign data={state?.routesDetail}/>
-          <div className="bg-gray-50 border border-gray-100 mt-4 ">
+          <div className="bg-gray-50 border border-gray-100 mt-10 ">
             <DayWiseSection  data={state?.dayWise} />
           </div>
           
@@ -491,22 +492,22 @@ const HolidayDetail = () => {
     {/* Contact Info */}
     <div className="bg-gray-50 p-4 rounded-lg shadow-sm text-center border border-gray-200">
       <p className="font-semibold text-gray-800 text-lg">Need Help?</p>
-      <p className="text-sm text-gray-600">
+      <p className="text-xl text-gray-600">
         Email:{" "}
         <a
-          href="mailto:ucs@gmail.com"
-          className="text-blue-600 underline hover:text-blue-700"
+          href="mailto:ucscab@gmail.com"
+          className="text-blue-600  hover:text-blue-700 no-underline"
         >
-          ucs@gmail.com
+          ucscab@gmail.com
         </a>
       </p>
-      <p className="text-sm text-gray-600">
+      <p className="text-xl text-gray-600">
         Phone:{" "}
         <a
-          href="tel:919876543210"
-          className="text-blue-600 underline hover:text-blue-700"
+          href="tel:919520801801"
+          className="text-blue-600 no-underline hover:text-blue-700"
         >
-          +91 9876543210
+          +91 9520801801
         </a>
       </p>
     </div>

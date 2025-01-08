@@ -10,7 +10,7 @@ const BreadCrumbs = ({ items, headText ,image}) => {
   return (
     <div
       className="relative flex flex-col items-center justify-center py-16 lg:py-24 bg-cover bg-center"
-      style={{ backgroundImage: `url(${image2})` }} // Background image
+      style={{ backgroundImage: `url(${image || image2})` }} // Background image
       data-aos="fade-in" // Add AOS effect here
     >
       {/* Dark overlay */}
