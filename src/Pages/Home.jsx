@@ -39,6 +39,9 @@ const Home = () => {
         return <div>No data available</div>
     }
 
+    console.log(home);
+    
+
     return (
         <div>
             {/* Conditionally render based on data availability */}

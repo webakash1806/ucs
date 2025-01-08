@@ -3,15 +3,17 @@ import car2 from '../assets/car2.avif';
 
 const HomeSection2 = ({data}) => {
 
-
-
-    console.log(data);
+    console.log("home section is",data);
+    
 
     const {children}=data
 
     const stripHTMLTags = (str) => {
         return str.replace(/<\/?[^>]+(>|$)/g, "");
       };
+
+      console.log(children);
+      
 
     
 
@@ -26,7 +28,7 @@ const HomeSection2 = ({data}) => {
                 <img src={children[0]?.photo?.secure_url} className='float-left w-full sm:w-[40vw] md:w-[30vw] lg:w-[25vw] sm:mr-3' alt="Main visual" />
 
                 <h2 className='text-xl md:text-2xl font-semibold text-main mb-1'>
-                    {children[0].title}
+                    {children[0]?.title}
                 </h2>
                 <p className='text-base  text-[#535760] mb-4'>
           
@@ -35,7 +37,7 @@ const HomeSection2 = ({data}) => {
         : "Description Not Available"}
                 </p>
                 <h2 className='text-xl md:text-2xl font-semibold text-main mb-1'>
-                    {children[1].title}
+                    {/* {children[1].title} */}
                 </h2>
                 <p className='text-base  text-[#535760] mb-4'>
                 {children[1]?.description
