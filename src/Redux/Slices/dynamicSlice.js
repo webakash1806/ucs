@@ -48,7 +48,7 @@ export const getAllHome = createAsyncThunk('/dynamic/Home', async () => {
 
 export const getPrivacyPolicy = createAsyncThunk('/dynamic/privacy-policy', async () => {
     try {
-        let res = axiosInstance.get('dynamic/Privacy-Policy');
+        let res = axiosInstance.get('dynamic/Privacy Policy');
         res = await res;
         return res.data;
     } catch (e) {

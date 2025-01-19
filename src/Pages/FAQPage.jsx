@@ -42,7 +42,7 @@ const FAQPage = () => {
                         <div
                             className={` text-gray-700 border-t border-gray-200 transition-all duration-500 ease-in-out ${openIndex === index ? 'max-h-screen opacity-100 px-6 py-4' : 'max-h-0 p-0 opacity-0 overflow-hidden'}`}
                         >
-                            <div
+                            <div className='p1'
                                 dangerouslySetInnerHTML={{ __html: faq?.description }}
 
                             />

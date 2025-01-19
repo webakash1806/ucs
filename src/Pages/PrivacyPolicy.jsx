@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
         <div className="max-w-4xl p-6 mx-auto my-12 bg-white rounded-lg shadow-lg">
             <h1 className="mb-6 text-3xl font-semibold text-center">Privacy Policy</h1>
 
-            <div
+            <div className="p1"
                 dangerouslySetInnerHTML={{ __html: data?.description }}
             />
         </div>

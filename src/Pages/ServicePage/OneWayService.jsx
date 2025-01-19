@@ -97,7 +97,7 @@ const OneWayService = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
                     >
-                        <div
+                        <div className='p1'
                             dangerouslySetInnerHTML={{ __html: data?.description }}
                         />
                     </motion.div>
