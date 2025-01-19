@@ -49,7 +49,7 @@ const Home = () => {
              <HolidayPackage/>
             {home[1] && <HomeSection1 data={home[1]} />}
             <ServiceSection />
-            {/* {home[3] && <HomeSection2 data={home[3]} />} */}
+            {home[3] && <HomeSection2 data={home[3]} />}
             <WhyChoose />
             {home[4] && <Testimonial data={home[4]} />}
             {/* {  <BlogSection  />} */}

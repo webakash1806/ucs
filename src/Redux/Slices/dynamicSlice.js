@@ -11,7 +11,7 @@ const initialState = {
     onewayCab: localStorage.getItem('onewayCab') !== "undefined" ? JSON.parse(localStorage.getItem('onewayCab')) : {},
     faq: localStorage.getItem('faq') !== "undefined" ? JSON.parse(localStorage.getItem('faq')) : {},
     about: localStorage.getItem('about') !== "undefined" ? JSON.parse(localStorage.getItem('about')) : {},
-    home: localStorage.getItem('home') !== "undefined" ? JSON.parse(localStorage.getItem('home')) : {},
+    home: [],
     blog: []
 };
 
@@ -180,15 +180,16 @@ const dynamicSlice = createSlice({
                 state.about = action.payload.data;
             }) 
             .addCase(getAllHome.fulfilled, (state, action) => {
-         
-                localStorage.setItem('home', JSON.stringify(action.payload.sections));
-                state.home = action.payload.sections;
+               console.log(action);
+               
+                // localStorage.setItem('home', JSON.stringify(action.payload.sections));
+                state.home = action?.payload?.sections;
             }) 
             
             .addCase(getBlogs.fulfilled, (state, action) => {
                 // localStorage.setItem('blog', JSON.stringify(action.payload.sections));
                 state.blog=action?.payload?.sections
-                state.home = action.payload.sections;
+                // state.home = action.payload.sections;
             })
 
     }
