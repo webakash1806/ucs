@@ -29,28 +29,28 @@ const WhyChoose = () => {
                 <div className='flex flex-col gap-4 lg:gap-6'>
                     <div data-aos="fade-right" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1200" data-aos-delay="0" className="relative w-[18rem] flex items-center gap-2  lg:py-[0.6rem]  p-3 py-[0.3rem] bg-main text-white rounded-lg shadow-2xl border-l-4 border-blue-300">
                         <AiOutlineSafety />
-                        <h2 className="text-[1.05rem] tracking-wide font-bold">Secured and Safe Rides</h2>
+                        <h2 className="text-[1.05rem] tracking-wide font-bold text-white">Secured and Safe Rides</h2>
                         <span className="absolute bottom-0 w-5 h-5 bg-white rounded-full right-4 opacity-20"></span>
                         <span className="absolute w-3 h-3 bg-white rounded-full bottom-1 right-8 opacity-20"></span>
                     </div>
 
                     <div data-aos="fade-right" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1200" data-aos-delay="300" className="relative w-[18rem] flex items-center gap-2  lg:py-[0.6rem]  p-3 py-[0.3rem] bg-main  text-white rounded-lg shadow-2xl border-l-4 border-blue-300 font-bold">
                         <RiCustomerService2Fill />
-                        <h2 className="text-[1.05rem] tracking-wide">24/7 Customer Support</h2>
+                        <h2 className="text-[1.05rem] tracking-wide text-white">24/7 Customer Support</h2>
                         <span className="absolute bottom-0 w-5 h-5 bg-white rounded-full right-4 opacity-20"></span>
                         <span className="absolute w-3 h-3 bg-white rounded-full bottom-1 right-8 opacity-20"></span>
                     </div>
 
                     <div data-aos="fade-right" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1200" data-aos-delay="600" className="relative w-[18rem] flex items-center gap-2  lg:py-[0.6rem]  p-3 py-[0.3rem] bg-main font-bold text-white rounded-lg shadow-2xl border-l-4 border-blue-300">
                         <MdCleanHands />
-                        <h2 className="text-[1.05rem] tracking-wide">Sanitized and Clean</h2>
+                        <h2 className="text-[1.05rem] tracking-wide text-white">Sanitized and Clean</h2>
                         <span className="absolute bottom-0 w-5 h-5 bg-white rounded-full right-4 opacity-20"></span>
                         <span className="absolute w-3 h-3 bg-white rounded-full bottom-1 right-8 opacity-20"></span>
                     </div>
 
                     <div data-aos="fade-right" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1200" data-aos-delay="900" className="relative w-[18rem] flex items-center gap-2  lg:py-[0.6rem]  p-3 py-[0.3rem] bg-main font-bold text-white rounded-lg shadow-2xl border-l-4 border-blue-300">
                         <MdOutlineTimer />
-                        <h2 className="text-[1.05rem] tracking-wide">On Time Punctuality</h2>
+                        <h2 className="text-[1.05rem] tracking-wide text-white">On Time Punctuality</h2>
                         <span className="absolute bottom-0 w-5 h-5 bg-white rounded-full right-4 opacity-20"></span>
                         <span className="absolute w-3 h-3 bg-white rounded-full bottom-1 right-8 opacity-20"></span>
                     </div>
@@ -80,28 +80,28 @@ const WhyChoose = () => {
                 <div className='flex flex-col gap-4 lg:gap-6'>
                     <div data-aos="fade-left" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1200" data-aos-delay="0" className="relative w-[18rem] flex items-center gap-2  lg:py-[0.6rem]  p-3 py-[0.3rem] bg-main font-bold text-white rounded-lg shadow-2xl border-r-4 border-blue-300">
                         <FaCar />
-                        <h2 className="text-[1.05rem] tracking-wide">Variety of Cars</h2>
+                        <h2 className="text-[1.05rem] tracking-wide text-white">Variety of Cars</h2>
                         <span className="absolute bottom-0 w-5 h-5 bg-white rounded-full right-4 opacity-20"></span>
                         <span className="absolute w-3 h-3 bg-white rounded-full bottom-1 right-8 opacity-20"></span>
                     </div>
 
                     <div data-aos="fade-left" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1200" data-aos-delay="300" className="relative w-[18rem] flex items-center gap-2  lg:py-[0.6rem]  p-3 py-[0.3rem] bg-main font-bold  text-white rounded-lg shadow-2xl border-r-4 border-blue-300">
                         <FaCoins />
-                        <h2 className="text-[1.05rem] tracking-wide">Best in Affordable Price</h2>
+                        <h2 className="text-[1.05rem] tracking-wide text-white">Best in Affordable Price</h2>
                         <span className="absolute bottom-0 w-5 h-5 bg-white rounded-full right-4 opacity-20"></span>
                         <span className="absolute w-3 h-3 bg-white rounded-full bottom-1 right-8 opacity-20"></span>
                     </div>
 
                     <div data-aos="fade-left" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1200" data-aos-delay="600" className="relative w-[18rem] flex items-center gap-2  lg:py-[0.6rem]  p-3 py-[0.3rem] bg-main font-bold  text-white rounded-lg shadow-2xl border-r-4 border-blue-300">
                         <FaRoad />
-                        <h2 className="text-[1.05rem] tracking-wide">Road Trip Expert</h2>
+                        <h2 className="text-[1.05rem] tracking-wide text-white">Road Trip Expert</h2>
                         <span className="absolute bottom-0 w-5 h-5 bg-white rounded-full right-4 opacity-20"></span>
                         <span className="absolute w-3 h-3 bg-white rounded-full bottom-1 right-8 opacity-20"></span>
                     </div>
 
                     <div data-aos="fade-left" data-aos-anchor-placement="bottom-bottom" data-aos-duration="1200" data-aos-delay="900" className="relative w-[18rem] flex items-center gap-2  lg:py-[0.6rem]  p-3 py-[0.3rem] bg-main font-bold  text-white rounded-lg shadow-2xl border-r-4 border-blue-300">
                         <MdPayment />
-                        <h2 className="text-[1.05rem] tracking-wide">Hassle free payment mode</h2>
+                        <h2 className="text-[1.05rem] tracking-wide text-white">Hassle free payment mode</h2>
                         <span className="absolute bottom-0 w-5 h-5 bg-white rounded-full right-4 opacity-20"></span>
                         <span className="absolute w-3 h-3 bg-white rounded-full bottom-1 right-8 opacity-20"></span>
                     </div>
