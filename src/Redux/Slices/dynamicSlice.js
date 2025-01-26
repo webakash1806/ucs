@@ -12,6 +12,7 @@ const initialState = {
     faq: localStorage.getItem('faq') !== "undefined" ? JSON.parse(localStorage.getItem('faq')) : {},
     about: localStorage.getItem('about') !== "undefined" ? JSON.parse(localStorage.getItem('about')) : {},
     home: [],
+    refundPolicy: localStorage.getItem('refundPolicy') !== "undefined" ? JSON.parse(localStorage.getItem('refundPolicy')) : {},
     blog: []
 };
 
@@ -43,9 +44,6 @@ export const getAllHome = createAsyncThunk('/dynamic/Home', async () => {
     }
 });
 
-
-
-
 export const getPrivacyPolicy = createAsyncThunk('/dynamic/privacy-policy', async () => {
     try {
         let res = axiosInstance.get('dynamic/Privacy Policy');
@@ -56,6 +54,20 @@ export const getPrivacyPolicy = createAsyncThunk('/dynamic/privacy-policy', asyn
 
     }
 });
+
+
+export const getRefundPolicy = createAsyncThunk('/dynamic/refund-policy', async () => {
+    try {
+        let res = axiosInstance.get('dynamic/Refund and Cancellation');
+        res = await res;
+        return res.data;
+    } catch (e) {
+        return e?.response?.data?.message;
+
+    }
+});
+
+
 
 export const getRoundCabData = createAsyncThunk('/dynamic/round-cab', async () => {
     try {
@@ -154,6 +166,10 @@ const dynamicSlice = createSlice({
             .addCase(getPrivacyPolicy.fulfilled, (state, action) => {
                 localStorage.setItem('privacyPolicy', JSON.stringify(action.payload.data));
                 state.privacyPolicy = action.payload.data;
+            })
+            .addCase(getRefundPolicy.fulfilled, (state, action) => {
+                localStorage.setItem('refundPolicy', JSON.stringify(action.payload.data));
+                state.refundPolicy = action.payload.data;
             })
             .addCase(getRoundCabData.fulfilled, (state, action) => {
                 localStorage.setItem('roundCab', JSON.stringify(action.payload.data));

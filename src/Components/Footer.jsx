@@ -15,7 +15,7 @@ import youtube from '../assets/Social/youtube.png'
 
 const Footer = () => {
     return (
-        <footer className="relative flex flex-col items-center justify-center overflow-x-hidden">
+        <footer className="relative flex flex-col items-start justify-center overflow-x-hidden">
 
             <div className="mx-auto w-full sm:px-28 px-4 bg-[#001e3a] pt-8">
                 <div className="py-8">
@@ -124,6 +124,9 @@ const Footer = () => {
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
                                         <Link to="/privacy-policy">Privacy Policy</Link>
+                                    </li>
+                                    <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
+                                        <Link to="/refund-policy">Refund and Cancellation</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
                                         <Link to="/holiday/package">Holiday Package</Link>
