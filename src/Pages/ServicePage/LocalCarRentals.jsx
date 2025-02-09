@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { getLocalCabData } from '../../Redux/Slices/dynamicSlice';
+import MainForm from '../../Components/MainForm';
 const faqItems = [
     {
         question: 'What are the payment options for hourly car rentals?',
@@ -54,12 +55,14 @@ const LocalCarRentals = () => {
         fetchData()
     }, [dispatch])
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen  ">
             {/* Hero Section */}
-            <section className="relative bg-center bg-cover h-96" style={{ backgroundImage: `url(${data?.photo?.secure_url})` }}>
+            <section className="relative bg-center bg-cover h-96 py-[17rem]" style={{ backgroundImage: `url(${data?.photo?.secure_url})` }}>
+             
                 <div className="absolute inset-0 bg-black opacity-70"></div>
-                <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
-                    <motion.h1
+                <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-black">
+                <MainForm/>
+                    {/* <motion.h1
                         className="text-4xl font-bold"
                         initial={{ opacity: 0, y: -50 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -83,7 +86,7 @@ const LocalCarRentals = () => {
                         className='p-2 px-4 mt-4 border border-white rounded hover:shadow-[0px_0px_16px] bg-main font-semibold hover:shadow-main'
                     >
                         Book now
-                    </motion.button>
+                    </motion.button> */}
                 </div>
             </section>
 

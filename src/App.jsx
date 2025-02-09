@@ -51,6 +51,7 @@ import BlogDetail from './Pages/Blog/BlogDetail';
 import HolidayForm from './Pages/Holiday/HolidayForm';
 import PackageMoreDetail from './Pages/Holiday/PackageMoreDetail';
 import RefundPolicy from './Pages/RefundPolicy';
+import CarRental from './Pages/CarRental';
 
 
 const App = () => {
@@ -183,6 +184,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/contact' element={<Contact />} />
+          <Route path='/car/rental' element={<CarRental/>} />
           <Route path='/about' element={<About />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
           <Route path='/refund-policy' element={<RefundPolicy/>} />
