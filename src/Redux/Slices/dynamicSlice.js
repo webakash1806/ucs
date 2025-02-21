@@ -9,6 +9,7 @@ const initialState = {
     localCab: localStorage.getItem('localCab') !== "undefined" ? JSON.parse(localStorage.getItem('localCab')) : {},
     airportCab: localStorage.getItem('airportCab') !== "undefined" ? JSON.parse(localStorage.getItem('airportCab')) : {},
     onewayCab: localStorage.getItem('onewayCab') !== "undefined" ? JSON.parse(localStorage.getItem('onewayCab')) : {},
+    taxiCabDetail: [],
     faq: localStorage.getItem('faq') !== "undefined" ? JSON.parse(localStorage.getItem('faq')) : {},
     about: localStorage.getItem('about') !== "undefined" ? JSON.parse(localStorage.getItem('about')) : {},
     home: [],
@@ -54,8 +55,6 @@ export const getPrivacyPolicy = createAsyncThunk('/dynamic/privacy-policy', asyn
 
     }
 });
-
-
 export const getRefundPolicy = createAsyncThunk('/dynamic/refund-policy', async () => {
     try {
         let res = axiosInstance.get('dynamic/Refund and Cancellation');
@@ -66,7 +65,6 @@ export const getRefundPolicy = createAsyncThunk('/dynamic/refund-policy', async 
 
     }
 });
-
 
 
 export const getRoundCabData = createAsyncThunk('/dynamic/round-cab', async () => {
@@ -102,7 +100,6 @@ export const getAirportCabData = createAsyncThunk('/dynamic/airport-cab', async 
     }
 });
 
-
 export const getOnewayData = createAsyncThunk('/dynamic/oneway-cab', async () => {
     try {
         let res = axiosInstance.get('dynamic/One-Way%20Cab%20Rentals');
@@ -113,6 +110,46 @@ export const getOnewayData = createAsyncThunk('/dynamic/oneway-cab', async () =>
 
     }
 });
+
+
+export const getTaxtDetail = createAsyncThunk(
+    "/dynamic/taxi/detail",
+    async ({page, category }, { rejectWithValue }) => {
+      try {
+        let urlbe = "";
+
+       
+  
+        if (page === "local-taxi-service") {
+          urlbe = "Local%20Trip%20Cab%20Services";
+        } else if (page === "airport-taxi-service") {
+          urlbe = "Airport%20Cab%20Services";
+        } else if (page === "oneway-taxi-service") {
+          urlbe = "One-Way%20Cab%20Rentals";
+        } else if (page === "round-taxi-service") {
+          urlbe = "Round%20Trip%20Car%20Rentals";
+        } else {
+          urlbe = "round";
+        }
+  
+        console.log("Request URL:", `/dynamic/${urlbe}/${category}`);
+  
+        // ✅ Await the API response correctly
+        const res = await axiosInstance.get(`/dynamic/${urlbe}/${category}`);
+  
+        console.log("API Response:", res.data);
+  
+        return res.data;
+      } catch (error) {
+        console.error("API Error:", error?.response?.data?.message);
+        return rejectWithValue(error?.response?.data?.message || "Something went wrong");
+      }
+    }
+  );
+  
+
+
+
 
 export const getFAQ = createAsyncThunk('/dynamic/faq', async () => {
     try {
@@ -186,6 +223,11 @@ const dynamicSlice = createSlice({
             .addCase(getOnewayData.fulfilled, (state, action) => {
                 localStorage.setItem('onewayCab', JSON.stringify(action.payload.data));
                 state.onewayCab = action.payload.data;
+            })
+            .addCase(getTaxtDetail.fulfilled, (state, action) => {
+                console.log(action);
+            
+                state.taxiCabDetail = action?.payload?.data;
             })
             .addCase(getFAQ.fulfilled, (state, action) => {
                 localStorage.setItem('faq', JSON.stringify(action.payload.data));

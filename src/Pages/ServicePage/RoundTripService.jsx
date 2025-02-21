@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { getRoundCabData } from '../../Redux/Slices/dynamicSlice';
+import MainForm from '../../Components/MainForm';
+import WhyWe from './Why';
 
 const faqItems = [
     {
@@ -57,34 +59,11 @@ const RoundTripService = () => {
     return (
         <div className="min-h-screen bg-gray-100">
             {/* Hero Section */}
-            <section className="relative bg-center bg-cover h-96" style={{ backgroundImage: `url(${data?.photo?.secure_url})` }}>
+            <section className="relative bg-center bg-cover h-96 py-[17rem]" style={{ backgroundImage: `url(${data?.photo?.secure_url})` }}>
+
                 <div className="absolute inset-0 bg-black opacity-70"></div>
-                <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white">
-                    <motion.h1
-                        className="text-4xl font-bold"
-                        initial={{ opacity: 0, y: -50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1 }}
-                    >
-                        {data?.title}
-                    </motion.h1>
-                    <motion.p
-                        className="mt-4 text-xl"
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.5 }}
-                    >
-                        Comfortable, Reliable, and Flexible
-                    </motion.p>
-                    <motion.button
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.8 }}
-                        onClick={() => navigate('/')}
-                        className='p-2 px-4 mt-4 border border-white rounded hover:shadow-[0px_0px_16px] bg-main font-semibold hover:shadow-main'
-                    >
-                        Book now
-                    </motion.button>
+                <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-black">
+                    <MainForm />
                 </div>
             </section>
 
@@ -104,8 +83,11 @@ const RoundTripService = () => {
                     </motion.div>
                 </div>
             </section>
+
+            <WhyWe/>
         </div>
     );
 };
+
 
 export default RoundTripService;

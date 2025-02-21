@@ -52,6 +52,7 @@ import HolidayForm from './Pages/Holiday/HolidayForm';
 import PackageMoreDetail from './Pages/Holiday/PackageMoreDetail';
 import RefundPolicy from './Pages/RefundPolicy';
 import CarRental from './Pages/CarRental';
+import TaxiServiceDetails from './Pages/ServicePage/TaxiDetail/TaxiServiceDetails';
 
 
 const App = () => {
@@ -201,12 +202,12 @@ const App = () => {
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/services/local-car-rentals' element={<LocalCarRentals />} />
-          <Route path='/services/round-trip' element={<RoundTripService />} />
-          <Route path='/services/airport-cabs' element={<AirportCabService />} />
-          <Route path='/services/one-way-cabs' element={<OneWayService />} />
+          <Route path='/taxi-service/local-taxi-service' element={<LocalCarRentals />} />
+          <Route path='/taxi-service/round-taxi-service' element={<RoundTripService />} />
+          <Route path='/taxi-service/airport-taxi-service' element={<AirportCabService />} />
+          <Route path='/taxi-service/oneway-taxi-service' element={<OneWayService />} />
+          <Route path='/taxi-service/:page/:category' element={<TaxiServiceDetails/>} />
           <Route path='/holiday/package' element={<HolidayPage/>} />
-      
           <Route path='/holiday/package/detail' element={<HolidayDetail/>} />
           <Route path='/holiday/form' element={<HolidayForm/>} />
           <Route path='/blog/details' element={<BlogDetail/>} />
