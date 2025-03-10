@@ -633,7 +633,7 @@ const BookCab = () => {
                                     <div className='p-[5px] border-[0.1px] border-black rounded-full size-fit'>
                                         <PiUsersThreeFill className='text-[1.3rem]' />
                                     </div>
-                                    <h2 className='font-semibold tracking-wide sm:text-[1.3rem]'>Travelers 123 </h2>
+                                    <h2 className='font-semibold tracking-wide sm:text-[1.3rem]'>Customer Details </h2>
 
                                 </div>
                                 <div className='p-2 space-y-2'>

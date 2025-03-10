@@ -61,7 +61,7 @@ const LocalCarRentals = () => {
 
 
             {/* How to Book Section */}
-            {/* <section className="py-12 px-6 md:px-20 bg-white">
+            <section className="py-12 px-6 md:px-20 bg-white">
                 <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">How to Book a UCS Cab?</h2>
                 <div className="space-y-4 text-gray-700 max-w-3xl mx-auto">
                     {["Choose your car & location", "Select rental duration", "Confirm booking & make payment", "Enjoy your ride!"].map((step, index) => (
@@ -71,11 +71,11 @@ const LocalCarRentals = () => {
                         </div>
                     ))}
                 </div>
-            </section> */}
+            </section>
 
 
 
-            {/* <HowWeWork /> */}
+            <HowWeWork />
 
             <WhyWe/>
 

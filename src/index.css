@@ -199,13 +199,17 @@ h2{
     color: #08828E;
 }
 
+ h3{
+    color: #08828E;
+}
+
   
-.p1 ol {
+ ol {
     list-style-type: decimal; /* Ensure numbers are used */
     padding-left: 20px; /* To add some indentation */
   }
   
-  .p1 ul {
+  ul {
     list-style-type: disc; /* Ensure bullets are used */
     padding-left: 20px; /* Add indentation */
   }

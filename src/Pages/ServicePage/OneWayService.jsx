@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { getOnewayData } from '../../Redux/Slices/dynamicSlice';
 import MainForm from '../../Components/MainForm';
 import WhyWe from './Why';
+import AoChale from './AooChale';
 
 const faqItems = [
     {
@@ -65,6 +66,8 @@ const OneWayService = () => {
                     <MainForm />
                 </div>
             </section>
+
+            <AoChale/>
 
             {/* Round Trip Service Overview Section */}
             <section className="py-12 px-[5vw] md:px-[10vw] bg-white">

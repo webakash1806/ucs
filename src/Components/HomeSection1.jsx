@@ -24,27 +24,30 @@ const HomeSection1 = ({data}) => {
                 <h2 className='mb-1 text-xl font-semibold md:text-2xl text-main'>
                     {children[0]?.title}
                 </h2>
-                <p className='text-base  text-[#535760] mb-4'>
+                <p className='text-base  mb-4 p1'>
                   
                      {children[0]?.description
-        ? stripHTMLTags(children[0]?.description)
+        ? <div className='text-base mb-4 p1' 
+        dangerouslySetInnerHTML={{ __html: children[0]?.description || "Description Not Available" }}>
+   </div>
         : "Description Not Available"}
                  </p>    
-                <p className='text-base  text-[#535760] mb-4'>
+                <div className='text-base mb-4'>
                     <strong>{children[1]?.title}</strong>,         {children[1]?.description
-        ? stripHTMLTags(children[1]?.description)
+        ?  <div className='text-base  mb-4 p1' 
+        dangerouslySetInnerHTML={{ __html: children[1]?.description || "Description Not Available" }}>
+   </div>
+   
         : "Description Not Available"}
-                </p>
+                </div>
                 <h2 className='mb-1 text-xl font-semibold md:text-2xl text-main'>
+                    
                    {children[2]?.title}
                 </h2>
-                <p className='text-base  text-[#535760] mb-4'>At
-          
-                    {children[2]?.description
-        ? stripHTMLTags(children[2]?.description)
-        : "Description Not Available"}
+                <div className='text-base text-[#535760] mb-4 p1' 
+     dangerouslySetInnerHTML={{ __html: children[2]?.description || "Description Not Available" }}>
+</div>
 
-                </p>
 
 
             </div>
