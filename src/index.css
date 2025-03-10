@@ -195,12 +195,19 @@ button {
     padding-left: 20px; /* Adds padding to the left for better spacing */
   }
 
-h2{
-    color: #08828E;
-}
+  h2 span {
+    color: inherit #08828e !important; 
 
- h3{
-    color: #08828E;
+
+  }
+
+
+
+
+ h3 span{
+    color: inherit #08828E !important;
+   
+   
 }
 
   

@@ -91,17 +91,17 @@ const Footer = () => {
                                 <ul>
 
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/taxi-service/local-taxi-service">Local Car Rentals</Link>
+                                        <Link to="/taxi/local">Local Car Rentals</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/taxi-service/round-taxi-service">Round trip</Link>
+                                        <Link to="/taxi/round">Round trip</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/taxi-service/oneway-taxi-service">One-way Cabs</Link>
+                                        <Link to="/taxi/oneway">One-way Cabs</Link>
                                     </li>
 
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/taxi-service/airport-taxi-service">Airport Taxi</Link>
+                                        <Link to="/taxi/airport">Airport Taxi</Link>
                                     </li>
                                 </ul>
                             </div>

@@ -44,7 +44,7 @@ const LocalCarRentals = () => {
       
             <section className="relative bg-center bg-cover h-96 py-[17rem]" style={{ backgroundImage: `url(${data?.photo?.secure_url})` }}>
 
-                <div className="absolute inset-0 bg-black opacity-70"></div>
+                <div className="absolute inset-0  opacity-70"></div>
                 <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-black">
                     <MainForm />
                 </div>
@@ -54,24 +54,10 @@ const LocalCarRentals = () => {
 
             {/* Service Overview */}
             <section className="py-12  bg-gray-50 mx-auto container px-4">
-                <div className="text-lg text-gray-700 mx-auto container px-10 p1" dangerouslySetInnerHTML={{ __html: data?.description }} />
+                <div className="text-lg  mx-auto container px-10 p1" dangerouslySetInnerHTML={{ __html: data?.description }} />
             </section>
 
-    
 
-
-            {/* How to Book Section */}
-            <section className="py-12 px-6 md:px-20 bg-white">
-                <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">How to Book a UCS Cab?</h2>
-                <div className="space-y-4 text-gray-700 max-w-3xl mx-auto">
-                    {["Choose your car & location", "Select rental duration", "Confirm booking & make payment", "Enjoy your ride!"].map((step, index) => (
-                        <div key={index} className="flex items-center gap-3 p-4 bg-gray-100 rounded-lg">
-                            <FaCheckCircle className="text-green-500 text-2xl" />
-                            <span className="text-lg font-medium">{step}</span>
-                        </div>
-                    ))}
-                </div>
-            </section>
 
 
 

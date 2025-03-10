@@ -16,7 +16,8 @@ const TaxiServiceDetails = () => {
   console.log(page, category);
 
   const fetchData = async () => {
-    console.log("i m running");
+    console.log(page,category);
+    
 
     const response = await dispatch(getTaxtDetail({ page, category }))
     console.log(response);

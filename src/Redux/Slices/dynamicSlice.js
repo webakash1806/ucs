@@ -120,7 +120,7 @@ export const getTaxtDetail = createAsyncThunk(
 
        
   
-        if (page === "local-taxi-service") {
+        if (page === "local") {
           urlbe = "Local%20Trip%20Cab%20Services";
         } else if (page === "airport-taxi-service") {
           urlbe = "Airport%20Cab%20Services";

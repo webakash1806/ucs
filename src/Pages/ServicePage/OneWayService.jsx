@@ -7,6 +7,7 @@ import { getOnewayData } from '../../Redux/Slices/dynamicSlice';
 import MainForm from '../../Components/MainForm';
 import WhyWe from './Why';
 import AoChale from './AooChale';
+import HowWeWork from './HowWeWork';
 
 const faqItems = [
     {
@@ -51,8 +52,6 @@ const OneWayService = () => {
         const res = await dispatch(getOnewayData())
         setData(res?.payload?.sections[0])
     }
-
-    console.log(data)
     useEffect(() => {
         fetchData()
     }, [dispatch])
@@ -67,14 +66,14 @@ const OneWayService = () => {
                 </div>
             </section>
 
-            <AoChale/>
+            <AoChale />
 
             {/* Round Trip Service Overview Section */}
             <section className="py-12 px-[5vw] md:px-[10vw] bg-white">
                 <div className="container px-4 mx-auto">
 
                     <motion.div
-                        className="space-y-6 text-lg text-black"
+                        className="space-y-6 text-lg"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
@@ -85,7 +84,27 @@ const OneWayService = () => {
                     </motion.div>
                 </div>
             </section>
-             <WhyWe/>
+
+
+
+            <HowWeWork />
+
+            <WhyWe />
+
+            {/* FAQ Section */}
+            <section className="py-12 px-6 md:px-20 bg-white">
+                <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">Frequently Asked Questions</h2>
+                <div className="space-y-4">
+                    {faqItems.map((item, index) => (
+                        <motion.div key={index} className="p-4 border rounded-lg shadow-md" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+                            <h3 className="font-semibold text-lg">{item.question}</h3>
+                            <p className="text-gray-600 text-sm">{item.answer}</p>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
+         
 
         </div>
     );

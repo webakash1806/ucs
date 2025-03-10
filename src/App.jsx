@@ -53,6 +53,7 @@ import PackageMoreDetail from './Pages/Holiday/PackageMoreDetail';
 import RefundPolicy from './Pages/RefundPolicy';
 import CarRental from './Pages/CarRental';
 import TaxiServiceDetails from './Pages/ServicePage/TaxiDetail/TaxiServiceDetails';
+import Taxi from './Pages/ServicePage/Taxi';
 
 
 const App = () => {
@@ -202,11 +203,12 @@ const App = () => {
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/taxi-service/local-taxi-service' element={<LocalCarRentals />} />
-          <Route path='/taxi-service/round-taxi-service' element={<RoundTripService />} />
-          <Route path='/taxi-service/airport-taxi-service' element={<AirportCabService />} />
-          <Route path='/taxi-service/oneway-taxi-service' element={<OneWayService />} />
-          <Route path='/taxi-service/:page/:category' element={<TaxiServiceDetails/>} />
+          <Route path='/taxi' element={<Taxi/>} />
+          <Route path='/taxi/local' element={<LocalCarRentals />} />
+          <Route path='/taxi/round' element={<RoundTripService />} />
+          <Route path='/taxi/airport' element={<AirportCabService />} />
+          <Route path='/taxi/oneway' element={<OneWayService />} />
+          <Route path='/taxi/:page/:category' element={<TaxiServiceDetails/>} />
           <Route path='/holiday/package' element={<HolidayPage/>} />
           <Route path='/holiday/package/detail' element={<HolidayDetail/>} />
           <Route path='/holiday/form' element={<HolidayForm/>} />
