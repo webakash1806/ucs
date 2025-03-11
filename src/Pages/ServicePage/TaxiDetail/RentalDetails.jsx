@@ -1,17 +1,36 @@
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { getTaxtDetail } from '../../../Redux/Slices/dynamicSlice'
+import MainForm from '../../../Components/MainForm'
+import image from '../../../assets/car1.avif'
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { getLocalCabData } from '../../Redux/Slices/dynamicSlice';
-import MainForm from '../../Components/MainForm';
-import { FaCar, FaMoneyBillWave, FaClock, FaMapMarkedAlt, FaCheckCircle } from 'react-icons/fa';
-import HowWeWork from './HowWeWork';
-import WhyChoose from './WhyChoose';
-import AoChale from './AooChale';
-import TaxiFareTable from './TaxiFare';
-import WhyWe from './Why';
 
-const faqItems = [
+const RentalDetails = () => {
+
+    const page="car-rental"
+  const { category } = useParams()
+  const dispatch = useDispatch()
+
+  const { taxiCabDetail, loading, error } = useSelector((state) => state.dynamic)
+
+  console.log(page, category);
+
+  const fetchData = async () => {
+    console.log(page,category);
+    
+
+    const response = await dispatch(getTaxtDetail({ page, category }))
+    console.log(response);
+
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+
+  const faqItems = [
     { question: 'What are the payment options for hourly car rentals?', answer: 'UCS Cabs offers various payment options for hourly car rentals, including credit/debit cards, net banking, and digital wallets.' },
     { question: 'Is there a minimum rental period for UCS Cabs?', answer: 'Yes, UCS Cabs typically has a minimum rental period, which may vary based on the type of service and location.' },
     { question: 'Can I rent a car for inter-city travel?', answer: 'Absolutely! UCS Cabs specializes in inter-city travel with our outstation rental services.' },
@@ -22,51 +41,28 @@ const faqItems = [
     { question: 'Are UCS Cabs available for airport transfers?', answer: 'Yes, UCS Cabs offers convenient and timely airport transfers to and from major airports in your city.' },
 ];
 
-const LocalCarRentals = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const [data, setData] = useState(null);
-
-    const fetchData = async () => {
-        const res = await dispatch(getLocalCabData());
-        setData(res?.payload?.sections[0]);
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, [dispatch]);
-
-    console.log(data);
-    
-
-    return (
-        <div className="min-h-screen">
-      
-            <section className="relative bg-center bg-cover h-96 py-[17rem]" style={{ backgroundImage: `url(${data?.photo?.secure_url})` }}>
-
-                <div className="absolute inset-0  opacity-70"></div>
-                <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-black">
-                    <MainForm />
-                </div>
-            </section>
-
-            <AoChale />
-
-            {/* Service Overview */}
-            <section className="py-12  bg-gray-50  container px-10 mx-auto">
-                <div className="text-lg  mx-auto container px-10 p1" dangerouslySetInnerHTML={{ __html: data?.description }} />
-            </section>
 
 
+  return (
+    <section>
+      {/* Hero Section */}
+
+      <section className="relative bg-center bg-cover h-96 py-[17rem]" style={{ backgroundImage: `url(${image})` }}>
+
+        <div className="absolute inset-0 bg-black opacity-70"></div>
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-black">
+          <MainForm />
+        </div>
+      </section>
+
+      {/* Service Overview */}
+      <section className="py-12  bg-gray-50 mx-auto container px-4">
+        <div className="text-lg text-gray-700 mx-auto container px-10 p1" dangerouslySetInnerHTML={{ __html: taxiCabDetail?.description }} />
+      </section>
 
 
-
-            <HowWeWork />
-
-            <WhyWe/>
-
-            {/* FAQ Section */}
-            <section className="py-12 px-6 md:px-20 bg-white">
+         {/* FAQ Section */}
+         <section className="py-12 px-6 md:px-20 bg-white">
                 <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">Frequently Asked Questions</h2>
                 <div className="space-y-4">
                     {faqItems.map((item, index) => (
@@ -77,8 +73,9 @@ const LocalCarRentals = () => {
                     ))}
                 </div>
             </section>
-        </div>
-    );
-};
 
-export default LocalCarRentals;
+    </section>
+  )
+}
+
+export default RentalDetails

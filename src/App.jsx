@@ -45,15 +45,18 @@ import 'primeicons/primeicons.css';
 
 
 
+import CarRental from './Pages/ServicePage/CarRental';
+
 
 import SocialMediaIcons from './Components/SocailMedia';
 import BlogDetail from './Pages/Blog/BlogDetail';
 import HolidayForm from './Pages/Holiday/HolidayForm';
 import PackageMoreDetail from './Pages/Holiday/PackageMoreDetail';
 import RefundPolicy from './Pages/RefundPolicy';
-import CarRental from './Pages/CarRental';
+
 import TaxiServiceDetails from './Pages/ServicePage/TaxiDetail/TaxiServiceDetails';
 import Taxi from './Pages/ServicePage/Taxi';
+import RentalDetails from './Pages/ServicePage/TaxiDetail/RentalDetails';
 
 
 const App = () => {
@@ -186,7 +189,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/contact' element={<Contact />} />
-          <Route path='/car/rental' element={<CarRental/>} />
+          <Route path='/car-rental' element={<CarRental/>} />
           <Route path='/about' element={<About />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
           <Route path='/refund-policy' element={<RefundPolicy/>} />
@@ -206,14 +209,16 @@ const App = () => {
           <Route path='/taxi' element={<Taxi/>} />
           <Route path='/taxi/local' element={<LocalCarRentals />} />
           <Route path='/taxi/round' element={<RoundTripService />} />
+          <Route path='/car-rental' element={<CarRental/>} />
           <Route path='/taxi/airport' element={<AirportCabService />} />
           <Route path='/taxi/oneway' element={<OneWayService />} />
           <Route path='/taxi/:page/:category' element={<TaxiServiceDetails/>} />
-          <Route path='/holiday/package' element={<HolidayPage/>} />
-          <Route path='/holiday/package/detail' element={<HolidayDetail/>} />
-          <Route path='/holiday/form' element={<HolidayForm/>} />
+          <Route path='/car-rental/:category' element={<RentalDetails/>} />
+          <Route path='/package' element={<HolidayPage/>} />
+          <Route path='/package/detail' element={<HolidayDetail/>} />
+          <Route path='/package/form' element={<HolidayForm/>} />
           <Route path='/blog/details' element={<BlogDetail/>} />
-          <Route path='/holiday/package/detail/:name' element={<PackageMoreDetail/>} />
+          <Route path='/package/detail/:name' element={<PackageMoreDetail/>} />
 
           {/* Auth */}
           <Route element={<RequireAuth />}>

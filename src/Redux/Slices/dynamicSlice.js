@@ -9,6 +9,7 @@ const initialState = {
     localCab: localStorage.getItem('localCab') !== "undefined" ? JSON.parse(localStorage.getItem('localCab')) : {},
     airportCab: localStorage.getItem('airportCab') !== "undefined" ? JSON.parse(localStorage.getItem('airportCab')) : {},
     onewayCab: localStorage.getItem('onewayCab') !== "undefined" ? JSON.parse(localStorage.getItem('onewayCab')) : {},
+    carental: localStorage.getItem('carental') !== "undefined" ? JSON.parse(localStorage.getItem('carental')) : {},
     taxiCabDetail: [],
     faq: localStorage.getItem('faq') !== "undefined" ? JSON.parse(localStorage.getItem('faq')) : {},
     about: localStorage.getItem('about') !== "undefined" ? JSON.parse(localStorage.getItem('about')) : {},
@@ -129,7 +130,12 @@ export const getTaxtDetail = createAsyncThunk(
         } else if (page === "round-taxi-service") {
           urlbe = "Round%20Trip%20Car%20Rentals";
         } else {
-          urlbe = "round";
+            if(page==="car-rental"){
+            urlbe="car-rental"
+            }else{
+                urlbe = "round";
+            }
+    
         }
   
         console.log("Request URL:", `/dynamic/${urlbe}/${category}`);
@@ -184,6 +190,17 @@ export const getBlogs = createAsyncThunk('/dynamic/blogs', async () => {
     }
 });
 
+export const getCarRental = createAsyncThunk('/dynamic/car-rental', async () => {
+    try {
+        let res = axiosInstance.get('dynamic/car-rental');
+        res = await res;
+        return res.data;
+    } catch (e) {
+        return e?.response?.data?.message;
+
+    }
+});
+
 
 
 
@@ -223,6 +240,10 @@ const dynamicSlice = createSlice({
             .addCase(getOnewayData.fulfilled, (state, action) => {
                 localStorage.setItem('onewayCab', JSON.stringify(action.payload.data));
                 state.onewayCab = action.payload.data;
+            })
+            .addCase(getCarRental.fulfilled, (state, action) => {
+                localStorage.setItem('carental', JSON.stringify(action.payload.data));
+                state.carental = action.payload.data;
             })
             .addCase(getTaxtDetail.fulfilled, (state, action) => {
                 console.log(action);

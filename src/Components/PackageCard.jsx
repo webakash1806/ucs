@@ -6,7 +6,7 @@ const PackageCard = ({ val }) => {
   return (
     <div
       className="relative w-full max-w-[35rem] mx-auto my-4 border border-gray-100 bg-white overflow-hidden rounded-xl shadow-md hover:shadow-lg cursor-pointer transition-transform transform hover:scale-105"
-      onClick={() => navigate('/holiday/package/detail', { state: { ...val } })}
+      onClick={() => navigate('/package/detail', { state: { ...val } })}
     >
       {/* Image Section */}
       <div className="relative h-[20rem] w-full object-cover">

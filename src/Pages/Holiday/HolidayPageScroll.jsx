@@ -15,7 +15,7 @@ const HolidayCard = ({ data }) => {
   return (
     <article 
       className="relative flex flex-col justify-end overflow-hidden rounded-3xl max-w-[24rem] mx-auto cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
-      onClick={() => navigate('/holiday/package/detail', { state: { ...data } })}
+      onClick={() => navigate('/package/detail', { state: { ...data } })}
     >
       {/* Image */}
       <img 

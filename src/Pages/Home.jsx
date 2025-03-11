@@ -19,7 +19,7 @@ const Home = () => {
     const fetchData = async () => {
         console.log("fetch data call..")
         const response = await dispatch(getAllHome())
-        console.log(response)
+     
     }
 
     useEffect(() => {
