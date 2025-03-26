@@ -89,19 +89,25 @@ const Footer = () => {
                                     <div className="w-[3.5px] h-[3.5px] bg-white rounded-full"></div>
                                 </div>
                                 <ul>
-
-                                    <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/taxi/local">Local Car Rentals</Link>
+                                <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
+                                        <Link to="/taxi">Taxi</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/taxi/round">Round trip</Link>
+                                        <Link to="/taxi/local">Local Taxi</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/taxi/oneway">One-way Cabs</Link>
+                                        <Link to="/taxi/round-trip">Round Trip Taxi</Link>
+                                    </li>
+                                    <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
+                                        <Link to="/taxi/one-way">One-way Taxi</Link>
                                     </li>
 
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
                                         <Link to="/taxi/airport">Airport Taxi</Link>
+                                    </li>
+
+                                    <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
+                                        <Link to="/taxi/outstation">OutStation</Link>
                                     </li>
 
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">

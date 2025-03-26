@@ -36,7 +36,7 @@ const LocalCarRentals = () => {
         fetchData();
     }, [dispatch]);
 
-    console.log(data);
+ 
     
 
     return (

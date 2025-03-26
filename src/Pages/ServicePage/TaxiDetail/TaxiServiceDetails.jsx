@@ -16,7 +16,7 @@ const TaxiServiceDetails = () => {
   console.log(page, category);
 
   const fetchData = async () => {
-    console.log(page,category);
+
     
 
     const response = await dispatch(getTaxtDetail({ page, category }))
@@ -61,7 +61,7 @@ const TaxiServiceDetails = () => {
 
 
          {/* FAQ Section */}
-         <section className="py-12 px-6 md:px-20 bg-white">
+         {/* <section className="py-12 px-6 md:px-20 bg-white">
                 <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">Frequently Asked Questions</h2>
                 <div className="space-y-4">
                     {faqItems.map((item, index) => (
@@ -71,7 +71,7 @@ const TaxiServiceDetails = () => {
                         </motion.div>
                     ))}
                 </div>
-            </section>
+            </section> */}
 
     </section>
   )

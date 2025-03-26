@@ -15,7 +15,8 @@ const initialState = {
     about: localStorage.getItem('about') !== "undefined" ? JSON.parse(localStorage.getItem('about')) : {},
     home: [],
     refundPolicy: localStorage.getItem('refundPolicy') !== "undefined" ? JSON.parse(localStorage.getItem('refundPolicy')) : {},
-    blog: []
+    blog: [],
+    taxi: localStorage.getItem('taxi') !== "undefined" ? JSON.parse(localStorage.getItem('taxi')) : {},
 };
 
 // Thunks for different actions
@@ -112,6 +113,31 @@ export const getOnewayData = createAsyncThunk('/dynamic/oneway-cab', async () =>
     }
 });
 
+export const getTaxiData = createAsyncThunk('/dynamic/Taxi-data', async () => {
+    try {
+        let res = axiosInstance.get('dynamic/Taxi-Service');
+     
+        res = await res;
+        return res.data;
+    } catch (e) {
+        return e?.response?.data?.message;
+
+    }
+});
+
+
+export const getOutStation = createAsyncThunk('/dynamic/OutStation-data', async () => {
+    try {
+        let res = axiosInstance.get('dynamic/OutStation');
+     
+        res = await res;
+        return res.data;
+    } catch (e) {
+        return e?.response?.data?.message;
+
+    }
+});
+
 
 export const getTaxtDetail = createAsyncThunk(
     "/dynamic/taxi/detail",
@@ -119,21 +145,23 @@ export const getTaxtDetail = createAsyncThunk(
       try {
         let urlbe = "";
 
-       
-  
+    
         if (page === "local") {
           urlbe = "Local%20Trip%20Cab%20Services";
-        } else if (page === "airport-taxi-service") {
+        } else if (page === "airport") {
           urlbe = "Airport%20Cab%20Services";
-        } else if (page === "oneway-taxi-service") {
+        } else if (page === "one-way") {
           urlbe = "One-Way%20Cab%20Rentals";
-        } else if (page === "round-taxi-service") {
+        } else if (page === "round-trip") {
           urlbe = "Round%20Trip%20Car%20Rentals";
         } else {
             if(page==="car-rental"){
             urlbe="car-rental"
             }else{
-                urlbe = "round";
+                if(page=== "outstation" )
+                {
+                   urlbe = "OutStation";
+                }
             }
     
         }
@@ -151,7 +179,7 @@ export const getTaxtDetail = createAsyncThunk(
         return rejectWithValue(error?.response?.data?.message || "Something went wrong");
       }
     }
-  );
+);
   
 
 
@@ -269,6 +297,11 @@ const dynamicSlice = createSlice({
                 // localStorage.setItem('blog', JSON.stringify(action.payload.sections));
                 state.blog=action?.payload?.sections
                 // state.home = action.payload.sections;
+            })
+            .addCase(getTaxiData.fulfilled, (state, action) => {
+              
+                state.taxi=action?.payload?.sections
+               
             })
 
     }
