@@ -6,6 +6,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getPackage, getPackageCategory } from '../Redux/Slices/packageSlice';
 import PackageCard from './PackageCard';
 
+
+const toSlug = (str) => {
+	return str
+	  .toLowerCase()
+	  .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+	  .replace(/\s+/g, '-')         // Replace spaces with dashes
+	  .replace(/-+/g, '-')          // Replace multiple dashes with single dash
+	  .trim();
+  };
+
+
 const HolidayPackage = () => {
     const { data, loading, error, category } = useSelector((state) => state?.packages);
     const dispatch = useDispatch();

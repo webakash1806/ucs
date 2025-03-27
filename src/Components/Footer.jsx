@@ -140,7 +140,7 @@ const Footer = () => {
                                         <Link to="/refund-policy">Refund and Cancellation</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
-                                        <Link to="/package">Holiday Package</Link>
+                                        <Link to="/packages">Holiday Package</Link>
                                     </li>
                                     <li className="text-[#e0e4ff] leading-8 text-[0.9rem] hover:text-white">
                                         <Link to="/terms-and-conditions">Terms &amp; Conditions</Link>

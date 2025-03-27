@@ -79,7 +79,7 @@ const HolidayPage = () => {
 
   const fetchTagData = async () => {
     const response = await dispatch(getPackageTag())
-    console.log("fetch tag data is", response);
+   
   }
 
   // Handle Input Change (Filter Tags Dynamically)
@@ -161,11 +161,11 @@ const HolidayPage = () => {
     return (
       <div className="flex items-center text-center relative ">
         {/* Circle with Icon */}
-        <div className="bg-gray-100 rounded-full p-4 w-20 h-20 flex items-center justify-center shadow-sm" onClick={() => navigate(`/package/detail/${label}`, { state: { input: label } })}>
+        <div className="bg-gray-100 rounded-full p-4 w-20 h-20 flex items-center justify-center shadow-sm" onClick={() => navigate(`/packages/category/${label}`, { state: { input: label } })}>
           <img src={image} alt="" className='w-[20rem]' />
         </div>
 
-        <span className="text-sm mt-2 font-medium text-gray-600 cursor-pointer" onClick={() => navigate(`/package/detail/${label}`, { state: { input: label } })}>{label}</span>
+        <span className="text-sm mt-2 font-medium text-gray-600 cursor-pointer" onClick={() => navigate(`/packages/category/${label}`, { state: { input: label } })}>{label}</span>
       </div>
     );
   };
@@ -177,7 +177,7 @@ const HolidayPage = () => {
 
   return (
     <section className='overflow-x-hidden'>
-      <div className="relative w-full min-h-[25rem] flex flex-col items-center justify-center border border-red-500  ">
+      <div className="relative w-full min-h-[25rem] flex flex-col items-center justify-center   ">
 
 
         {/* Input Section */}
@@ -194,7 +194,7 @@ const HolidayPage = () => {
             />
 
             {/* Search Button */}
-            <button className="px-10 py-2 bg-blue-500 text-white rounded-full flex items-center justify-center" onClick={() => navigate(`/package/detail/${input}`, { state: { input } })}>
+            <button className="px-10 py-2 bg-blue-500 text-white rounded-full flex items-center justify-center" onClick={() => navigate(`/packages/category/${input}`, { state: { input } })}>
               <FaSearch className="mr-1" /> Search
             </button>
           </div>

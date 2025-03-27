@@ -217,10 +217,11 @@ const App = () => {
           <Route path='/taxi/:page/:category' element={<TaxiServiceDetails/>} />
           <Route path='/car-rental/:category' element={<RentalDetails/>} />
           <Route path='/packages' element={<HolidayPage/>} />
-          <Route path='/packages/detail' element={<HolidayDetail/>} />
+          {/* <Route path='/packages/detail' element={<HolidayDetail/>} /> */}
+          <Route path='/packages/:name' element={<HolidayDetail/>} />
           <Route path='/packages/form' element={<HolidayForm/>} />
           <Route path='/blog/details' element={<BlogDetail/>} />
-          <Route path='/packages/detail/:name' element={<PackageMoreDetail/>} />
+          <Route path='/packages/category/:name' element={<PackageMoreDetail/>} />
 
           {/* Auth */}
           <Route element={<RequireAuth />}>

@@ -7,13 +7,23 @@ import CTA from "./CTA";
 
 
 
+const toSlug = (str) => {
+	return str
+	  .toLowerCase()
+	  .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+	  .replace(/\s+/g, '-')         // Replace spaces with dashes
+	  .replace(/-+/g, '-')          // Replace multiple dashes with single dash
+	  .trim();
+  };
+
+
 const PlaceItem = ({ data }) => {
 	const navigate = useNavigate();
 
 	return (
 		<div
 			className="shadow-lg border-none rounded-lg mt-4 cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
-			onClick={() => navigate('/package/detail', { state: { ...data } })}
+			onClick={() => navigate(`/packages/${toSlug(data?.packageName)}`, { state: { ...data } })}
 		>
 			{/* Image Section */}
 			<div className="relative overflow-hidden rounded-t-lg">

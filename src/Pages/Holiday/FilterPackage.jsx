@@ -7,35 +7,45 @@ import CTA from "./CTA";
 
 
 
+const toSlug = (str) => {
+	return str
+	  .toLowerCase()
+	  .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+	  .replace(/\s+/g, '-')         // Replace spaces with dashes
+	  .replace(/-+/g, '-')          // Replace multiple dashes with single dash
+	  .trim();
+  };
+
+
 const PlaceItem = ({ data }) => {
 	const navigate = useNavigate();
-  
+
 	return (
-	  <div
-		className="shadow-lg border-none rounded-lg mt-4 cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
-		onClick={() => navigate('/holiday/package/detail', { state: { ...data } })}
-	  >
-		{/* Image Section */}
-		<div className="relative overflow-hidden rounded-t-lg">
-		  <img
-			src={data?.mainPhoto?.secure_url}
-			alt={data?.packageName || "Holiday Location"}
-			className="w-full h-72 object-cover transition-all duration-500"
-		  />
-		  <div className="absolute top-4 right-4 bg-main text-white px-4 py-2 rounded-md">
-			<h6 className="mb-0 font-normal">From {data?.rate}/person</h6>
-		  </div>
+		<div
+			className="shadow-lg border-none rounded-lg mt-4 cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
+			onClick={() => navigate(`/packages/${toSlug(data?.packageName)}`, { state: { ...data } })}
+		>
+			{/* Image Section */}
+			<div className="relative overflow-hidden rounded-t-lg">
+				<img
+					src={data?.mainPhoto?.secure_url}
+					alt={data?.packageName || "Holiday Location"}
+					className="w-full h-72 object-cover transition-all duration-500"
+				/>
+				<div className="absolute top-4 right-4 bg-main text-white px-4 py-2 rounded-md">
+					<h6 className="mb-0 font-normal">From {data?.rate}/person</h6>
+				</div>
+			</div>
+
+			{/* Content Section */}
+			<div className="p-6 bg-white rounded-b-lg">
+				<h5 className="font-medium text-[20px] mb-1 text-main">{data?.packageName}</h5>
+				<p className="text-[14px] opacity-50 mb-0 text-black">{data?.location}</p>
+			</div>
 		</div>
-  
-		{/* Content Section */}
-		<div className="p-6 bg-white rounded-b-lg">
-		  <h5 className="font-medium text-[20px] mb-1 text-main">{data?.packageName}</h5>
-		  <p className="text-[14px] opacity-50 mb-0 text-black">{data?.location}</p>
-		</div>
-	  </div>
 	);
-  };
-  
+};
+
 
 
 
@@ -43,23 +53,23 @@ PlaceItem.propTypes = {
 	data: PropTypes.object.isRequired,
 };
 
-const FilterPackage = ({holiday,isLoading,isError}) => {
+const FilterPackage = ({ holiday, isLoading, isError }) => {
 
-    console.log(holiday,isLoading,isError)
+
 
 	return (
 		<section className="ezy__travel3 light   bg-white  text-zinc-900 dark:text-white relative overflow-hidden z-10">
-		
-             {/* <HolidayScrollPage holidayData={holiday}/>
+
+			{/* <HolidayScrollPage holidayData={holiday}/>
 			 <CallToAction/> */}
-			 {/* <CTA/> */}
+			{/* <CTA/> */}
 
 			<div className="max-w-7xl px-4 mx-auto py-12">
-			<div className='text-start flex flex-col md:items-start justify-start b max-w-[30rem]'>
+				<div className='text-start flex flex-col md:items-start justify-start b max-w-[30rem]'>
 
-</div>
+				</div>
 
-                
+
 
 				<div className="grid grid-cols-12 gap-4">
 					{holiday.map((data, i) => (
@@ -72,7 +82,7 @@ const FilterPackage = ({holiday,isLoading,isError}) => {
 					))}
 				</div>
 			</div>
-			
+
 		</section>
 	);
 };

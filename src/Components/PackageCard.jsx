@@ -1,12 +1,23 @@
 import { useNavigate } from "react-router-dom";
 
+
+const toSlug = (str) => {
+	return str
+	  .toLowerCase()
+	  .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+	  .replace(/\s+/g, '-')         // Replace spaces with dashes
+	  .replace(/-+/g, '-')          // Replace multiple dashes with single dash
+	  .trim();
+  };
+
+
 const PackageCard = ({ val }) => {
   const navigate = useNavigate();
 
   return (
     <div
       className="relative w-full max-w-[35rem] mx-auto my-4 border border-gray-100 bg-white overflow-hidden rounded-xl shadow-md hover:shadow-lg cursor-pointer transition-transform transform hover:scale-105"
-      onClick={() => navigate('/package/detail', { state: { ...val } })}
+      onClick={() => navigate(`/packages/${toSlug(val?.packageName)}`, { state: { ...val } })}
     >
       {/* Image Section */}
       <div className="relative h-[20rem] w-full object-cover">

@@ -7,6 +7,14 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
+const toSlug = (str) => {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-')         // Replace spaces with dashes
+    .replace(/-+/g, '-')          // Replace multiple dashes with single dash
+    .trim();
+};
 
 
 const HolidayCard = ({ data }) => {
@@ -15,7 +23,7 @@ const HolidayCard = ({ data }) => {
   return (
     <article 
       className="relative flex flex-col justify-end overflow-hidden rounded-3xl max-w-[24rem] mx-auto cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
-      onClick={() => navigate('/package/detail', { state: { ...data } })}
+      onClick={() => navigate(`/packages/${toSlug(data?.packageName)}`, { state: { ...data } })}
     >
       {/* Image */}
       <img 
