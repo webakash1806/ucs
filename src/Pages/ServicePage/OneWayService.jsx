@@ -10,39 +10,18 @@ import AoChale from './AooChale';
 import HowWeWork from './HowWeWork';
 
 const faqItems = [
-    {
-        question: 'What are the payment options for one-way cab bookings?',
-        answer: 'UCS Cabs offers various payment options for one-way cab bookings, including credit/debit cards, net banking, and digital wallets.',
-    },
-    {
-        question: 'Is there a minimum booking period for UCS Cabs one-way services?',
-        answer: 'Yes, UCS Cabs typically has a minimum booking period for one-way services, which may vary based on the type of service and location.',
-    },
-    {
-        question: 'Can I use UCS Cabs for long-distance one-way trips?',
-        answer: 'Absolutely! UCS Cabs specializes in long-distance one-way trips and offers services to ensure a comfortable and reliable journey.',
-    },
-    {
-        question: 'What is UCS Cabs\' cancellation policy for one-way trips?',
-        answer: 'Cancellations made 24 hours prior to the trip are free of charge. For more details, refer to our terms and conditions.',
-    },
-    {
-        question: 'Are the prices inclusive of fuel costs for one-way trips?',
-        answer: 'Yes, UCS Cabs rental prices typically include fuel costs, but it’s best to confirm during booking for one-way services.',
-    },
-    {
-        question: 'What safety measures does UCS Cabs implement for long-distance one-way trips?',
-        answer: 'UCS Cabs ensures all vehicles are sanitized before and after each trip, and follows COVID-19 safety guidelines for long-distance travel.',
-    },
-    {
-        question: 'How can I book a UCS Cab for a corporate one-way trip?',
-        answer: 'Corporate one-way bookings can be easily made online or through our dedicated support team. UCS Cabs offers special rates and packages for businesses.',
-    },
-    {
-        question: 'Are UCS Cabs available for one-way airport transfers?',
-        answer: 'Yes, UCS Cabs offers convenient and timely one-way airport transfers to and from major airports in your city.',
-    },
+    { question: 'How can I book a one-way taxi near me?', answer: 'You can book a one-way taxi through our website, WhatsApp, or by calling our customer support.' },
+    { question: 'Do you offer one-way drop taxi service to any city?', answer: 'Yes, we provide one-way taxi services to multiple cities across India at affordable rates.' },
+    { question: 'What are the charges for a one-way taxi service?', answer: 'The charges depend on the distance, vehicle type, and route. Contact us for a customized fare.' },
+    { question: 'Can I get a one-way taxi near me at any time?', answer: 'Yes, our one-way taxi service is available 24/7 for hassle-free travel.' },
+    { question: 'Do I need to pay a round-trip fare for a one-way drop taxi service?', answer: 'No, we offer special one-way fares, so you only pay for the distance traveled.' },
+    { question: 'What vehicle options are available for a one-way taxi service?', answer: 'We provide hatchbacks, sedans, SUVs, and MUVs for a comfortable journey.' },
+    { question: 'Can I pre-book a one-way taxi for a specific date and time?', answer: 'Yes, you can pre-book our one-way taxi service to avoid last-minute hassles.' },
+    { question: 'Is your one-way taxi service safe and reliable?', answer: 'Yes, all our taxis are GPS-tracked and driven by professional drivers for a safe journey.' },
+    { question: 'Do you offer doorstep pickup and drop for one-way trips?', answer: 'Yes, we provide convenient doorstep pickup and drop-off services.' },
+    { question: 'Why should I choose your one-way taxi service?', answer: 'We offer affordable pricing, professional drivers, comfortable vehicles, and 24/7 availability, making us the best one-way taxi provider.' },
 ];
+
 
 const OneWayService = () => {
     const navigate = useNavigate()

@@ -10,15 +10,18 @@ import HowWeWork from './HowWeWork';
 
 
 const faqItems = [
-    { question: 'What are the payment options for hourly car rentals?', answer: 'UCS Cabs offers various payment options for hourly car rentals, including credit/debit cards, net banking, and digital wallets.' },
-    { question: 'Is there a minimum rental period for UCS Cabs?', answer: 'Yes, UCS Cabs typically has a minimum rental period, which may vary based on the type of service and location.' },
-    { question: 'Can I rent a car for inter-city travel?', answer: 'Absolutely! UCS Cabs specializes in inter-city travel with our outstation rental services.' },
-    { question: 'What is UCS Cabs\' cancellation policy?', answer: 'Cancellations made 24 hours prior to the trip are free of charge. For details, refer to our terms and conditions.' },
-    { question: 'Are the prices inclusive of fuel costs?', answer: 'Yes, UCS Cabs rental prices typically include fuel costs, but it’s best to confirm during booking.' },
-    { question: 'What safety measures does UCS Cabs implement?', answer: 'UCS Cabs ensures all vehicles are sanitized before and after each trip, and follows COVID-19 safety guidelines.' },
-    { question: 'How can I book a UCS Cab for corporate travel?', answer: 'Corporate travel bookings can be easily made online or through our dedicated support team. UCS Cabs offers special rates and packages for businesses.' },
-    { question: 'Are UCS Cabs available for airport transfers?', answer: 'Yes, UCS Cabs offers convenient and timely airport transfers to and from major airports in your city.' },
+    { question: 'How can I find a reliable taxi service near me?', answer: 'You can book our taxi service online, via WhatsApp, or by calling us for quick and reliable transportation.' },
+    { question: 'Do you provide taxi services for outstation trips?', answer: 'Yes, we offer both local and outstation taxi services to major destinations across India.' },
+    { question: 'Can I book a taxi near me for airport pickup and drop?', answer: 'Absolutely! We provide airport transfers with on-time pickup and drop services.' },
+    { question: 'Is your taxi service available 24/7?', answer: 'Yes, our local taxi company operates round the clock to serve you at any time of the day.' },
+    { question: 'How do I calculate the taxi fare before booking?', answer: 'Our fares are transparent, and you can check estimated pricing on our website or by contacting us.' },
+    { question: 'Do your taxis have GPS tracking for safety?', answer: 'Yes, all our taxis are equipped with GPS tracking for your safety and security.' },
+    { question: 'Can I book a taxi nearby me for hourly rental?', answer: 'Yes, we offer hourly rental options for local travel, shopping, or sightseeing.' },
+    { question: 'What types of taxis do you offer?', answer: 'We have a wide range of vehicles, including hatchbacks, sedans, SUVs, and luxury cars.' },
+    { question: 'Do you offer special discounts on regular taxi bookings?', answer: 'Yes, we provide exclusive offers and discounts for our regular customers.' },
+    { question: 'Why should I choose your taxi service over other local taxi companies?', answer: 'We offer affordable pricing, professional drivers, well-maintained vehicles, and 24/7 availability, making us the best local taxi company.' },
 ];
+
 
 
 const Taxi = () => {

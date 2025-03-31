@@ -12,15 +12,18 @@ import TaxiFareTable from './TaxiFare';
 import WhyWe from './Why';
 
 const faqItems = [
-    { question: 'What are the payment options for hourly car rentals?', answer: 'UCS Cabs offers various payment options for hourly car rentals, including credit/debit cards, net banking, and digital wallets.' },
-    { question: 'Is there a minimum rental period for UCS Cabs?', answer: 'Yes, UCS Cabs typically has a minimum rental period, which may vary based on the type of service and location.' },
-    { question: 'Can I rent a car for inter-city travel?', answer: 'Absolutely! UCS Cabs specializes in inter-city travel with our outstation rental services.' },
-    { question: 'What is UCS Cabs\' cancellation policy?', answer: 'Cancellations made 24 hours prior to the trip are free of charge. For details, refer to our terms and conditions.' },
-    { question: 'Are the prices inclusive of fuel costs?', answer: 'Yes, UCS Cabs rental prices typically include fuel costs, but it’s best to confirm during booking.' },
-    { question: 'What safety measures does UCS Cabs implement?', answer: 'UCS Cabs ensures all vehicles are sanitized before and after each trip, and follows COVID-19 safety guidelines.' },
-    { question: 'How can I book a UCS Cab for corporate travel?', answer: 'Corporate travel bookings can be easily made online or through our dedicated support team. UCS Cabs offers special rates and packages for businesses.' },
-    { question: 'Are UCS Cabs available for airport transfers?', answer: 'Yes, UCS Cabs offers convenient and timely airport transfers to and from major airports in your city.' },
+    { question: 'What is the best local taxi service available in my area?', answer: 'We provide the best local taxi service with affordable pricing, professional drivers, and well-maintained cabs for your convenience.' },
+    { question: 'How can I book a local taxi cab?', answer: 'You can book a local taxi through our website, WhatsApp, or by calling our customer support team.' },
+    { question: 'Do you provide 24/7 local taxi service?', answer: 'Yes, our local taxi service operates 24/7 to ensure you get a cab whenever you need it.' },
+    { question: 'What are the charges for a local taxi service?', answer: 'Our fares depend on the distance, time, and vehicle type. Contact us for exact pricing.' },
+    { question: 'Are your local taxis available for hourly rental?', answer: 'Yes, we offer flexible hourly rental options for city travel, shopping, and business meetings.' },
+    { question: 'Can I schedule a local taxi in advance?', answer: 'Yes, you can pre-book our local taxi service for hassle-free and timely pickups.' },
+    { question: 'What types of taxis are available in your fleet?', answer: 'We offer hatchbacks, sedans, SUVs, and luxury cars to cater to different travel needs.' },
+    { question: 'Is your local taxi service safe and reliable?', answer: 'Yes, all our taxis have GPS tracking, and our drivers are well-trained to ensure your safety.' },
+    { question: 'Do you offer shared local taxi services?', answer: 'No, we currently provide only private taxi services for a comfortable ride.' },
+    { question: 'Why should I choose your local taxi cab service?', answer: 'Our taxis are affordable, well-maintained, available 24/7, and driven by professional drivers, making us the best local taxi service provider.' },
 ];
+
 
 const LocalCarRentals = () => {
     const navigate = useNavigate();

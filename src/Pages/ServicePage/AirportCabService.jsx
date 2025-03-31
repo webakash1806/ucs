@@ -11,15 +11,18 @@ import HowWeWork from './HowWeWork';
 
 
 const faqItems = [
-    { question: 'What are the payment options for hourly car rentals?', answer: 'UCS Cabs offers various payment options for hourly car rentals, including credit/debit cards, net banking, and digital wallets.' },
-    { question: 'Is there a minimum rental period for UCS Cabs?', answer: 'Yes, UCS Cabs typically has a minimum rental period, which may vary based on the type of service and location.' },
-    { question: 'Can I rent a car for inter-city travel?', answer: 'Absolutely! UCS Cabs specializes in inter-city travel with our outstation rental services.' },
-    { question: 'What is UCS Cabs\' cancellation policy?', answer: 'Cancellations made 24 hours prior to the trip are free of charge. For details, refer to our terms and conditions.' },
-    { question: 'Are the prices inclusive of fuel costs?', answer: 'Yes, UCS Cabs rental prices typically include fuel costs, but it’s best to confirm during booking.' },
-    { question: 'What safety measures does UCS Cabs implement?', answer: 'UCS Cabs ensures all vehicles are sanitized before and after each trip, and follows COVID-19 safety guidelines.' },
-    { question: 'How can I book a UCS Cab for corporate travel?', answer: 'Corporate travel bookings can be easily made online or through our dedicated support team. UCS Cabs offers special rates and packages for businesses.' },
-    { question: 'Are UCS Cabs available for airport transfers?', answer: 'Yes, UCS Cabs offers convenient and timely airport transfers to and from major airports in your city.' },
+    { question: 'How do I book an airport taxi service?', answer: 'You can book our airport taxi service online, via WhatsApp, or by calling our support team.' },
+    { question: 'Do you provide airport transfer services 24/7?', answer: 'Yes, our airport transfer service operates 24/7 for timely pickups and drops.' },
+    { question: 'How much does an airport city taxi cost?', answer: 'The cost depends on the pickup location and vehicle type. Contact us for a quote.' },
+    { question: 'Can I schedule an airport taxi in advance?', answer: 'Yes, you can pre-book an airport taxi to ensure on-time arrival at the airport.' },
+    { question: 'Do you track flight arrivals for pickups?', answer: 'Yes, we monitor flight arrivals to adjust pickup times accordingly.' },
+    { question: 'Are your airport transfer services available for multiple passengers?', answer: 'Yes, we provide various vehicle options, including sedans, SUVs, and minivans, for group travel.' },
+    { question: 'Do you offer fixed-rate pricing for airport taxis?', answer: 'Yes, we have transparent and fixed-rate pricing for airport transfers with no hidden charges.' },
+    { question: 'Will I be charged extra for luggage in an airport taxi?', answer: 'No, we do not charge extra for standard luggage. For oversized luggage, please inform us in advance.' },
+    { question: 'Do you offer airport taxis for corporate travelers?', answer: 'Yes, we provide premium and executive airport taxi services for corporate clients.' },
+    { question: 'Why should I choose your airport taxi service?', answer: 'Our airport taxi service is reliable, punctual, and available 24/7, ensuring a hassle-free airport transfer experience.' },
 ];
+
 
 
 const AirportCabService = () => {

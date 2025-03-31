@@ -10,39 +10,18 @@ import AoChale from './AooChale';
 import HowWeWork from './HowWeWork';
 
 const faqItems = [
-    {
-        question: 'What are the payment options for one-way cab bookings?',
-        answer: 'UCS Cabs offers various payment options for one-way cab bookings, including credit/debit cards, net banking, and digital wallets.',
-    },
-    {
-        question: 'Is there a minimum booking period for UCS Cabs one-way services?',
-        answer: 'Yes, UCS Cabs typically has a minimum booking period for one-way services, which may vary based on the type of service and location.',
-    },
-    {
-        question: 'Can I use UCS Cabs for long-distance one-way trips?',
-        answer: 'Absolutely! UCS Cabs specializes in long-distance one-way trips and offers services to ensure a comfortable and reliable journey.',
-    },
-    {
-        question: 'What is UCS Cabs\' cancellation policy for one-way trips?',
-        answer: 'Cancellations made 24 hours prior to the trip are free of charge. For more details, refer to our terms and conditions.',
-    },
-    {
-        question: 'Are the prices inclusive of fuel costs for one-way trips?',
-        answer: 'Yes, UCS Cabs rental prices typically include fuel costs, but it’s best to confirm during booking for one-way services.',
-    },
-    {
-        question: 'What safety measures does UCS Cabs implement for long-distance one-way trips?',
-        answer: 'UCS Cabs ensures all vehicles are sanitized before and after each trip, and follows COVID-19 safety guidelines for long-distance travel.',
-    },
-    {
-        question: 'How can I book a UCS Cab for a corporate one-way trip?',
-        answer: 'Corporate one-way bookings can be easily made online or through our dedicated support team. UCS Cabs offers special rates and packages for businesses.',
-    },
-    {
-        question: 'Are UCS Cabs available for one-way airport transfers?',
-        answer: 'Yes, UCS Cabs offers convenient and timely one-way airport transfers to and from major airports in your city.',
-    },
+    { question: 'How can I find an outstation taxi near me?', answer: 'You can book an outstation taxi through our website, WhatsApp, or by calling us for a smooth travel experience.' },
+    { question: 'Do you offer one-way and round-trip outstation taxi services?', answer: 'Yes, we provide both one-way and round-trip taxi services for your convenience.' },
+    { question: 'What are the charges for outstation taxi service?', answer: 'The charges depend on the distance, vehicle type, and trip duration. Contact us for a quote.' },
+    { question: 'Can I book an outstation taxi near me for multiple days?', answer: 'Yes, we offer flexible rental options for single-day or multi-day outstation trips.' },
+    { question: 'Do your outstation cabs come with a professional driver?', answer: 'Yes, all our outstation taxis are driven by professional and experienced drivers.' },
+    { question: 'Can I rent an outstation taxi for Char Dham Yatra or hill stations?', answer: 'Yes, we offer outstation taxi services for Char Dham Yatra, hill stations, and popular tourist destinations.' },
+    { question: 'Is your outstation taxi service available 24/7?', answer: 'Yes, we operate round the clock to ensure you get a taxi whenever required.' },
+    { question: 'Do you offer the best cab service for outstation travel with family?', answer: 'Yes, we provide spacious and comfortable cabs, including SUVs and MUVs, ideal for family travel.' },
+    { question: 'How far in advance should I book an outstation taxi?', answer: 'It’s best to book at least 24 hours in advance to ensure vehicle availability.' },
+    { question: 'Why should I choose your outstation taxi service?', answer: 'We offer affordable pricing, well-maintained vehicles, experienced drivers, and 24/7 customer support, making us the best cab service for outstation travel.' },
 ];
+
 
 const OutStation = () => {
     const navigate = useNavigate()

@@ -7,15 +7,17 @@ import { motion } from 'framer-motion';
 
 
 const faqItems = [
-    { question: 'What types of cars are available for rent?', answer: 'UCS Cabs offers a variety of rental cars, including hatchbacks, sedans, SUVs, and luxury vehicles.' },
-    { question: 'Do I need to provide a security deposit for car rentals?', answer: 'Yes, a refundable security deposit may be required based on the car type and rental duration.' },
-    { question: 'Is there a mileage limit on rented cars?', answer: 'Yes, UCS Cabs provides a fixed mileage limit. Additional charges may apply if you exceed the limit.' },
-    { question: 'Can I rent a car for a one-way trip?', answer: 'Yes, UCS Cabs allows one-way rentals between cities with applicable drop-off charges.' },
-    { question: 'Are UCS Cabs rental prices inclusive of fuel costs?', answer: 'Some rental plans include fuel, while others require you to refuel the car before returning it. Please confirm during booking.' },
-    { question: 'Can I extend my rental period after booking?', answer: 'Yes, you can extend your rental period by contacting UCS Cabs customer support, subject to availability.' },
-    { question: 'Is insurance included in the rental cost?', answer: 'Yes, UCS Cabs provides basic insurance coverage. Additional coverage can be purchased if needed.' },
-    { question: 'What happens if the rental car breaks down?', answer: 'UCS Cabs offers 24/7 roadside assistance and may provide a replacement vehicle if required.' },
+    { question: 'What types of car rental services do you offer in Uttarakhand?', answer: 'We offer chauffeur-driven car rentals for local, outstation, and tourist travel across Uttarakhand.' },
+    { question: 'Can I rent a car near me for one day?', answer: 'Yes, we provide flexible car rental options, including hourly, daily, weekly, and monthly rentals.' },
+    { question: 'Do you offer car rental services for Char Dham Yatra?', answer: 'Yes, we provide car rental services in Uttarakhand for Char Dham Yatra, Kedarnath, Badrinath, and other religious tours.' },
+    { question: 'How can I book a car rental service?', answer: 'You can book a car through our website, call us directly, or contact us via WhatsApp for quick reservations.' },
+    { question: 'What are the charges for car rental in Uttarakhand?', answer: 'Our pricing depends on the vehicle type, rental duration, and travel distance. Contact us for customized quotes.' },
+    { question: 'Do you provide self-drive car rental services?', answer: 'Yes, we offer cars for individuals who prefer independent travel.' },
+    { question: 'Is fuel included in the car rental charges?', answer: 'For chauffeur-driven rentals, fuel costs are included, while for self-drive cars, fuel is charged separately.' },
+    { question: 'Can I rent a car near me for an outstation trip?', answer: 'Yes, our car rental services cover outstation trips to major cities and tourist destinations.' },
+    { question: 'Why should I choose your car rental services over others?', answer: 'We provide well-maintained vehicles, competitive pricing, 24/7 customer support, and flexible rental options, making us the best car rental service provider in Uttarakhand.' },
 ];
+
 
 const CarRental = () => {
 

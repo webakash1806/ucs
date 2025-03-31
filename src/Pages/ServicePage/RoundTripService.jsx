@@ -10,39 +10,18 @@ import AoChale from './AooChale';
 import HowWeWork from './HowWeWork';
 
 const faqItems = [
-    {
-        question: 'What are the payment options for round-trip car rentals?',
-        answer: 'UCS Cabs offers various payment options for round-trip car rentals, including credit/debit cards, net banking, and digital wallets.',
-    },
-    {
-        question: 'Is there a minimum rental period for UCS Cabs round-trip services?',
-        answer: 'Yes, UCS Cabs typically has a minimum rental period for round-trip services, which may vary based on the type of service and location.',
-    },
-    {
-        question: 'Can I use UCS Cabs for long-distance round trips?',
-        answer: 'Absolutely! UCS Cabs specializes in long-distance round trips and offers services to ensure a comfortable and reliable journey.',
-    },
-    {
-        question: 'What is UCS Cabs\' cancellation policy for round trips?',
-        answer: 'Cancellations made 24 hours prior to the trip are free of charge. For more details, refer to our terms and conditions.',
-    },
-    {
-        question: 'Are the prices inclusive of fuel costs for round trips?',
-        answer: 'Yes, UCS Cabs rental prices typically include fuel costs, but it’s best to confirm during booking for round-trip services.',
-    },
-    {
-        question: 'What safety measures does UCS Cabs implement for long-distance round trips?',
-        answer: 'UCS Cabs ensures all vehicles are sanitized before and after each trip, and follows COVID-19 safety guidelines for long-distance travel.',
-    },
-    {
-        question: 'How can I book a UCS Cab for a corporate round-trip?',
-        answer: 'Corporate round-trip bookings can be easily made online or through our dedicated support team. UCS Cabs offers special rates and packages for businesses.',
-    },
-    {
-        question: 'Are UCS Cabs available for round-trip airport transfers?',
-        answer: 'Yes, UCS Cabs offers convenient and timely round-trip airport transfers to and from major airports in your city.',
-    },
+    { question: 'What is a round trip taxi service?', answer: 'A round trip taxi service allows you to travel to your destination and return in the same taxi without booking separate rides.' },
+    { question: 'How can I book a round trip taxi?', answer: 'You can book through our website, WhatsApp, or by calling our customer support.' },
+    { question: 'Do you provide outstation round trip cabs?', answer: 'Yes, we offer round trip cabs for outstation travel across multiple cities in India.' },
+    { question: 'What are the charges for a round trip taxi service?', answer: 'The fare depends on the destination, vehicle type, and total distance covered. Contact us for a quote.' },
+    { question: 'Can I hire a round trip taxi for a multi-day journey?', answer: 'Yes, we provide flexible multi-day round trip taxi services for long trips.' },
+    { question: 'What vehicle options are available for round trips?', answer: 'We offer hatchbacks, sedans, SUVs, and MUVs to suit different travel needs.' },
+    { question: 'Is there a waiting charge if I stop for sightseeing during a round trip?', answer: 'We allow short stops at no extra cost, but extended waiting times may have additional charges.' },
+    { question: 'Do you provide round trip cabs for corporate or family travel?', answer: 'Yes, we have comfortable and spacious cabs ideal for corporate and family travel.' },
+    { question: 'Is your round trip taxi service available 24/7?', answer: 'Yes, our round trip taxi service operates 24/7 to provide convenience at any time.' },
+    { question: 'Why should I choose your round trip taxi service?', answer: 'We provide reliable, affordable, and comfortable round trip cabs with professional drivers for a hassle-free travel experience.' },
 ];
+
 
 const RoundTripService = () => {
     const navigate = useNavigate();
@@ -53,7 +32,7 @@ const RoundTripService = () => {
         setData(res?.payload?.sections[0])
     }
 
-    console.log(data)
+   
     useEffect(() => {
         fetchData()
     }, [dispatch])
