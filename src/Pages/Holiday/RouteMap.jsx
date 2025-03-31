@@ -5,7 +5,7 @@ import routeimg from '../../assets/route.avif'
 
 const RouteDesign = ({data}) => {
   
-   console.log("routes is",data);
+
    
 
 

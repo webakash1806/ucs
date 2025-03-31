@@ -67,7 +67,7 @@ const HolidayPage = () => {
 
   const fetchData = async () => {
     const response = await dispatch(getPackage())
-    console.log(response);
+    
 
   }
 

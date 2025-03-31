@@ -22,51 +22,21 @@ import SimilarPackage from "./SimilarPackage";
 
 
 
-const BlogItems = ({ data }) => {
-  return (
-    <div className="mt-12 border border-gray-200 rounded-lg p-6 shadow-lg bg-white">
-      <h4 className="text-2xl font-semibold mb-6 text-gray-800 border-b border-gray-300 pb-3">
-        Similar Packages
-      </h4>
-
-      {/* Scrollable container for the packages in a column */}
-      <div className="space-y-6 flex items-center">
-        {data.map((val, i) => (
-          <div
-            className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition duration-300"
-            key={i}
-          >
-            {/* Image Section with smaller image */}
-            <img
-              src={val?.mainPhoto?.secure_url || "default-image-url"}
-              alt={val?.packageName}
-              className="w-20 h-20 object-cover rounded-lg shadow-md"
-            />
-
-            {/* Package Details */}
-            <div>
-              <Link
-                to={`/holiday/${val.id}`}
-                className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition duration-300"
-              >
-                {val?.packageName}
-              </Link>
-              <p className="text-sm text-gray-600 mt-1">
-                {val?.rate ? `₹${val.rate}/person` : "Price not available"}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
 
 const fromSlug = (slug) => {
   return slug
     .replace(/-/g, ' ') // Replace dashes with spaces
     .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize words
 };
+
+const toSlug = (str) => {
+	return str
+	  .toLowerCase()
+	  .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+	  .replace(/\s+/g, '-')         // Replace spaces with dashes
+	  .replace(/-+/g, '-')          // Replace multiple dashes with single dash
+	  .trim();
+  };
 
 const HolidayDetail = () => {
   const [showDetails, setShowDetails] = useState(null);
@@ -94,61 +64,34 @@ const HolidayDetail = () => {
     infants: 0,
     query: "",
   });
+  const { name } = useParams()
+
+  const [matchPackages,setMatchPackages]=useState(null)
 
   const [spinLoading, setSpinLoading] = useState(false)
 
-  // Function to handle input changes and update state
 
-  const termsPoints = [
-    'Users must be 18 years or older to make a booking.',
-    'Bookings are subject to availability and confirmation.',
-    'Payment must be made in full before the booking is confirmed.',
-    'Cancellations may incur fees as per our cancellation policy.',
-  ];
 
-  const bookingPolicyPoints = [
-    'Cancellations made within 24 hours are eligible for a full refund.',
-    'Changes to bookings may result in additional charges.',
-    'Late arrivals may be treated as a no-show and may forfeit the booking.',
-    'Customers are responsible for providing accurate details during booking.',
-  ];
 
-  const images = [img1, img2];
 
   const fetchData = async () => {
     const response = await dispatch(getPackage())
-
-
   }
 
-  const fetchPackageData = async () => {
-    const response = await dispatch(getPackage())
-  }
 
   const fetchIncludeData = async () => {
     const response = await dispatch(getPackageInclude())
   }
 
 
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
-    }, 3000); // Change slide every 3 seconds
-    return () => clearInterval(interval); // Clear interval on component unmount
-  }, [images.length]);
-
   useEffect(() => {
     fetchData()
-  }, [])
-
-  useEffect(() => {
     fetchIncludeData()
   }, [])
 
-  useEffect(() => {
-    fetchPackageData()
-  }, [])
+
+
+
 
   const toggleDetails = (day) => {
     setShowDetails(showDetails === day ? null : day);
@@ -160,60 +103,10 @@ const HolidayDetail = () => {
     { label: 'PackageDetail' },
   ];
 
-  const formattedInclusive = state?.inclusive
-    ? state.inclusive.replace(
-      /{tick}/g, // Replace a placeholder `{tick}` with the icon
-      `<i class="text-green-500"><svg xmlns="http://www.w3.org/2000/svg" class="text-green-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6.293 9.293a1 1 0 0 1 1.414 0L10 11.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0L6.293 10.707a1 1 0 0 1 0-1.414z"/></svg></i>`
-    )
-    : '';
-
-
-  const enhanceList = (htmlString) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlString, 'text/html');
-    const ul = doc.querySelector('ul');
-    if (ul) {
-      ul.querySelectorAll('li').forEach((li) => {
-        // Create an icon element
-        const icon = document.createElement('i');
-        icon.textContent = '✔️'; // Change to any desired icon
-        icon.style.marginRight = '8px';
-        icon.style.color = 'green';
-        li.prepend(icon); // Add the icon before the text
-      });
-      return ul.outerHTML;
-    }
-    return htmlString; // Return original string if no <ul>
-  };
-
-  const enhancedHTML = enhanceList(formattedInclusive);
-
-
-  // Function to parse and enhance list items with cross icons
-  const enhanceExclusiveList = (htmlString) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlString, 'text/html');
-    const ul = doc.querySelector('ul');
-    if (ul) {
-      ul.querySelectorAll('li').forEach((li) => {
-        // Create a cross icon element
-        const icon = document.createElement('i');
-
-        icon.textContent = '❌'; // Change to any desired cross icon
-        icon.style.marginRight = '8px';
-        icon.style.color = 'red';
-        li.prepend(icon); // Add the icon before the text
-      });
-      return ul.outerHTML;
-    }
-    return htmlString; // Return original string if no <ul>
-  };
-
-  const enhanced1HTML = enhanceExclusiveList(state?.exclusive);
-
+ 
 
   const handleQuery = () => {
-    console.log("calling");
+
 
     setIsOpenFrom(true)
     navigate('/holiday/form', { state: { ...state } })
@@ -253,6 +146,16 @@ const HolidayDetail = () => {
     }
   }, [data]);
 
+
+  useEffect(() => {
+    // Find the package based on slug from the URL params
+    const matchedPackage = data.find((pkg) => toSlug(pkg.packageName) === name); // Find package with matching slug
+    if (matchedPackage) {
+      setMatchPackages(matchedPackage); // Set the matched package
+      findSimilarPackages(matchedPackage); // Find similar packages based on matched package
+    }
+  }, [data, name]);
+
   const findSimilarPackages = () => {
 
     if (!state || !state.categoriesDetails || state.categoriesDetails.length === 0) {
@@ -274,33 +177,91 @@ const HolidayDetail = () => {
     }
   };
 
-  const { name } = useParams()
+
+  console.log(matchPackages);
+  
 
 
-  console.log(name);
 
-  const originalName = fromSlug(name);
-  console.log(originalName); // Output: "Auli Chopta 6 Days 5 Nights"
+  const formattedInclusive = matchPackages?.inclusive
+  ? matchPackages?.inclusive.replace(
+    /{tick}/g, // Replace a placeholder `{tick}` with the icon
+    `<i class="text-green-500"><svg xmlns="http://www.w3.org/2000/svg" class="text-green-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6.293 9.293a1 1 0 0 1 1.414 0L10 11.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0L6.293 10.707a1 1 0 0 1 0-1.414z"/></svg></i>`
+  )
+  : '';
+
+
+const enhanceList = (htmlString) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, 'text/html');
+  const ul = doc.querySelector('ul');
+  if (ul) {
+    ul.querySelectorAll('li').forEach((li) => {
+      // Create an icon element
+      const icon = document.createElement('i');
+      icon.textContent = '✔️'; // Change to any desired icon
+      icon.style.marginRight = '8px';
+      icon.style.color = 'green';
+      li.prepend(icon); // Add the icon before the text
+    });
+    return ul.outerHTML;
+  }
+  return htmlString; // Return original string if no <ul>
+};
+
+const enhancedHTML = enhanceList(formattedInclusive);
+
+
+// Function to parse and enhance list items with cross icons
+const enhanceExclusiveList = (htmlString) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, 'text/html');
+  const ul = doc.querySelector('ul');
+  if (ul) {
+    ul.querySelectorAll('li').forEach((li) => {
+      // Create a cross icon element
+      const icon = document.createElement('i');
+
+      icon.textContent = '❌'; // Change to any desired cross icon
+      icon.style.marginRight = '8px';
+      icon.style.color = 'red';
+      li.prepend(icon); // Add the icon before the text
+    });
+    return ul.outerHTML;
+  }
+  return htmlString; // Return original string if no <ul>
+};
+
+const enhanced1HTML = enhanceExclusiveList(matchPackages?.exclusive);
+
+
+
+
+
 
 
 
 
   return (
+
     <div className="bg-gray-50 font-sans text-gray-800 ">
-      <BreadCrumbs headText={state?.packageName} image={state?.mainPhoto?.secure_url} />
+      <BreadCrumbs headText={matchPackages?.packageName} image={matchPackages?.mainPhoto?.secure_url} />
 
       <div className="container mx-auto p-4 lg:p-6 flex flex-col lg:flex-row lg:max-w-7xl gap-6">
 
         {/* Left Section */}
         <div className="flex-1">
-
-
-          <HolidayDetailScroll data={state?.photos} />
-          {/* <RouteMap/> */}
-          <RouteDesign data={state?.routesDetail} />
-          <div className="bg-gray-50 border border-gray-100 mt-10 ">
-            <DayWiseSection data={state?.dayWise} />
-          </div>
+        {matchPackages ? (
+      <>
+        <HolidayDetailScroll data={matchPackages?.photos} />
+        <RouteDesign data={matchPackages?.routesDetail} />
+        <div className="bg-gray-50 border border-gray-100 mt-10">
+          <DayWiseSection data={matchPackages?.dayWise} />
+        </div>
+      </>
+    ) : (
+      <p>Loading package details...</p>
+    )}
 
 
           <div className="flex flex-col lg:flex-row gap-4 pt-4">
@@ -368,7 +329,7 @@ const HolidayDetail = () => {
                   <div
 
                     dangerouslySetInnerHTML={{
-                      __html: state?.termsAndCondition
+                      __html: matchPackages?.termsAndCondition
 
                     }}
                   />
@@ -384,7 +345,7 @@ const HolidayDetail = () => {
                   <div
 
                     dangerouslySetInnerHTML={{
-                      __html: state?.bookingPolicy
+                      __html: matchPackages?.bookingPolicy
 
                     }}
                   />
@@ -436,101 +397,98 @@ const HolidayDetail = () => {
 
         {/* Right Section */}
         <div className="lg:w-1/3">
-          <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-300">
-            {/* Price Section */}
-            <div className="bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50 p-4 rounded-lg mb-2">
-              <div className="flex items-center justify-between w-full mb-2">
-                <p className="text-sm font-semibold text-gray-800">Starting from</p>
-              </div>
-              <div className="text-4xl font-bold text-black">
-                ₹{state?.rate}
-                <span className="text-lg font-medium text-gray-600 ml-2">/ {state?.rateBy}</span>
-              </div>
-            </div>
 
-            {/* What We Included */}
-            {/* What We Included */}
-            <div className="bg-gradient-to-r from-green-50 via-green-100 to-green-50 px-4 py-6 rounded-lg mb-2">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Package Included</h2>
-              {state?.includedDetails && state.includedDetails.length > 0 ? (
-                <ul className="flex flex-row items-center gap-2 flex-wrap ">
-                  {state.includedDetails.map((val, index) => {
-                    const matchingInclude = Array.isArray(includeData)
-                      ? includeData.find((data) => data.includeName === val)
-                      : null;
+  <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-300">
+    {/* Price Section */}
+    <div className="bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50 p-4 rounded-lg mb-2">
+      <div className="flex items-center justify-between w-full mb-2">
+        <p className="text-sm font-semibold text-gray-800">Starting from</p>
+      </div>
+      <div className="text-4xl font-bold text-black">
+        ₹{matchPackages?.rate}
+        <span className="text-lg font-medium text-gray-600 ml-2">/ {matchPackages?.rateBy}</span>
+      </div>
+    </div>
 
-                    return (
-                      <li key={index} className="flex items-center space-x-2 text-gray-700">
-                        {/* Show image if match found */}
-                        {matchingInclude && (
-                          <img src={matchingInclude?.includePhoto
-                            ?.secure_url} alt={val} className="w-10 h-10 object-cover" />
-                        )}
-                        {/* Text */}
-                        <span className="text-sm font-medium">{val}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
+    {/* What We Included */}
+    <div className="bg-gradient-to-r from-green-50 via-green-100 to-green-50 px-4 py-6 rounded-lg mb-2">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Package Included</h2>
+      {matchPackages?.includedDetails && matchPackages.includedDetails.length > 0 ? (
+        <ul className="flex flex-row items-center gap-2 flex-wrap ">
+          {matchPackages.includedDetails.map((val, index) => {
+            const matchingInclude = Array.isArray(includeData)
+              ? includeData.find((data) => data.includeName === val)
+              : null;
 
+            return (
+              <li key={index} className="flex items-center space-x-2 text-gray-700">
+                {/* Show image if match found */}
+                {matchingInclude && (
+                  <img src={matchingInclude?.includePhoto?.secure_url} alt={val} className="w-10 h-10 object-cover" />
+                )}
+                {/* Text */}
+                <span className="text-sm font-medium">{val}</span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="text-gray-500">No details available.</p>
+      )}
+    </div>
 
-              ) : (
-                <p className="text-gray-500">No details available.</p>
-              )}
-            </div>
+    {/* Duration Section */}
+    <div className="bg-gradient-to-r from-yellow-50 via-yellow-100 to-yellow-50 px-4 py-6 rounded-lg mb-6">
+      <h2 className="text-xl font-semibold text-gray-800 mb-2">Duration</h2>
+      <div className="flex items-center gap-4">
+        <img src={time} alt="" className="w-10 h-10 object-cover" />
+        <p className="text-2xl text-black font-bold">
+          {matchPackages?.duration
+            ? `${matchPackages.duration - 1} Nights/${matchPackages.duration} Days`
+            : "Duration not available"}
+        </p>
+      </div>
+    </div>
 
+    {/* Submit Query Button */}
+    <div className="px-4 flex flex-col gap-2 mb-4">
+      <button
+        className="bg-gradient-to-r from-orange-400 to-orange-600 w-full text-white py-2 font-semibold text-sm hover:from-orange-500 hover:to-orange-700 transition rounded-full"
+        onClick={toggleIncludeModal}
+      >
+        SUBMIT QUERY
+      </button>
+      <button
+        className="border border-main text-main w-full py-2 font-semibold text-sm transition rounded-full"
+        onClick={toggleIncludeModal}
+      >
+        CUSTOMIZE YOUR PACKAGE
+      </button>
+    </div>
 
-            {/* Duration Section */}
-            <div className="bg-gradient-to-r from-yellow-50 via-yellow-100 to-yellow-50 px-4 py-6 rounded-lg mb-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">Duration</h2>
-              <div className="flex items-center gap-4">
-                <img src={time} alt="" className="w-10 h-10 object-cover" />
-                <p className="text-2xl text-black font-bold">
-                  {state?.duration
-                    ? `${state.duration - 1} Nights/${state.duration} Days`
-                    : "Duration not available"}
-                </p>
-              </div>
-
-            </div>
-
-            {/* Submit Query Button */}
-            <div className="px-4 flex flex-col gap-2 mb-4">
-              <button className="bg-gradient-to-r from-orange-400 to-orange-600 w-full text-white py-2 font-semibold text-sm hover:from-orange-500 hover:to-orange-700 transition rounded-full" onClick={toggleIncludeModal}>
-                SUBMIT QUERY
-              </button>
-              <button className="border  border-main text-main w-full  py-2 font-semibold text-sm transition rounded-full" onClick={toggleIncludeModal}>
-                CUSTOMIZE  YOUR PACKAGE
-              </button>
-            </div>
-
-            {/* Contact Info */}
-            <div className="bg-gray-50 p-4 rounded-lg shadow-sm text-center border border-gray-200">
-              <p className="font-semibold text-gray-800 text-lg">Need Help?</p>
-              <p className="text-xl text-gray-600">
-                Email:{" "}
-                <a
-                  href="mailto:ucscab@gmail.com"
-                  className="text-blue-600  hover:text-blue-700 no-underline"
-                >
-                  ucscab@gmail.com
-                </a>
-              </p>
-              <p className="text-xl text-gray-600">
-                Phone:{" "}
-                <a
-                  href="tel:919520801801"
-                  className="text-blue-600 no-underline hover:text-blue-700"
-                >
-                  +91 9520801801
-                </a>
-              </p>
-            </div>
-
-
-
-
-          </div>
+    {/* Contact Info */}
+    <div className="bg-gray-50 p-4 rounded-lg shadow-sm text-center border border-gray-200">
+      <p className="font-semibold text-gray-800 text-lg">Need Help?</p>
+      <p className="text-xl text-gray-600">
+        Email:{" "}
+        <a
+          href="mailto:ucscab@gmail.com"
+          className="text-blue-600 hover:text-blue-700 no-underline"
+        >
+          ucscab@gmail.com
+        </a>
+      </p>
+      <p className="text-xl text-gray-600">
+        Phone:{" "}
+        <a
+          href="tel:919520801801"
+          className="text-blue-600 no-underline hover:text-blue-700"
+        >
+          +91 9520801801
+        </a>
+      </p>
+    </div>
+  </div>
 
 
 
@@ -740,6 +698,7 @@ const HolidayDetail = () => {
       <SimilarPackage similar={similarPackages} />
 
     </div>
+        
   );
 };
 
