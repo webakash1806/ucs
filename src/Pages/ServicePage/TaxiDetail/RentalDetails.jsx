@@ -5,6 +5,7 @@ import { getTaxtDetail } from '../../../Redux/Slices/dynamicSlice'
 import MainForm from '../../../Components/MainForm'
 import image from '../../../assets/car1.avif'
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet';
 
 const RentalDetails = () => {
 
@@ -46,6 +47,11 @@ const RentalDetails = () => {
   return (
     <section>
       {/* Hero Section */}
+      <Helmet>
+        <title>{taxiCabDetail?.meta_title}</title>
+        <meta name="description" content={taxiCabDetail?.meta_description} />
+        <meta name="keywords" content={taxiCabDetail?.meta_url}/>
+      </Helmet>
 
       <section className="relative bg-center bg-cover h-96 py-[17rem]" style={{ backgroundImage: `url(${image})` }}>
 
