@@ -58,6 +58,7 @@ import TaxiServiceDetails from './Pages/ServicePage/TaxiDetail/TaxiServiceDetail
 import Taxi from './Pages/ServicePage/Taxi';
 import RentalDetails from './Pages/ServicePage/TaxiDetail/RentalDetails';
 import OutStation from './Pages/ServicePage/OutStation';
+import PageNotFound from './Components/PageNotFound';
 
 
 const App = () => {
@@ -228,6 +229,9 @@ const App = () => {
             <Route path='/profile' element={<Profile />} />
             <Route path='/booking/:id' element={<PastBooking />} />
           </Route>
+
+          <Route path="*" element={<PageNotFound/>} />
+
         </Routes>
       </Suspense>
       <Footer />

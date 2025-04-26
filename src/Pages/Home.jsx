@@ -11,6 +11,7 @@ import { getAbout, getAllHome } from '../Redux/Slices/dynamicSlice'
 import HolidayPackage from '../Components/HolidayPackage'
 import BlogList from './Blog/BlogList'
 import PackageCard from '../Components/PackageCard'
+import LoadingSpinner from '../Components/LoadSpinner'
 
 const Home = () => {
     const dispatch = useDispatch()
@@ -36,11 +37,10 @@ const Home = () => {
     }
 
     if (!home || home.length === 0) {
-        return <div>No data available</div>
+        <LoadingSpinner/>
     }
 
-    console.log(home);
-    
+
 
     return (
         <div>
