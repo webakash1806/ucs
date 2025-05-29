@@ -58,6 +58,8 @@ const BookCab = () => {
     const [gstActive, setGstActive] = useState(false)
     const [gstPrice, setGstPrice] = useState(0)
 
+    const [isChange, setIsChange] = useState(false)
+
     const userData = useSelector((state) => state?.auth)
 
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
@@ -104,6 +106,8 @@ const BookCab = () => {
         nameMsg: false,
         phoneNumber: false,
         email: false,
+        emailPattern: false,
+        phonePattern: false,
         pickup: false,
         drop: false,
         voucher: ""
@@ -136,6 +140,10 @@ const BookCab = () => {
     };
 
     const handleVoucher = async () => {
+
+        
+
+
         if (formData?.paymentMode === '100') {
             setErrorMessage((prev) => ({ ...prev, voucher: "" }))
 
@@ -196,10 +204,15 @@ const BookCab = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+
         setFormData({
             ...formData,
             [name]: type === "checkbox" ? checked : value, // Handle checkbox separately
         });
+
+        setIsChange(true)
+
+
     };
 
     const paymentDetails = {
@@ -289,6 +302,8 @@ const BookCab = () => {
 
 
 
+
+
     useEffect(() => {
         setPrice10(Number(finalPrice) * 10 / 100)
 
@@ -311,6 +326,25 @@ const BookCab = () => {
     }, [actualPrice, dispatch]);
 
 
+
+
+
+    useEffect(() => {
+
+    
+        setFormData((prev) => ({ ...prev, voucherCode: "" }))
+        setErrorMessage((prev) => ({ ...prev, voucher: "" }))
+
+        if (discountPrice > 0) {
+            setFinalPrice(Number(finalPrice) + Number(discountPrice))
+            setDiscountPrice(0)
+        }
+
+
+    }, [formData?.paymentMode])
+
+
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log(formData)
@@ -318,22 +352,17 @@ const BookCab = () => {
 
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         const phonePattern = /^[6-9]\d{9}$/;
-     
-        console.log(emailPattern.test(email));
-        console.log(phonePattern.test(phoneNumber));
-        
-        
-         
+
         if (currentStep === 1) {
 
             let hasError = false;
 
             if (!name) {
-                console.log("i am phone number");
-                
+
+
                 setErrorMessage((prev) => ({ ...prev, nameMsg: true }));
-                console.log(errorMessage);
-                
+
+
                 hasError = true;
             }
 
@@ -342,28 +371,28 @@ const BookCab = () => {
                 hasError = true;
             }
 
-            if(!emailPattern.test(email)){
-                
-                console.log("email pattern is:-",emailPattern.test(email));
-                
-                setErrorMessage((prev) => ({ ...prev, email: true }));
+            if (!emailPattern.test(email)) {
+
+                console.log("email pattern is:-", emailPattern.test(email));
+
+                setErrorMessage((prev) => ({ ...prev, emailPattern: true }));
                 console.log(errorMessage);
-                
+
                 hasError = true;
             }
 
             if (!phoneNumber) {
-                
+
                 setErrorMessage((prev) => ({ ...prev, phoneNumber: true }));
                 hasError = true;
             }
-            
-            if(!phonePattern.test(phoneNumber)){
-                console.log("phone pattern is:-",phonePattern.test(phoneNumber));
-                
-                setErrorMessage((prev) => ({ ...prev, phoneNumber: true }));
+
+            if (!phonePattern.test(phoneNumber)) {
+
+
+                setErrorMessage((prev) => ({ ...prev, phonePattern: true }));
                 console.log(errorMessage);
-                
+
                 hasError = true;
             }
 
@@ -410,7 +439,7 @@ const BookCab = () => {
             key: razorpayKey,
             amount: finalPrice * 100,
             currency: "INR",
-            name: "UCS",
+            name: "UCS CAB",
             description: "",
             image: "",
             order_id: order_id,
@@ -454,6 +483,17 @@ const BookCab = () => {
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
     return (
@@ -672,6 +712,9 @@ const BookCab = () => {
                                         {!formData?.email && errorMessage?.email &&
                                             <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Email is required!</p>}
 
+                                        {errorMessage?.emailPattern &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Email is Not Valid!</p>}
+
                                     </div>
                                     <div>
                                         <div className={`relative flex flex-col items-center w-full p-1 px-0 border-b ${!formData?.phoneNumber && errorMessage?.phoneNumber ? 'border-red-500' : 'border-main'}`}>
@@ -688,6 +731,9 @@ const BookCab = () => {
                                         </div>
                                         {!formData?.phoneNumber && errorMessage?.phoneNumber &&
                                             <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Phone number is required!</p>}
+
+                                        {errorMessage?.phonePattern &&
+                                            <p className='text-[0.78rem] text-left w-full leading-3 pt-[0.1rem] text-red-500'>*Phone is not valid start with 6 to 9 and having 10 digit!</p>}
 
                                     </div>
                                     <div>

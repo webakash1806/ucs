@@ -44,7 +44,7 @@ const Home = () => {
 
     return (
         <div>
-            {/* Conditionally render based on data availability */}
+            {/* Conditionally render based on data availability */} 
             {home[0] && <MainSlider data={home[0]} />}
              <HolidayPackage/>
             {home[1] && <HomeSection1 data={home[1]} />}
